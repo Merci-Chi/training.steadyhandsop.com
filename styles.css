@@ -41,3 +41,16 @@
 .training-account{position:fixed;bottom:14px;right:14px;z-index:50;display:flex;align-items:center;gap:10px;font-size:12px;background:#fff;padding:8px 12px;border:1px solid #d9e8f5;border-radius:12px;box-shadow:0 8px 25px #0012}
 .training-account button{border:1px solid #c9dced;background:#eff7ff;color:#12529e;padding:5px 9px;border-radius:8px}
 @media(max-width:700px){.training-auth{grid-template-columns:1fr}.training-auth-brand{padding:30px;min-height:195px;gap:12px}.training-auth-brand img{max-width:175px}.training-auth-brand h1{font-size:28px}.training-auth-brand p{display:none}.training-auth-panel{padding:30px 18px}.training-account{bottom:8px;right:8px}}
+
+/* Official brand artwork, shared with Steady Hands Admin. */
+.training-auth-brand{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(155deg,#06162c,#102a56 58%,#1d579b);padding:35px clamp(24px,4vw,65px)}
+.training-auth-brand::before{content:"";position:absolute;inset:0;z-index:-2;background:url("https://onboard.steadyhandsop.com/images/background2.jpg") center / cover no-repeat;opacity:.18}
+.training-brand-lockup{display:flex;align-items:center;gap:14px;position:relative;z-index:2}
+.training-brand-logo{width:63px!important;height:63px;object-fit:contain}
+.training-brand-wordmark{width:min(310px,55%)!important;object-fit:contain}
+.training-brand-wave{position:absolute;bottom:-30px;right:-25%;width:130%!important;height:49%;object-fit:cover;opacity:.5;mask-image:linear-gradient(to bottom,transparent,#000 38%);pointer-events:none}
+.training-auth-brand h1,.training-auth-brand>p{position:relative;z-index:2}
+.training-auth-panel{background:#edf4fd}
+.training-auth-card{background:#fff;border:1px solid #d6e4f5;border-radius:24px;box-shadow:0 25px 75px #1c498321;padding:clamp(24px,4vw,45px)}
+.training-mobile-logo{display:none}
+@media(max-width:700px){.training-auth-brand{min-height:190px;padding:20px 24px}.training-brand-logo{width:45px!important;height:45px}.training-brand-wordmark{width:190px!important}.training-brand-wave{height:75%;opacity:.3}.training-auth-panel{padding:22px 18px}.training-mobile-logo{display:block;width:150px;max-height:50px;object-fit:contain;align-self:flex-start}}
