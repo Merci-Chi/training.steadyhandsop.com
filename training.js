@@ -13,8 +13,30 @@ const scenarios=[
 {name:'Guide customer through portal',lesson:1,type:'portal',steps:['Open customer portal','Review website preview','Locate business email and business cards','Explain what happens next']}
 ];
 const icons={welcome:'<i data-lucide="headphones"></i>',products:'<i data-lucide="file-text"></i>',guide:'<i data-lucide="file-text"></i>',audio:'<i data-lucide="headphones"></i>',demo:'<i data-lucide="monitor"></i>'};
-const key='steadyhands_training_v3';
-let completed={};try{const existing=localStorage.getItem(key);if(existing){completed=JSON.parse(existing)||{}}else{const old=JSON.parse(localStorage.getItem('steadyhands_training_v2')||'{}');completed={0:!!old[0],1:!!old[3],2:!!old[1],3:!!old[4]};localStorage.setItem(key,JSON.stringify(completed))}}catch(e){}
+let completed={};
+let trainingRows=[];
+let trainingUser=null;
+async function loadTrainingProgress(){
+  trainingUser=window.trainingCurrentUser?.();
+  if(!trainingUser)return;
+  const {data,error}=await window.trainingClient.from('training_progress').select('*').eq('user_id',trainingUser.id);
+  if(error){console.error('Training progress load:',error);document.getElementById('progressTitle').textContent='Progress sync unavailable';return;}
+  trainingRows=data||[];
+  completed={};
+  trainingRows.forEach(row=>{if(row.completed)completed[row.lesson_id]=true;});
+  render();
+}
+async function saveLesson(i){
+  if(!trainingUser)throw new Error('Sign in before saving training.');
+  const video=trainingRows.find(row=>row.lesson_id===i)||{};
+  const payload={user_id:trainingUser.id,lesson_id:i,completed:!!completed[i],completed_at:completed[i]?new Date().toISOString():null,seconds_watched:video.seconds_watched||0,duration_seconds:video.duration_seconds||0,last_position_seconds:video.last_position_seconds||0,updated_at:new Date().toISOString()};
+  const {error}=await window.trainingClient.from('training_progress').upsert(payload,{onConflict:'user_id,lesson_id'});
+  if(error)throw error;
+  trainingRows=trainingRows.filter(row=>row.lesson_id!==i).concat(payload);
+}
+function save(i){saveLesson(i).catch(error=>{console.error('Training save failed:',error);alert('Unable to save training to your team account: '+error.message);});}
+window.addEventListener('training:authenticated',loadTrainingProgress);
+if(window.trainingCurrentUser?.())loadTrainingProgress();
 const lessonsEl=document.getElementById('lessons');
 function save(){try{localStorage.setItem(key,JSON.stringify(completed))}catch(e){}}
 function render(){lessonsEl.innerHTML=lessons.map((l,i)=>`<article class="lesson" id="training-${i+1}"><div class="lesson-content"><div class="lesson-title-row"><span class="step-num">${String(i+1).padStart(2,'0')}</span><div><h2>${l.title}</h2><p>${l.description}</p></div></div><div class="actions">${l.actions.map(a=>`<button type="button" class="action" data-lesson="${i}" data-action="${a}"><span class="action-icon">${icons[a]}</span><span><strong>${a==='welcome'?'Meet Steady Hands':a==='products'?'Products & Services':a==='guide'?'Training Guide':a==='audio'?'Audio Lesson':'Interactive Demo'}</strong><small>${a==='welcome'?'Welcome audio introduction':a==='products'?'View or download PDF':a==='guide'?(i===3?'Open lesson • PDF available':'Read the guide'):a==='audio'?'Listen to the lesson':'Try live practice'}</small></span><span class="chev">›</span></button>`).join('')}</div>${i===3?'<a class="lesson-pdf-link" href="pdfs/commissions-expectations.pdf" download><i data-lucide="download"></i> Download PDF</a>':''}<div class="status-row"><span class="status-tag ${completed[i]?'done':''}">${completed[i]?'✓ Training marked complete':'Training not yet completed'}</span><button type="button" class="complete-btn" data-complete="${i}" aria-pressed="${!!completed[i]}">${completed[i]?'Mark incomplete':'Mark complete'}</button></div></div><div class="lesson-image"><img src="images/step${[1,4,2,5][i]}.png" alt="Illustration for ${l.title}"></div><aside class="learn"><h3>What You’ll Learn</h3><ul>${l.learn.map(x=>`<li>${x}</li>`).join('')}</ul></aside></article>`).join('');if(window.lucide?.createIcons)window.lucide.createIcons();const n=Object.values(completed).filter(Boolean).length;document.getElementById('progressTitle').textContent=`${n} of 4 complete`;document.getElementById('progressPercent').textContent=`${n*25}%`;document.getElementById('progressBar').style.width=`${n*25}%`}
@@ -22,14 +44,14 @@ const modal=document.getElementById('modal'),body=document.getElementById('modal
 function openModal(type,title,html){document.getElementById('modalType').textContent=type;document.getElementById('modalTitle').textContent=title;body.innerHTML=html;modal.hidden=false;document.body.style.overflow='hidden';document.getElementById('modalClose').focus()}
 function closeModal(){modal.hidden=true;document.body.style.overflow=''}
 document.getElementById('modalClose').addEventListener('click',closeModal);modal.addEventListener('click',e=>{if(e.target===modal)closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!modal.hidden)closeModal()});
-function guide(i){if(i===3){window.location.href='commissions-expectations.html';return;}let l=lessons[i];openModal('Training guide',l.title,`${l.guide.map((x,j)=>`<p><strong>${j+1}.</strong> ${x}</p>`).join('')}<h3>Knowledge Check</h3>${l.quiz.map((q,j)=>`<fieldset class="question"><legend>${j+1}. ${q[0]}</legend>${q[1].map((o,k)=>`<label><input type="radio" name="q${j}" value="${k}"> ${o}</label>`).join('')}</fieldset>`).join('')}<div class="links"><button class="primary" id="scoreQuiz">Check Answers</button><button class="pill" id="markFromGuide">Mark section complete</button></div><div id="quizResult" aria-live="polite"></div><h3>FAQ</h3>${l.faqs.map(f=>`<details><summary>${f[0]}</summary><p>${f[1]}</p></details>`).join('')}`);document.getElementById('scoreQuiz').onclick=()=>{let score=l.quiz.reduce((n,q,j)=>n+(body.querySelector(`input[name=q${j}]:checked`)?.value===String(q[2])?1:0),0);document.getElementById('quizResult').className='state-output';document.getElementById('quizResult').textContent=`You scored ${score} out of ${l.quiz.length}. ${score===l.quiz.length?'Great work!':'Review the guide and try again.'}`};document.getElementById('markFromGuide').onclick=()=>{completed[i]=true;save();render();closeModal()}}
+function guide(i){if(i===3){window.location.href='commissions-expectations.html';return;}let l=lessons[i];openModal('Training guide',l.title,`${l.guide.map((x,j)=>`<p><strong>${j+1}.</strong> ${x}</p>`).join('')}<h3>Knowledge Check</h3>${l.quiz.map((q,j)=>`<fieldset class="question"><legend>${j+1}. ${q[0]}</legend>${q[1].map((o,k)=>`<label><input type="radio" name="q${j}" value="${k}"> ${o}</label>`).join('')}</fieldset>`).join('')}<div class="links"><button class="primary" id="scoreQuiz">Check Answers</button><button class="pill" id="markFromGuide">Mark section complete</button></div><div id="quizResult" aria-live="polite"></div><h3>FAQ</h3>${l.faqs.map(f=>`<details><summary>${f[0]}</summary><p>${f[1]}</p></details>`).join('')}`);document.getElementById('scoreQuiz').onclick=()=>{let score=l.quiz.reduce((n,q,j)=>n+(body.querySelector(`input[name=q${j}]:checked`)?.value===String(q[2])?1:0),0);document.getElementById('quizResult').className='state-output';document.getElementById('quizResult').textContent=`You scored ${score} out of ${l.quiz.length}. ${score===l.quiz.length?'Great work!':'Review the guide and try again.'}`};document.getElementById('markFromGuide').onclick=()=>{completed[i]=true;save(i);render();closeModal()}}
 function welcome(){openModal('Welcome audio','Meet Steady Hands',`<p>Listen to the company introduction and learn what Steady Hands stands for.</p><audio controls preload="none" src="audios/01-welcome.mp3">Your browser does not support audio.</audio>`)}
 function products(){openModal('Product reference','Products & Services',`<p>Explore the current training price reference, services and website process.</p><div class="links"><a class="primary" href="pdfs/products-services.pdf" target="_blank" rel="noopener">Open PDF</a><a class="pill" href="pdfs/products-services.pdf" download>Download PDF</a></div><p class="hint">The PDF can also be viewed without opening this modal.</p>`)}
-function audio(i){openModal('Audio lesson',lessons[i].title,`<h3>Audio outline</h3>${lessons[i].guide.map(x=>`<p>– ${x}</p>`).join('')}<button class="pill" id="markAudio">Mark section complete</button>`);document.getElementById('markAudio').onclick=()=>{completed[i]=true;save();render();closeModal()}}
+function audio(i){openModal('Audio lesson',lessons[i].title,`<h3>Audio outline</h3>${lessons[i].guide.map(x=>`<p>– ${x}</p>`).join('')}<button class="pill" id="markAudio">Mark section complete</button>`);document.getElementById('markAudio').onclick=()=>{completed[i]=true;save(i);render();closeModal()}}
 function demo(i){let list=scenarios.filter(s=>s.lesson===i);openModal('Interactive practice',lessons[i].title,`<div class="hint">Practice uses fictional examples. Nothing is sent, purchased, called or saved to a live account.</div><h3>Choose a practice scenario</h3><div class="demo-actions">${list.map((s,j)=>`<button class="pill" data-scenario="${scenarios.indexOf(s)}">${s.name}</button>`).join('')}</div><div id="scenarioArea" class="state-output">Select a scenario to begin.</div>`);body.querySelectorAll('[data-scenario]').forEach(b=>b.onclick=()=>showScenario(Number(b.dataset.scenario)))}
 function showScenario(k){const s=scenarios[k],a=document.getElementById('scenarioArea');a.innerHTML=`<h3>${s.name}</h3><p>Work through the checklist using fictional information.</p>${s.type==='queue'?'<div class="mock-list"><label class="mock-contact"><input class="lead-check" type="checkbox"> Willow Creek Landscaping <small>• Lead</small></label><label class="mock-contact"><input class="lead-check" type="checkbox"> Northstar Auto Detail <small>• Lead</small></label></div><p><label>Destination queue <select id="practiceQueue"><option>Morning Calls</option><option>Follow-up Queue</option></select></label></p>':s.type==='objection'?'<blockquote>“I already have a website. Why do I need yours?”</blockquote><p><label><input type="radio" name="obj" value="a"> Ask what they like about their current website and offer a preview.</label></p><p><label><input type="radio" name="obj" value="b"> Promise the new website will guarantee more sales.</label></p>':s.type==='client'?'<p>Fictional business: Willow Creek Landscaping — prospect interested in purchasing a website.</p>':''}${s.steps.map((step,j)=>`<label class="todo"><input type="checkbox" class="scenario-check"> ${step}</label>`).join('')}<button id="finishScenario" class="primary">Complete practice</button><div id="scenarioFeedback" aria-live="polite"></div>`;document.getElementById('finishScenario').onclick=()=>{let checks=[...a.querySelectorAll('.scenario-check')],ok=checks.every(c=>c.checked);if(s.type==='queue'&&a.querySelectorAll('.lead-check:checked').length===0)ok=false;if(s.type==='objection'&&a.querySelector('input[name=obj]:checked')?.value!=='a')ok=false;let f=document.getElementById('scenarioFeedback');f.className='state-output';f.textContent=ok?'Practice complete! You finished the fictional workflow.':'Finish every checklist item'+(s.type==='queue'?' and select at least one lead':'')+(s.type==='objection'?' using the professional response':'')+'.';}}
-lessonsEl.addEventListener('click',e=>{let b=e.target.closest('[data-complete], [data-lesson]');if(!b)return;if(b.dataset.complete!==undefined){let i=Number(b.dataset.complete);completed[i]=!completed[i];save();render();return}const i=Number(b.dataset.lesson);({guide,audio,demo,welcome,products})[b.dataset.action](i)});
-document.getElementById('resetAll').onclick=()=>{if(confirm('Reset all four training completion statuses in this browser?')){completed={};save();render()}};
+lessonsEl.addEventListener('click',e=>{let b=e.target.closest('[data-complete], [data-lesson]');if(!b)return;if(b.dataset.complete!==undefined){let i=Number(b.dataset.complete);completed[i]=!completed[i];save(i);render();return}const i=Number(b.dataset.lesson);({guide,audio,demo,welcome,products})[b.dataset.action](i)});
+document.getElementById('resetAll').onclick=()=>{if(confirm('Reset all four training completion statuses in this browser?')){completed={};Promise.all([0,1,2,3].map(i=>saveLesson(i))).catch(error=>alert('Unable to reset saved progress: '+error.message));render()}};
 render();
 
 // Compact training-only menu: same header control style as Outreach, without a sidebar.
@@ -40,3 +62,20 @@ trainingMenu?.addEventListener('click',e=>{if(e.target.closest('a')){trainingMen
 document.addEventListener('click',e=>{if(!trainingMenu?.hidden&&!e.target.closest('.top')){trainingMenu.hidden=true;trainingMenuBtn.setAttribute('aria-expanded','false');}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!trainingMenu?.hidden){trainingMenu.hidden=true;trainingMenuBtn.setAttribute('aria-expanded','false');trainingMenuBtn.focus();}});
 window.addEventListener('load',()=>window.lucide?.createIcons());
+
+document.addEventListener('play',e=>{
+  const media=e.target;if(!(media instanceof HTMLMediaElement))return;
+  const item=media.closest('.lesson');const lessonId=item?Number(item.id.replace('training-',''))-1:0;
+  media.dataset.trainingLesson=String(lessonId);
+},true);
+let lastSavedSecond={};
+document.addEventListener('timeupdate',e=>{
+  const media=e.target;if(!(media instanceof HTMLMediaElement)||!window.trainingCurrentUser?.())return;
+  const id=Number(media.dataset.trainingLesson||0),seconds=Math.floor(media.currentTime||0);
+  if(!Number.isFinite(seconds)||seconds<1||seconds-(lastSavedSecond[id]||0)<10)return;
+  lastSavedSecond[id]=seconds;
+  const prior=trainingRows.find(r=>r.lesson_id===id)||{};
+  const duration=Number.isFinite(media.duration)?Math.floor(media.duration):0;
+  const payload={user_id:trainingUser.id,lesson_id:id,completed:!!completed[id],seconds_watched:Math.max(prior.seconds_watched||0,seconds),duration_seconds:duration,last_position_seconds:seconds,updated_at:new Date().toISOString()};
+  window.trainingClient.from('training_progress').upsert(payload,{onConflict:'user_id,lesson_id'}).then(({error})=>{if(error)console.warn('Training playback sync failed',error);else trainingRows=trainingRows.filter(r=>r.lesson_id!==id).concat(payload);});
+},true);
