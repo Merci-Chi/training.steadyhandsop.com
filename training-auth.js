@@ -43,6 +43,7 @@ form.addEventListener('submit',async e=>{
   }catch(err){status.textContent=err.message||'Sign-in failed.';}
   finally{button.disabled=false;}
 });
+document.getElementById('trainingShowPassword')?.addEventListener('click',()=>{const input=document.getElementById('trainingPassword'),btn=document.getElementById('trainingShowPassword');const reveal=input.type==='password';input.type=reveal?'text':'password';btn.textContent=reveal?'Hide':'Show';btn.setAttribute('aria-label',reveal?'Hide password':'Show password');});
 document.getElementById('trainingForgot').addEventListener('click',async()=>{
   if(!email.value.trim()){status.textContent='Enter your email address first.';return;}
   try{const {error}=await client.auth.resetPasswordForEmail(email.value.trim(),{redirectTo:location.origin+location.pathname});if(error)throw error;status.textContent='Check your inbox for a password reset link.';}catch(e){status.textContent=e.message;}
