@@ -54,3 +54,11 @@
 .training-auth-card{background:#fff;border:1px solid #d6e4f5;border-radius:24px;box-shadow:0 25px 75px #1c498321;padding:clamp(24px,4vw,45px)}
 .training-mobile-logo{display:none}
 @media(max-width:700px){.training-auth-brand{min-height:190px;padding:20px 24px}.training-brand-logo{width:45px!important;height:45px}.training-brand-wordmark{width:190px!important}.training-brand-wave{height:75%;opacity:.3}.training-auth-panel{padding:22px 18px}.training-mobile-logo{display:block;width:150px;max-height:50px;object-fit:contain;align-self:flex-start}}
+
+/* Temporarily unavailable Client Experience & Portal module */
+#training-2 .training-coming-soon{display:flex;align-items:flex-start;gap:12px;padding:17px 18px;border:1px solid #c6d7e8;border-radius:14px;background:#edf3fa;color:#183d65;margin:12px 0}
+#training-2 .training-coming-soon svg{width:24px;height:24px;flex:none;margin-top:3px}
+#training-2 .training-coming-soon strong{display:block;font-size:16px;margin-bottom:3px}
+#training-2 .training-coming-soon span{display:block;font-size:13px;line-height:1.5}
+#training-2 .status-row .complete-btn:disabled{cursor:not-allowed;opacity:.65;background:#e3eaf1;color:#4d6176;border-color:#c3d1df}
+#training-2 .status-tag{color:#506582}
