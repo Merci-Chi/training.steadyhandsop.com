@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 6: Crafting Compelling Value Propositions</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --navy:#1A3A5C; --navy2:#2D4A6B; --gold:#D4A017; --gold2:#F0C24B;
+    --mist:#90A4B8; --paper:#E8F1F5;
+  }
+  body{font-family:'Inter','Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;
+    background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);
+    color:#fff;overflow:hidden;height:100vh}
+  .presentation{width:100vw;height:100vh;position:relative}
+  .slide{width:100%;height:100%;position:absolute;top:0;left:0;opacity:0;
+    transform:translateX(100px);transition:all .6s cubic-bezier(.25,.46,.45,.94);
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    padding:60px 80px;text-align:center;overflow-y:auto}
+  .slide.active{opacity:1;transform:translateX(0)}
+  .slide.prev{transform:translateX(-100px)}
+
+  h1.t{font-size:3rem;font-weight:800;margin-bottom:1.2rem;line-height:1.15;
+    background:linear-gradient(135deg,#fff 0%,var(--gold2) 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  h2.s{font-size:1.6rem;color:var(--mist);font-weight:300;margin-bottom:2rem}
+  .content{font-size:1.2rem;line-height:1.75;max-width:1000px;color:var(--paper);margin-bottom:1.5rem}
+
+  .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;max-width:1050px;width:100%;margin-bottom:1.5rem}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem;max-width:1050px;width:100%;margin-bottom:1.5rem}
+  .card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
+    border-radius:16px;padding:1.5rem 1.4rem;text-align:left;backdrop-filter:blur(8px);transition:.3s}
+  .card:hover{transform:translateY(-5px);border-color:rgba(212,160,23,.5)}
+  .card h3{color:var(--gold2);font-size:1.2rem;margin-bottom:.8rem}
+  .card ul{list-style:none}
+  .card li{font-size:1rem;color:var(--paper);margin-bottom:.55rem;padding-left:1.3rem;position:relative;line-height:1.5}
+  .card li::before{content:"→";position:absolute;left:0;color:var(--gold);font-weight:700}
+
+  .formula{max-width:900px;width:100%;background:rgba(212,160,23,.1);
+    border:2px solid var(--gold);border-radius:18px;padding:2rem;margin-bottom:1.5rem}
+  .formula .big{font-size:2.4rem;font-weight:800;color:var(--gold2);letter-spacing:.02em}
+  .formula .sub{font-size:1rem;color:var(--mist);margin-top:.6rem}
+
+  .vs .old{border-color:rgba(255,120,120,.4)}
+  .vs .old h3{color:#FF9E9E}
+  .vs .new{border-color:rgba(212,160,23,.55)}
+  .vs .new h3{color:var(--gold2)}
+
+  .flow{max-width:980px;width:100%;text-align:left}
+  .flow .step{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
+    border-left:5px solid var(--gold);border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:.9rem}
+  .flow .step b{display:block;color:var(--gold2);font-size:1.05rem;margin-bottom:.35rem;letter-spacing:.03em}
+  .flow .step span{font-size:.98rem;color:var(--paper);line-height:1.55;display:block}
+  .flow .step em{color:#fff;font-style:italic}
+
+  .quote{max-width:900px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
+    border-left:6px solid var(--gold);border-radius:16px;padding:2.2rem;text-align:left;backdrop-filter:blur(8px)}
+  .quote p{font-size:1.35rem;font-style:italic;line-height:1.6;margin-bottom:1rem;color:#fff}
+  .quote span{color:var(--gold2);font-weight:700;font-size:1.05rem}
+
+  .bar{height:6px;background:rgba(255,255,255,.15);border-radius:6px;max-width:1050px;width:100%;margin-top:1.5rem;overflow:hidden}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .4s;border-radius:6px}
+
+  .quiz{max-width:900px;width:100%;text-align:left}
+  .quiz .q{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:14px;
+    padding:1.2rem 1.4rem;margin-bottom:1rem}
+  .quiz .q p.qt{font-size:1.05rem;font-weight:600;margin-bottom:.7rem;color:#fff}
+  .quiz .q .opt{display:block;font-size:.95rem;color:var(--paper);padding:.4rem 0 .4rem 1.9rem;position:relative;cursor:default}
+  .quiz .q .opt::before{content:"○";position:absolute;left:0;color:var(--mist)}
+  .quiz .q .opt.correct{color:#B8F5D0}
+  .quiz .q .opt.correct::before{content:"✓";color:#5DDB8A;font-weight:800}
+  .quiz .q .ans{margin-top:.6rem;font-size:.85rem;color:#5DDB8A;font-weight:600}
+
+  .diagram{display:flex;gap:.9rem;align-items:stretch;justify-content:center;max-width:1080px;width:100%;flex-wrap:wrap}
+  .node{background:rgba(212,160,23,.12);border:1.5px solid var(--gold);border-radius:14px;padding:1.1rem 1.2rem;min-width:190px;flex:1}
+  .node b{display:block;color:var(--gold2);font-size:1.05rem;margin-bottom:.4rem}
+  .node span{font-size:.9rem;color:var(--paper);line-height:1.45;display:block}
+  .arrow{display:flex;align-items:center;color:var(--gold);font-size:1.7rem;font-weight:800}
+
+  .note{max-width:1000px;font-size:.88rem;color:var(--mist);background:rgba(255,255,255,.05);
+    border:1px dashed rgba(144,164,184,.5);border-radius:10px;padding:.8rem 1.2rem;margin-top:.5rem}
+
+  .math{max-width:900px;width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.2);
+    border-radius:14px;padding:1.4rem 1.6rem;margin-bottom:1rem;text-align:left}
+  .math .line{display:flex;justify-content:space-between;align-items:center;
+    font-size:1.05rem;padding:.45rem 0;border-bottom:1px dashed rgba(255,255,255,.15)}
+  .math .line:last-child{border-bottom:none}
+  .math .line b{color:var(--gold2)}
+  .math .line .neg{color:#FF9E9E}
+  .math .line .pos{color:#5DDB8A}
+
+  .nav{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);display:flex;gap:.8rem;z-index:1000}
+  .nav button{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;
+    padding:.7rem 1.4rem;border-radius:24px;cursor:pointer;font-size:.95rem;font-weight:600;transition:.25s}
+  .nav button:hover{background:var(--gold);color:var(--navy);border-color:var(--gold)}
+  .counter{position:fixed;top:20px;right:24px;background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.25);padding:.55rem 1.1rem;border-radius:24px;font-size:.9rem;font-weight:600;z-index:1000}
+  .brandtag{position:fixed;top:20px;left:24px;background:rgba(212,160,23,.15);border:1px solid rgba(212,160,23,.4);
+    color:var(--gold2);padding:.5rem 1rem;border-radius:24px;font-size:.75rem;font-weight:700;letter-spacing:.08em;z-index:1000;text-transform:uppercase}
+
+  @media(max-width:820px){
+    .grid2,.grid3{grid-template-columns:1fr}
+    .slide{padding:80px 22px 120px}
+    h1.t{font-size:2.1rem}
+    .brandtag{display:none}
+  }
+</style>
+<link rel="icon" href="assets/steady-hands-logo.jpg">
+<style>
+/* Local logo and Lucide icon assets. */
+.sh-icon{display:inline-block;width:1em;height:1em;vertical-align:-.125em;flex-shrink:0;overflow:visible}
+.logo.sh-logo-slot{background:none;overflow:hidden;flex-shrink:0}
+.sh-brand-logo{display:block;width:100%;height:100%;object-fit:contain;border-radius:inherit}
+.brandtag .sh-brand-logo{display:inline-block;width:24px;height:24px;border-radius:5px;vertical-align:middle;margin-right:8px}
+</style>
+<style>
+/* Viewport-aware slide area and chapter navigation. */
+:root{--sh-header-height:72px;--sh-footer-height:76px}
+html,body{width:100%;height:100%;height:100dvh;overflow:hidden}
+.chapter-header{position:fixed;inset:0 0 auto;z-index:1100;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px;padding:12px 24px;background:rgba(26,58,92,.97);border-bottom:1px solid rgba(255,255,255,.14)}
+.chapter-header .brandtag{position:static;display:flex;align-items:center;min-width:0;margin:0;padding:0;border:0;border-radius:0;background:none;font-size:.7rem;line-height:1.35}
+.chapter-header .brandtag .sh-brand-logo{flex:0 0 28px;width:28px;height:28px}
+.chapter-tools{display:flex;align-items:center;gap:10px}
+.chapter-header .counter{position:static;white-space:nowrap;margin:0;padding:.55rem .85rem;font-size:.85rem}
+.sh-back,.sh-fullscreen,.sh-course{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid rgba(255,255,255,.3);border-radius:12px;padding:10px 13px;background:rgba(255,255,255,.1);color:#fff;font-family:inherit;font-size:.85rem;font-weight:600;text-decoration:none;cursor:pointer;min-height:44px;line-height:1.3}
+.sh-back:hover,.sh-fullscreen:hover,.sh-course:hover{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+.sh-course[aria-disabled="true"]{opacity:.4;cursor:default;pointer-events:none}
+.sh-fullscreen:disabled{opacity:.4;cursor:default}
+.sh-back:focus-visible,.sh-fullscreen:focus-visible,.sh-course:focus-visible,.nav button:focus-visible{outline:3px solid var(--gold2);outline-offset:3px}
+.presentation{position:fixed;inset:var(--sh-header-height) 0 var(--sh-footer-height);width:100%;height:auto;min-height:0;overflow:hidden}
+.slide{display:block;height:100%;width:100%;padding:24px clamp(20px,5vw,80px);overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;scrollbar-gutter:auto;visibility:hidden;pointer-events:none;outline:none;scroll-padding:20px}
+.slide.active{visibility:visible;pointer-events:auto}
+.slide-content{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100%;width:100%;min-width:0}
+.slide-content>*{flex-shrink:0;max-width:100%}
+.slide-content .grid2,.slide-content .grid3{min-width:0}
+.slide-content .card,.slide-content .node{min-width:0;overflow-wrap:break-word}
+.chapter-footer{position:fixed;inset:auto 0 0;z-index:1100;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:12px;align-items:center;padding:12px 24px max(12px,env(safe-area-inset-bottom));background:rgba(26,58,92,.97);border-top:1px solid rgba(255,255,255,.14)}
+.chapter-footer>.sh-course:first-child{justify-self:start}
+.chapter-footer>.sh-course:last-child{justify-self:end}
+.chapter-footer .nav{position:static;left:auto;bottom:auto;transform:none;gap:8px}
+.chapter-footer .nav button{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;min-width:44px;padding:0;border-radius:12px;font-size:20px}
+@media(max-width:820px){
+ .chapter-header{padding:10px 14px;gap:10px}
+ .chapter-header .brandtag{display:flex;font-size:.6rem;letter-spacing:.03em}
+ .chapter-header .counter{font-size:.78rem;padding:8px 10px}
+ .sh-fullscreen .sh-fullscreen-label{display:none}
+ .sh-fullscreen{width:44px;padding:10px}
+ .slide{padding:20px 18px}
+ .slide-content h1.t{font-size:clamp(1.6rem,5.8vw,2.1rem)}
+ .slide-content h2.s{font-size:clamp(1.1rem,4.5vw,1.6rem)}
+ .slide-content .content{font-size:1rem;overflow-wrap:break-word}
+ .slide-content .grid2,.slide-content .grid3{grid-template-columns:minmax(0,1fr);width:100%}
+ .slide-content .diagram{width:100%;min-width:0}
+ .slide-content .node{flex-basis:100%;max-width:100%}
+ .slide-content table{display:block;max-width:100%;overflow-x:auto}
+ .slide-content .quote{padding:1.4rem}
+ .slide-content .quote p{font-size:1.1rem}
+ .chapter-footer{padding:10px 12px max(10px,env(safe-area-inset-bottom));gap:8px}
+ .sh-course{padding:9px 10px;font-size:.78rem;max-width:100%;text-align:center}
+}
+@media(max-width:480px){
+ .chapter-header{padding:8px 10px;gap:8px}
+ .chapter-header .brandtag{font-size:0;letter-spacing:0;justify-content:center}
+ .chapter-header .brandtag .sh-brand-logo{width:28px;height:28px;margin:0}
+ .chapter-tools{gap:6px}
+ .sh-back{padding:9px 10px;font-size:.8rem}
+ .chapter-header .counter{padding:8px;font-size:.75rem}
+ .sh-course{padding:8px 4px;font-size:.68rem;gap:4px;min-height:44px}
+ .sh-course .sh-icon{display:none}
+}
+</style>
+<style>
+/* Centered slide controls: labels on desktop, icons on compact screens. */
+.chapter-footer .nav{gap:8px}
+.chapter-footer .nav button.sh-slide-control{width:auto;min-width:44px;gap:7px;padding:10px 13px;font-size:.85rem;line-height:1.3}
+.chapter-footer .nav .sh-icon{width:1.1em;height:1.1em}
+.chapter-footer .nav .sh-fullscreen{display:inline-flex}
+.chapter-footer .nav .sh-fullscreen .sh-maximize,.chapter-footer .nav .sh-fullscreen .sh-minimize{line-height:1}
+.chapter-footer .nav .sh-fullscreen [hidden]{display:none}
+@media(max-width:820px){
+ .chapter-footer .nav button.sh-slide-control{width:44px;height:44px;padding:0;font-size:20px}
+ .chapter-footer .nav .sh-control-label{display:none}
+ .chapter-footer .nav{gap:6px}
+ .chapter-footer{gap:6px}
+ .chapter-footer .sh-course{font-size:.7rem;padding:8px 5px}
+}
+@media(max-width:380px){
+ .chapter-footer{padding-left:6px;padding-right:6px;gap:4px}
+ .chapter-footer .nav{gap:4px}
+ .chapter-footer .sh-course{font-size:.65rem;padding-left:3px;padding-right:3px;overflow-wrap:normal}
+}
+</style>
+</head>
+<body>
+
+<header class="chapter-header"><a class="sh-back" href="index.html"><svg class="sh-icon" width="1em" height="1em" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m12 19-7-7 7-7" />   <path d="M19 12H5" /> </svg> <span>Back</span></a><div class="brandtag"><img class="sh-brand-logo" src="assets/steady-hands-logo.jpg" alt="Steady Hands Operation logo">Steady Hands LLC · Sales Training</div><div class="chapter-tools"><div class="counter"><span id="cur">1</span> / <span id="tot"></span></div></div></header>
+
+<div class="presentation">
+
+<!-- ============ SLIDE 1 : TITLE ============ -->
+<div class="slide active" tabindex="0"><div class="slide-content">
+  <p style="font-size:.85rem;letter-spacing:.15em;color:var(--gold2);font-weight:700;margin-bottom:1rem;text-transform:uppercase">Steady Hands LLC · Chapter 6</p>
+  <h1 class="t">Crafting Compelling Value Propositions</h1>
+  <h2 class="s">Turning a $100 Website Into an Undeniable Investment</h2>
+  <p class="content">A value proposition is the bridge between what we offer and what the client needs to achieve. Done right, <b>$100 + $20/month stops being a cost — and becomes the obvious answer</b>.</p>
+  <div class="diagram">
+    <div class="node"><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="calculator"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <rect width="16" height="20" x="4" y="2" rx="2" />   <line x1="8" x2="16" y1="6" y2="6" />   <line x1="16" x2="16" y1="14" y2="18" />   <path d="M16 10h.01" />   <path d="M12 10h.01" />   <path d="M8 10h.01" />   <path d="M12 14h.01" />   <path d="M8 14h.01" />   <path d="M12 18h.01" />   <path d="M8 18h.01" /> </svg>  The Formula</b><span>VALUE = BENEFIT − COST</span></div>
+    <div class="node"><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="list ordered"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M11 5h10" />   <path d="M11 12h10" />   <path d="M11 19h10" />   <path d="M4 4h1v5" />   <path d="M4 9h2" />   <path d="M6.5 20H3.4c0-1 2.6-1.925 2.6-3.5a1.5 1.5 0 0 0-2.6-1.02" /> </svg>  Quantified</b><span>Honest numbers from the client's own world</span></div>
+    <div class="node"><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="puzzle"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M15.39 4.39a1 1 0 0 0 1.68-.474 2.5 2.5 0 1 1 3.014 3.015 1 1 0 0 0-.474 1.68l1.683 1.682a2.414 2.414 0 0 1 0 3.414L19.61 15.39a1 1 0 0 1-1.68-.474 2.5 2.5 0 1 0-3.014 3.015 1 1 0 0 1 .474 1.68l-1.683 1.682a2.414 2.414 0 0 1-3.414 0L8.61 19.61a1 1 0 0 0-1.68.474 2.5 2.5 0 1 1-3.014-3.015 1 1 0 0 0 .474-1.68l-1.683-1.682a2.414 2.414 0 0 1 0-3.414L4.39 8.61a1 1 0 0 1 1.68.474 2.5 2.5 0 1 0 3.014-3.015 1 1 0 0 1-.474-1.68l1.683-1.682a2.414 2.414 0 0 1 3.414 0z" /> </svg>  Tailored</b><span>The right story for each decision-maker</span></div>
+  </div>
+  <div class="bar"><i style="width:5%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 2 : WHAT A VALUE PROP IS ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">What a Value Proposition Is</h1>
+  <h2 class="s">A Clear Statement of Tangible Results</h2>
+  <div class="grid2 vs">
+    <div class="card old"><h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="circle x"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <path d="m15 9-6 6" />   <path d="m9 9 6 6" /> </svg>  What It Is Not</h3>
+      <ul>
+        <li>A list of features: "10 pages, mobile-ready"</li>
+        <li>A slogan: "We build great websites"</li>
+        <li>A price announcement: "It's only $100"</li>
+        <li>A promise of guaranteed results</li>
+      </ul>
+    </div>
+    <div class="card new"><h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="circle check"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <path d="m16 9-5.5 5.5L8 12" /> </svg>  What It Is</h3>
+      <ul>
+        <li>A clear statement of the <b>tangible results</b> the client gets</li>
+        <li>Built on <b>their</b> stated challenge and goal (CGP)</li>
+        <li>Quantified with <b>their</b> own numbers</li>
+        <li>An investment case they can verify themselves</li>
+      </ul>
+    </div>
+  </div>
+  <p class="content">The test: could the client repeat your value proposition to their spouse in one sentence — and have it make sense? If not, it's not a value proposition. <b>It's a pitch.</b></p>
+  <div class="bar"><i style="width:9%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 3 : WHAT MAKES IT COMPELLING ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">What Makes One Compelling</h1>
+  <h2 class="s">Five Requirements — All Five, Every Time</h2>
+  <div class="grid3">
+    <div class="card"><h3>1. Specific</h3>
+      <ul><li>Concrete language, no vague benefits</li><li>"More calls" <svg class="sh-icon" width="1em" height="1em" role="img" aria-label="circle x"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <path d="m15 9-6 6" />   <path d="m9 9 6 6" /> </svg>  → "New clients finding you on Google" ✓</li></ul></div>
+    <div class="card"><h3>2. Relevant</h3>
+      <ul><li>Directly addresses THEIR stated challenge</li><li>The salon story ≠ the landscaper story</li></ul></div>
+    <div class="card"><h3>3. Quantified</h3>
+      <ul><li>Their numbers: clients missed, average visit value</li><li>Numbers they gave you — not invented ones</li></ul></div>
+  </div>
+  <div class="grid2" style="max-width:1050px">
+    <div class="card"><h3>4. Unique</h3>
+      <ul><li>Differentiates from competitors, DIY, and doing nothing</li><li>The preview → customize → launch process is ours</li></ul></div>
+    <div class="card"><h3>5. Believable</h3>
+      <ul><li>Conditional math, not inflated promises</li><li>"If even half of what you described happens…" — credibility is currency</li></ul></div>
+  </div>
+  <div class="bar"><i style="width:14%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 4 : THE FORMULA ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">The Value Formula</h1>
+  <h2 class="s">Simple Math — Honest Math</h2>
+  <div class="formula">
+    <div class="big">VALUE = BENEFIT − COST</div>
+    <div class="sub">Value must be clearly positive — and visibly better than every alternative</div>
+  </div>
+  <div class="grid3">
+    <div class="card"><h3>BENEFIT</h3>
+      <ul><li>New clients captured</li><li>Interruptions eliminated</li><li>Professional presence, pride</li></ul></div>
+    <div class="card"><h3>COST — All of It</h3>
+      <ul><li>$100 one-time</li><li>$20–30/month hosting</li><li>Their time: one conversation + preview review</li></ul></div>
+    <div class="card"><h3>VALUE — The Gap</h3>
+      <ul><li>The distance Benefit − Cost</li><li>Expressed in THEIR dollars and hours</li><li>Compared against alternatives honestly</li></ul></div>
+  </div>
+  <p class="content">The formula only works when the Cost side is <b>fully honest</b> — including the monthly commitment. Hiding recurring costs to shrink "COST" kills trust the moment the first invoice arrives.</p>
+  <div class="bar"><i style="width:19%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 5 : FOUR TYPES OF VALUE ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">The Four Types of Value</h1>
+  <h2 class="s">Stack All Four — Price Conversations Shrink</h2>
+  <div class="grid2">
+    <div class="card"><h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="banknote"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <rect width="20" height="12" x="2" y="6" rx="2" />   <circle cx="12" cy="12" r="2" />   <path d="M6 12h.01M18 12h.01" /> </svg>  Financial Value</h3>
+      <ul>
+        <li>New clients who find and book them online</li>
+        <li>Revenue recovered from the Gap they described</li>
+        <li>Cost of inaction vs. $100 + $20–30/mo</li>
+      </ul>
+    </div>
+    <div class="card"><h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="crown"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z" />   <path d="M5 21h14" /> </svg>  Strategic Value</h3>
+      <ul>
+        <li>Visible where competitors are visible — or more so</li>
+        <li>"Established business" perception for a $100 build</li>
+        <li>An owned address vs. rented Facebook land</li>
+      </ul>
+    </div>
+    <div class="card"><h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="settings"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915" />   <circle cx="12" cy="12" r="3" /> </svg>  Operational Value</h3>
+      <ul>
+        <li>Hours &amp; prices answered by the site, not the phone</li>
+        <li>Fewer interruptions during appointments</li>
+        <li>Backend plan: update prices/services themselves in minutes</li>
+      </ul>
+    </div>
+    <div class="card"><h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="heart"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5" /> </svg>  Emotional Value</h3>
+      <ul>
+        <li>Pride in sharing their web address</li>
+        <li>Peace of mind — someone answers when something breaks</li>
+        <li>Confidence that growth isn't limited to word of mouth</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="brain"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M12 18V5" />   <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" />   <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" />   <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" />   <path d="M18 18a4 4 0 0 0 2-7.464" />   <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" />   <path d="M6 18a4 4 0 0 1-2-7.464" />   <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /> </svg>  A client who only sees Financial value haggles over $20/month. A client who feels all four sees the complete picture — and the monthly cost shrinks inside it.</div>
+  <div class="bar"><i style="width:24%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 6 : THE 6-STEP PROCESS ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Building One: The 6-Step Process</h1>
+  <h2 class="s">From Discovery Data to a One-Sentence Case</h2>
+  <div class="flow">
+    <div class="step"><b>1. DISCOVER (CGP + DARE)</b>
+      <span>Challenges, goals, plans — and the quantified Gap. <em>Without this, nothing that follows is tailored.</em></span></div>
+    <div class="step"><b>2. IDENTIFY VALUE TYPES</b>
+      <span>Map their situation to all four: financial, strategic, operational, emotional. Which matter most to THEM?</span></div>
+    <div class="step"><b>3. DIFFERENTIATE</b>
+      <span>What makes our answer unique vs. competitors, DIY, and doing nothing? (Preview process, real humans, honest pricing.)</span></div>
+    <div class="step"><b>4. QUANTIFY</b>
+      <span>Attach THEIR numbers to every benefit possible — conservatively, conditionally.</span></div>
+    <div class="step"><b>5. EVIDENCE</b>
+      <span>Industry-matched real clients, the preview process, verified facts only. Never invented results.</span></div>
+    <div class="step"><b>6. CRAFT THE MESSAGE</b>
+      <span>One sentence they could repeat to their spouse. Then the supporting structure around it.</span></div>
+  </div>
+  <div class="bar"><i style="width:29%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 7 : QUANTIFICATION RULES ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Quantification — The Honesty Rules</h1>
+  <h2 class="s">Numbers Build the Case. Invented Numbers Destroy It.</h2>
+  <div class="grid2">
+    <div class="card"><h3>The Rules</h3>
+      <ul>
+        <li>The <b>client supplies the inputs</b> — clients missed, average visit value, hours lost</li>
+        <li>You facilitate the math; they watch it happen</li>
+        <li>Round <b>conservatively</b> — understate, never inflate</li>
+        <li>Frame conditionally: <em>"IF the site captures even two of those four…"</em></li>
+        <li>Label everything as their estimate: <em>"rough," "ballpark," "your numbers"</em></li>
+      </ul>
+    </div>
+    <div class="card"><h3>Why This Wins</h3>
+      <ul>
+        <li>They can't argue with their own numbers</li>
+        <li>Conditional framing = no broken promises later</li>
+        <li>Conservative math that still works = unanswerable case</li>
+        <li>When results arrive, you UNDER-promised — trust compounds</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="scale"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M12 3v18" />   <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" />   <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" />   <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" />   <path d="M7 21h10" /> </svg>  The difference between quantification and manipulation: quantification uses the client's own conservative estimates with an IF. Manipulation uses your inflated numbers with a WHEN. We do the first — always.</div>
+  <div class="bar"><i style="width:33%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 8 : THE HONEST MATH ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">The Honest Math — Worked Example</h1>
+  <h2 class="s">Maria's Salon Numbers, From Chapter 4</h2>
+  <div class="math">
+    <div class="line"><span>Her estimate: new clients lost to competitors</span><b>~4 / month</b></div>
+    <div class="line"><span>Her estimate: average new-client visit</span><b>~$45</b></div>
+    <div class="line"><span>The Gap (her math, her words)</span><span class="neg">~$180 / month walking past</span></div>
+    <div class="line"><span>Investment: development</span><span class="neg">$100 one-time</span></div>
+    <div class="line"><span>Investment: Standard hosting</span><span class="neg">$20 / month</span></div>
+    <div class="line"><span>IF the site captures just 2 of the 4</span><b>~$90 / month recovered</b></div>
+    <div class="line"><span>First month: 2 clients ($90) vs. $120 total first-month cost</span><span class="pos">≈ break-even — then $90/mo vs $20/mo</span></div>
+    <div class="line"><span>IF it captures 3–4</span><span class="pos">paid for itself in month one</span></div>
+  </div>
+  <p class="content">Notice the structure: <b>her numbers, conservative scenario, explicit IF, break-even honestly labeled.</b> This case is unanswerable precisely because it refuses to exaggerate.</p>
+  <div class="bar"><i style="width:38%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 9 : BEFORE & AFTER ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Before &amp; After Framing</h1>
+  <h2 class="s">Paint the Transformation — With Their Colors</h2>
+  <div class="flow">
+    <div class="step"><b>BEFORE — their current state, in their words</b>
+      <span><em>"New residents search 'salon near me,' find three competitors, and never know you exist. Meanwhile your phone interrupts every appointment with hours-and-prices calls."</em></span></div>
+    <div class="step"><b>TRANSFORMATION — what changes, mapped to each pain</b>
+      <span><em>"A complete site puts you in that search — services, prices, photos, hours — answering those questions for you, 24/7. Built, customized and launched for you."</em></span></div>
+    <div class="step"><b>AFTER — the future state, conditionally quantified</b>
+      <span><em>"IF even 2 of those 4 lost clients a month find you instead — that's roughly $90/month recovered, against $20/month hosting. And your phone gets quieter."</em></span></div>
+  </div>
+  <div class="note"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="target"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <circle cx="12" cy="12" r="6" />   <circle cx="12" cy="12" r="2" /> </svg>  The Before must use THEIR words from discovery — never your assumptions. If you described their "before" wrong, they'll discount everything that follows.</div>
+  <div class="bar"><i style="width:43%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 10 : STAKEHOLDER ADAPTATION ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Tailoring to Each Decision-Maker</h1>
+  <h2 class="s">The Local Business Decision Circle</h2>
+  <div class="grid3">
+    <div class="card"><h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="user round"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="8" r="5" />   <path d="M20 21a8 8 0 0 0-16 0" /> </svg>  The Owner</h3>
+      <ul>
+        <li>Cares about: growth, pride, time, fewer headaches</li>
+        <li>Lead with: <b>operational + emotional value</b></li>
+        <li>"Your site answers the repetitive calls so you can work"</li>
+      </ul>
+    </div>
+    <div class="card"><h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="users round"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M18 21a8 8 0 0 0-16 0" />   <circle cx="10" cy="8" r="5" />   <path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3" /> </svg>  The Spouse / Partner</h3>
+      <ul>
+        <li>Cares about: household money, risk, "is this worth it?"</li>
+        <li>Lead with: <b>financial value + low risk</b></li>
+        <li>"$100 once, $20/month — against the $180/month Maria-math. And there's a preview before anything goes live."</li>
+      </ul>
+    </div>
+    <div class="card"><h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="folders"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M20 5a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2.5a1.5 1.5 0 0 1 1.2.6l.6.8a1.5 1.5 0 0 0 1.2.6z" />   <path d="M3 8.268a2 2 0 0 0-1 1.738V19a2 2 0 0 0 2 2h11a2 2 0 0 0 1.732-1" /> </svg>  The Gatekeeper / Manager</h3>
+      <ul>
+        <li>Cares about: making their boss happy, their own workload</li>
+        <li>Lead with: <b>how it makes THEM look and life easier</b></li>
+        <li>"When the boss asks 'why don't we show up on Google' — you'll have the answer ready."</li>
+      </ul>
+    </div>
+  </div>
+  <p class="content">Same offer. Same numbers. <b>Different lead value for each listener.</b> Chapter 5's Authority question ("Who else is involved?") tells you who's in the circle — this slide tells you what to say to each.</p>
+  <div class="bar"><i style="width:48%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 11 : COMPONENTS ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Anatomy of a Value Proposition</h1>
+  <h2 class="s">Four Building Blocks — In Order</h2>
+  <div class="flow">
+    <div class="step"><b>1. THE HEADLINE — one sentence, their outcome</b>
+      <span><em>"Your salon, findable and bookable 24/7 — built and launched for you."</em> If they remember nothing else, they remember this.</span></div>
+    <div class="step"><b>2. THE CONTEXT — their situation, mirrored back</b>
+      <span><em>"You told me new clients search online and find the other salons — and your phone never stops during appointments."</em> Proof you listened.</span></div>
+    <div class="step"><b>3. THE SUPPORTING POINTS — 2–3, each tied to a pain</b>
+      <span><em>"Full design and build, mobile-ready — $100 one-time. Hosting from $20/month keeps it fast and online. Preview before launch — you see it before anyone else does."</em></span></div>
+    <div class="step"><b>4. THE PROOF — honest and verifiable</b>
+      <span><em>"We do this for local businesses — cleaning services, salons like Studio 47, landscapers."</em> Real client industries, verified facts, zero invented numbers.</span></div>
+  </div>
+  <div class="bar"><i style="width:52%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 12 : DIFFERENTIATION ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Competitive Differentiation</h1>
+  <h2 class="s">Three Alternatives — Answer All Three</h2>
+  <div class="grid3">
+    <div class="card"><h3>vs. Other Web Companies</h3>
+      <ul>
+        <li>Their move: big quotes, long timelines, upsell ladders</li>
+        <li>Our case: <b>$100 done-for-you, days not months, real humans on the phone</b></li>
+        <li>"No $2,000 proposals. No 6-week waits."</li>
+      </ul>
+    </div>
+    <div class="card"><h3>vs. DIY / "My Nephew"</h3>
+      <ul>
+        <li>Their move: free or cheap, but who maintains it?</li>
+        <li>Our case: <b>built + hosted + maintained + supported</b> — for the price of a dinner out</li>
+        <li>"Who fixes it at 9pm when it breaks? We do."</li>
+      </ul>
+    </div>
+    <div class="card"><h3>vs. Doing Nothing</h3>
+      <ul>
+        <li>Their move: "it's worked so far"</li>
+        <li>Our case: the Gap keeps compounding — <b>every month is another ~4 clients to the competitors</b></li>
+        <li>Presented as their own math — never as fear</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="scale"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M12 3v18" />   <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" />   <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" />   <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" />   <path d="M7 21h10" /> </svg>  Differentiation rule: elevate YOUR case — never trash the alternative. "Your nephew might do a great job" keeps respect; "your nephew will ruin it" burns the bridge and your credibility.</div>
+  <div class="bar"><i style="width:57%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 13 : LOGIC + EMOTION ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Logic Leads, Emotion Amplifies</h1>
+  <h2 class="s">The Balancing Act</h2>
+  <div class="grid2">
+    <div class="card"><h3>The Sequence</h3>
+      <ul>
+        <li><b>1. Lead with logic:</b> the quantified case — their numbers, the math</li>
+        <li><b>2. Amplify with emotion:</b> connect the math to their life</li>
+        <li><b>3. Support with evidence:</b> preview process, real client industries</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Emotional Value — Said Honestly</h3>
+      <ul>
+        <li><em>"Imagine handing out a web address you're proud of."</em></li>
+        <li><em>"Sleep easy knowing someone answers when the site needs help."</em></li>
+        <li><em>"Your business, presented the way you'd present it in person."</em></li>
+      </ul>
+    </div>
+  </div>
+  <p class="content">Owners buy on emotion and justify with math — so give them <b>both, in that order</b>. But the emotion must be real: pride, relief, confidence. Manufactured urgency or fear is banned in this program.</p>
+  <div class="bar"><i style="width:62%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 14 : PROOF POINTS ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Proof Points — Used Ethically</h1>
+  <h2 class="s">What You Can Say, and What You Never Say</h2>
+  <div class="grid2">
+    <div class="card" style="border-color:rgba(93,219,138,.45)"><h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="circle check"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <path d="m16 9-5.5 5.5L8 12" /> </svg>  Safe &amp; True</h3>
+      <ul>
+        <li><em>"We build and host sites for local businesses — a cleaning company, a hair salon, a landscaping company."</em></li>
+        <li><em>"The process: you see a preview, we customize, then launch."</em></li>
+        <li><em>"Hosting starts at $20/month — support when you need it."</em></li>
+        <li><em>"Plans are flexible — you can move between hosting levels as your needs change."</em></li>
+      </ul>
+    </div>
+    <div class="card old" style="border-color:rgba(255,120,120,.4)"><h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="circle x"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <path d="m15 9-6 6" />   <path d="m9 9 6 6" /> </svg>  Never</h3>
+      <ul>
+        <li>Invented results: "Studio 47 got 50 new clients!"</li>
+        <li>Fabricated quotes or fake testimonials</li>
+        <li>"Guaranteed first page on Google"</li>
+        <li>Any statistic you can't trace to a real source</li>
+      </ul>
+    </div>
+  </div>
+  <p class="content">If they ask for proof you don't personally hold: <em>"Great question — I can connect you with our team for references."</em> Honesty about proof limits is itself proof of character.</p>
+  <div class="bar"><i style="width:67%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 15 : PRESENTING ON THE CALL ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Presenting It On the Call</h1>
+  <h2 class="s">A 90-Second Structure</h2>
+  <div class="flow">
+    <div class="step"><b>SECOND 0–20: MIRROR THEIR SITUATION</b>
+      <span><em>"So — no site, new residents finding the competitors, and the phone interrupting every appointment. Did I get that right?"</em> Their nod is your permission to proceed.</span></div>
+    <div class="step"><b>SECOND 20–50: THE CASE</b>
+      <span>Headline → the honest math (their Gap vs. $100 + $20/mo) → the four value types that matter most to THEM.</span></div>
+    <div class="step"><b>SECOND 50–75: THE PROOF &amp; THE PATH</b>
+      <span>Real client industries + the preview process. <em>"You'd see a preview before anything goes live — you approve it first."</em></span></div>
+    <div class="step"><b>SECOND 75–90: THE CHECK</b>
+      <span><em>"Based on what you've told me — does that math work for your situation?"</em> Then STOP. Silence invites their real reaction.</span></div>
+  </div>
+  <div class="bar"><i style="width:71%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 16 : TESTING & REFINING ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Testing &amp; Refining</h1>
+  <h2 class="s">Value Propositions Are Living Things</h2>
+  <div class="grid2">
+    <div class="card"><h3>How to Test Yours</h3>
+      <ul>
+        <li>Client reactions: silence? confusion? "that makes sense"?</li>
+        <li>Which benefits make them lean IN — track it per industry</li>
+        <li>A/B across calls: lead a salon with financial value once, emotional next — compare responses</li>
+        <li>Ask directly: <em>"Which part of that matters most to you?"</em></li>
+      </ul>
+    </div>
+    <div class="card"><h3>When to Update</h3>
+      <ul>
+        <li>An industry pattern emerges (salons lean emotional, landscapers lean visual-strategic)</li>
+        <li>Objections repeat — the value prop missed something</li>
+        <li>Team debriefs: share what's landing and what's not</li>
+        <li>Quarterly: re-verify every claim is still accurate to our offers</li>
+      </ul>
+    </div>
+  </div>
+  <div class="bar"><i style="width:76%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 17 : OBJECTIONS TO THE PROP ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">When They Push Back on the Value</h1>
+  <h2 class="s">Three Common Challenges — First-Pass Responses</h2>
+  <div class="flow">
+    <div class="step"><b>"That math sounds too good to be true."</b>
+      <span><em>"Fair — and that's why every number in it is yours, not mine, and why I said IF. Here's the worst case: you get a complete professional site for $100 and $20/month. Here's your scenario: the math you just watched me build. Judge it yourself."</em></span></div>
+    <div class="step"><b>"I need to see proof first."</b>
+      <span><em>"Absolutely reasonable. The strongest proof we can give you today is the preview process — you see YOUR site before it goes live, and you don't pay for promises. I can also connect you with our team for references."</em></span></div>
+    <div class="step"><b>"My business is different."</b>
+      <span><em>"You're right — and that's exactly why I didn't use a generic pitch. Everything I showed you came from YOUR numbers. Let's adjust the math together if any of my assumptions are off."</em></span></div>
+  </div>
+  <div class="note"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="pin"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M12 17v5" />   <path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z" /> </svg>  Full objection-handling mastery — LACE, the Value Shield, negotiation — is Chapter 7. These are first-pass responses; the deep framework comes next.</div>
+  <div class="bar"><i style="width:81%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 18 : MISTAKES ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Value Prop Mistakes to Avoid</h1>
+  <h2 class="s">Six Ways Good Reps Weaken Good Cases</h2>
+  <div class="grid2">
+    <div class="card"><h3>Construction Mistakes</h3>
+      <ul>
+        <li><b>Generic:</b> identical pitch to every industry</li>
+        <li><b>Unquantified:</b> "it will help a lot" — help whom, how much?</li>
+        <li><b>Feature-led:</b> opening with specs instead of their outcome</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Integrity Mistakes</h3>
+      <ul>
+        <li><b>Inflated math:</b> big numbers you can't stand behind</li>
+        <li><b>Hidden costs:</b> burying the monthly hosting — trust dies at invoice one</li>
+        <li><b>Borrowed proof:</b> invented results for named real clients</li>
+      </ul>
+    </div>
+  </div>
+  <p class="content">The self-audit, every call: <b>"Could this client repeat my value proposition to their spouse — accurately — right now?"</b> If yes, you built it right. If no, simplify until they can.</p>
+  <div class="bar"><i style="width:86%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 19 : SUMMARY ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Chapter 6 — Summary</h1>
+  <h2 class="s">What You Must Walk Away With</h2>
+  <div class="grid2">
+    <div class="card"><h3>The Craft</h3>
+      <ul>
+        <li><b>VALUE = BENEFIT − COST</b> — with all costs stated honestly</li>
+        <li>Stack all four value types: financial, strategic, operational, emotional</li>
+        <li>Quantify with THEIR numbers — conservative, conditional, labeled</li>
+        <li>Structure: headline → context → supporting points → proof</li>
+      </ul>
+    </div>
+    <div class="card"><h3>The Integrity</h3>
+      <ul>
+        <li>Conditional framing (IF) — never guaranteed promises</li>
+        <li>Real client industries — never invented results</li>
+        <li>Monthly cost always visible — never buried</li>
+        <li>Tailor the lead value to each decision-maker in the circle</li>
+      </ul>
+    </div>
+  </div>
+  <div class="bar"><i style="width:91%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 20 : QUIZ ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Quick Check</h1>
+  <h2 class="s">Test Yourself Before Moving On</h2>
+  <div class="quiz">
+    <div class="q">
+      <p class="qt">1. In VALUE = BENEFIT − COST, what must the "COST" side include?</p>
+      <span class="opt">Only the $100 development fee</span>
+      <span class="opt correct">Everything: the $100 one-time, the $20–30/month hosting, AND the client's time investment</span>
+      <span class="opt">Whatever makes the value look biggest</span>
+      <p class="ans">Full honesty on cost — including recurring — is what keeps the value proposition credible at invoice time.</p>
+    </div>
+    <div class="q">
+      <p class="qt">2. Building the quantified case, the correct approach is:</p>
+      <span class="opt">Use industry averages, stated confidently, to maximize the gap</span>
+      <span class="opt correct">The client supplies the numbers; you facilitate conservative math, frame it with IF, and label it as their estimate</span>
+      <span class="opt">Quote a fixed guaranteed return to build confidence</span>
+      <p class="ans">Their numbers + conservative rounding + conditional framing = a case they can't argue with and you never have to walk back.</p>
+    </div>
+    <div class="q">
+      <p class="qt">3. The owner loves the pitch but says "my wife handles the money." You should:</p>
+      <span class="opt">Pressure him to decide alone tonight</span>
+      <span class="opt">Skip the spouse — hope for the best at close</span>
+      <span class="opt correct">Get the spouse on the next call, and prepare the FINANCIAL + low-risk version of the value case for them (preview process, flexible plans, their own numbers)</span>
+      <p class="ans">Chapter 5's Authority question found the circle; Chapter 6's tailoring gives each member the version of value they need to hear.</p>
+    </div>
+  </div>
+  <div class="bar"><i style="width:96%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 21 : NEXT CHAPTER ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">What's Next</h1>
+  <h2 class="s">Chapter 7: Negotiation &amp; Objection Handling</h2>
+  <div class="diagram">
+    <div class="node"><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="shield"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> </svg>  LACE</b><span>Listen · Acknowledge · Clarify · Execute — the objection loop</span></div>
+    <div class="node"><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="trophy"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M10 14.66V17a1 1 0 0 1-1 1 2 2 0 0 0-2 2v2" />   <path d="M14 14.66V17a1 1 0 0 0 1 1 2 2 0 0 1 2 2v2" />   <path d="M17.916 10H19.5A2.5 2.5 0 0 0 22 7.5V5a1 1 0 0 0-1-1h-3" />   <path d="M4 22h16" />   <path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z" />   <path d="M6.084 10H4.5A2.5 2.5 0 0 1 2 7.5V5a1 1 0 0 1 1-1h3" /> </svg>  Value Shield</b><span>Protecting value when price pressure arrives</span></div>
+    <div class="node"><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="handshake"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m11 17 2 2a1 1 0 1 0 3-3" />   <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4" />   <path d="m21 3 1 11h-2" />   <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3" />   <path d="M3 4h8" /> </svg>  Ethical Closing</b><span>Win-win commitments, never pressure</span></div>
+  </div>
+  <div class="quote" style="margin-top:1.5rem">
+    <p>"You've built an undeniable case. Now comes the moment every rep faces: 'It's too expensive.' Next, we learn to answer it — ethically, every time."</p>
+    <span>— Steady Hands LLC</span>
+  </div>
+  <div class="bar"><i style="width:100%"></i></div>
+</div></div>
+
+</div><!-- /presentation -->
+
+<footer class="chapter-footer"><a class="sh-course" href="Chapter_05_Comprehensive_Presentation.html"><svg class="sh-icon" width="1em" height="1em" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m12 19-7-7 7-7" />   <path d="M19 12H5" /> </svg> <span>Previous Course</span></a><nav class="nav" aria-label="Slide navigation"><button class="sh-slide-control" type="button" onclick="previousSlide()" aria-label="Previous slide" title="Previous slide"><svg class="sh-icon" width="1em" height="1em" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m12 19-7-7 7-7" />   <path d="M19 12H5" /> </svg> <span class="sh-control-label">Previous</span></button><button class="sh-fullscreen sh-slide-control" type="button" onclick="toggleFullscreen()" aria-label="Toggle fullscreen" title="Fullscreen" aria-pressed="false"><span class="sh-maximize"><svg class="sh-icon" width="1em" height="1em" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M8 3H5a2 2 0 0 0-2 2v3" />   <path d="M21 8V5a2 2 0 0 0-2-2h-3" />   <path d="M3 16v3a2 2 0 0 0 2 2h3" />   <path d="M16 21h3a2 2 0 0 0 2-2v-3" /> </svg> </span><span class="sh-minimize" hidden><svg class="sh-icon" width="1em" height="1em" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M8 3v3a2 2 0 0 1-2 2H3" />   <path d="M21 8h-3a2 2 0 0 1-2-2V3" />   <path d="M3 16h3a2 2 0 0 1 2 2v3" />   <path d="M16 21v-3a2 2 0 0 1 2-2h3" /> </svg> </span><span class="sh-control-label">Fullscreen</span></button><button class="sh-slide-control" type="button" onclick="nextSlide()" aria-label="Next slide" title="Next slide"><svg class="sh-icon" width="1em" height="1em" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M5 12h14" />   <path d="m12 5 7 7-7 7" /> </svg> <span class="sh-control-label">Next</span></button></nav><a class="sh-course" href="Chapter_07_Comprehensive_Presentation.html"><span>Next course</span><svg class="sh-icon" width="1em" height="1em" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M5 12h14" />   <path d="m12 5 7 7-7 7" /> </svg> </a></footer>
+
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  document.getElementById('tot').textContent = slides.length;
+
+  function showSlide(n) {
+    slides[currentSlide].classList.remove('active');
+    slides[currentSlide].classList.add('prev');
+    currentSlide = (n + slides.length) % slides.length;
+    slides[currentSlide].classList.remove('prev');
+    slides[currentSlide].classList.add('active');
+    document.getElementById('cur').textContent = currentSlide + 1;
+    slides[currentSlide].scrollTop = 0;
+    slides[currentSlide].focus({preventScroll:true});
+    const pct = ((currentSlide + 1) / slides.length) * 100;
+    document.querySelectorAll('.bar i').forEach(function(b){ b.style.width = pct + '%'; });
+    if(window.SteadyHandsProgress)window.SteadyHandsProgress.save();
+  }
+
+  function nextSlide() { showSlide(currentSlide + 1); }
+  function previousSlide() { showSlide(currentSlide - 1); }
+
+  function toggleFullscreen() {
+    const action=document.fullscreenElement ? document.exitFullscreen && document.exitFullscreen() : document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
+    if(action && action.catch)action.catch(function(){});
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if(e.target.closest('input,textarea,select,button,a,[contenteditable="true"]'))return;
+    if(e.key===' ' && slides[currentSlide].scrollHeight>slides[currentSlide].clientHeight+1)return;
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); previousSlide(); }
+    else if (e.key === 'f' || e.key === 'F') { e.preventDefault(); toggleFullscreen(); }
+  });
+</script>
+
+
+<script>
+(function(){
+  const header=document.querySelector('.chapter-header');
+  const footer=document.querySelector('.chapter-footer');
+  function fitViewport(){
+    document.documentElement.style.setProperty('--sh-header-height',Math.ceil(header.getBoundingClientRect().bottom)+'px');
+    document.documentElement.style.setProperty('--sh-footer-height',Math.ceil(footer.getBoundingClientRect().height)+'px');
+  }
+  if(window.ResizeObserver){const observer=new ResizeObserver(fitViewport);observer.observe(header);observer.observe(footer);}
+  window.addEventListener('resize',fitViewport);
+  if(window.visualViewport)window.visualViewport.addEventListener('resize',fitViewport);
+  document.addEventListener('fullscreenchange',function(){
+    const on=!!document.fullscreenElement;
+    document.querySelector('.sh-fullscreen').setAttribute('aria-pressed',String(on));
+    document.querySelector('.sh-maximize').hidden=on;
+    document.querySelector('.sh-minimize').hidden=!on;
+    fitViewport();
+  });
+  const fs=document.querySelector('.sh-fullscreen');
+  if(!document.documentElement.requestFullscreen){fs.disabled=true;fs.title='Fullscreen is not supported by this browser';}
+  fitViewport();
+  document.querySelector('.slide.active').focus({preventScroll:true});
+})();
+</script>
+
+<script src="assets/chapter-progress.js"></script>
+</body>
+</html>

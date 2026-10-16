@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Playbook: Cold &amp; Warm Calling — Steady Hands LLC</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --navy:#1A3A5C; --navy2:#2D4A6B; --gold:#D4A017; --gold2:#F0C24B;
+    --mist:#90A4B8; --paper:#F5F8FB; --ink:#22313F;
+  }
+  body{font-family:'Inter','Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;
+    background:var(--paper);color:var(--ink);line-height:1.65}
+
+  .topbar{position:sticky;top:0;z-index:100;background:rgba(26,58,92,.97);backdrop-filter:blur(8px);
+    display:flex;align-items:center;justify-content:space-between;padding:.8rem 1.6rem;
+    box-shadow:0 2px 14px rgba(0,0,0,.25)}
+  .brand{display:flex;align-items:center;gap:.7rem;color:#fff}
+  .logo{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));
+    display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--navy)}
+  .brand b{display:block;line-height:1.2}
+  .brand small{color:var(--mist);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
+  .topbar .tag{color:var(--gold2);font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+
+  .hero{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:2.6rem 2rem;text-align:center}
+  .hero h1{font-size:2.2rem;font-weight:800}
+  .hero h1 span{color:var(--gold2)}
+  .hero p{max-width:760px;margin:.8rem auto 0;color:#C9D8E6;font-size:1.05rem}
+
+  .wrap{max-width:1150px;margin:0 auto;padding:1.6rem 1.5rem 4rem}
+
+  .tabs{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.6rem;position:sticky;top:64px;z-index:90;
+    background:var(--paper);padding:.7rem 0}
+  .tab{background:#fff;border:1.5px solid #D7E1EA;border-radius:999px;padding:.55rem 1.1rem;
+    font-size:.9rem;font-weight:700;color:var(--navy2);cursor:pointer;transition:.2s}
+  .tab:hover{border-color:var(--gold)}
+  .tab.active{background:var(--navy);border-color:var(--navy);color:#fff}
+
+  .panel{display:none;animation:fade .35s}
+  .panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  h2{color:var(--navy);font-size:1.5rem;margin:1.6rem 0 .8rem;padding-bottom:.4rem;border-bottom:3px solid var(--gold)}
+  h2:first-child{margin-top:.2rem}
+  h3{color:var(--navy2);font-size:1.12rem;margin:1.3rem 0 .5rem}
+  p{margin-bottom:.85rem}
+  ul{margin:0 0 1rem 1.3rem}
+  li{margin-bottom:.4rem}
+  b{color:var(--navy)}
+  em{color:var(--navy2)}
+
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.2rem;margin-bottom:1.2rem}
+  .box{background:#fff;border:1px solid #E3EAF1;border-radius:14px;padding:1.25rem 1.35rem;
+    box-shadow:0 2px 8px rgba(26,58,92,.05)}
+  .box h4{color:var(--gold);font-size:1rem;margin-bottom:.55rem}
+  .box ul{margin-left:1.15rem}
+  .box p{margin-bottom:.4rem;font-size:.95rem}
+
+  .script{background:#fff;border:1px solid #E3EAF1;border-left:6px solid var(--gold);border-radius:14px;
+    padding:1.25rem 1.4rem;margin:1.1rem 0;box-shadow:0 2px 8px rgba(26,58,92,.05)}
+  .script h4{color:var(--navy);font-size:1.02rem;margin-bottom:.6rem}
+  .say{background:rgba(212,160,23,.09);border-radius:10px;padding:.9rem 1.1rem;margin:.65rem 0}
+  .say p{font-style:italic;margin-bottom:.35rem;font-size:.98rem}
+  .say .them{color:#7a4a9e}
+  .say .you{color:var(--navy)}
+  .why{font-size:.86rem;color:#5A6E82;margin-top:.5rem}
+  .why b{color:var(--gold)}
+
+  .flow{display:flex;gap:.55rem;flex-wrap:wrap;margin:.9rem 0 1.2rem}
+  .flow span{background:var(--navy);color:#fff;border-radius:999px;padding:.35rem .9rem;font-size:.84rem;font-weight:600}
+  .flow span:nth-child(even){background:var(--gold);color:var(--navy)}
+
+  .note{background:rgba(212,160,23,.1);border:1.5px dashed var(--gold);border-radius:12px;
+    padding:.95rem 1.25rem;margin:1.1rem 0;font-size:.92rem}
+  .warn{background:rgba(255,120,120,.08);border:1.5px dashed #E07070;border-radius:12px;
+    padding:.95rem 1.25rem;margin:1.1rem 0;font-size:.92rem}
+
+  .tablewrap{overflow-x:auto;margin:1.1rem 0}
+  table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid #E3EAF1;
+    border-radius:14px;overflow:hidden;min-width:620px}
+  th,td{padding:.65rem .9rem;text-align:left;font-size:.92rem;border-bottom:1px solid #EDF2F7;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  th{background:var(--navy);color:#fff;font-size:.88rem}
+  td b{color:var(--gold)}
+
+  .big3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1.1rem 0}
+  .big3 .box{text-align:center}
+  .big3 .price{font-size:1.7rem;font-weight:800;color:var(--gold)}
+
+  footer{text-align:center;padding:2rem;color:#7A8DA0;font-size:.85rem;border-top:1px solid #E3EAF1;margin-top:2rem}
+  footer b{color:var(--navy)}
+
+  @media(max-width:640px){.hero{padding:1.8rem 1.2rem}.topbar .tag{display:none}.tabs{top:60px}}
+</style>
+<link rel="icon" href="assets/steady-hands-logo.jpg">
+<style>
+/* Local logo and Lucide icon assets. */
+.sh-icon{display:inline-block;width:1em;height:1em;vertical-align:-.125em;flex-shrink:0;overflow:visible}
+.logo.sh-logo-slot{background:none;overflow:hidden;flex-shrink:0}
+.sh-brand-logo{display:block;width:100%;height:100%;object-fit:contain;border-radius:inherit}
+.brandtag .sh-brand-logo{display:inline-block;width:24px;height:24px;border-radius:5px;vertical-align:middle;margin-right:8px}
+</style>
+<style>
+.sh-playbook-back{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:9px 12px;border-radius:10px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:.85rem;font-weight:600;flex-shrink:0}
+.sh-playbook-back-wrap{padding:.5rem 1rem;text-align:left;background:var(--navy)}
+.topbar{gap:.8rem}.tabs{top:var(--sh-topbar-height,60px)}
+@media(max-width:640px){.topbar{padding:.7rem .8rem;flex-wrap:wrap}.topbar .brand{min-width:0;flex:1}.topbar .brand b{font-size:.85rem}.topbar .brand small{font-size:.65rem}.topbar .logo{flex-shrink:0}.cols{grid-template-columns:minmax(0,1fr)}.pb-grid{grid-template-columns:minmax(0,1fr)}.sheet{padding:1rem}.sh-head .prices{text-align:left}table{max-width:100%}}
+@media print{.sh-playbook-back,.sh-playbook-back-wrap{display:none}}
+</style>
+</head>
+<body>
+
+<div class="topbar"><a class="sh-playbook-back" href="index.html"><svg class="sh-icon" width="1em" height="1em" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m12 19-7-7 7-7" />   <path d="M19 12H5" /> </svg> <span>Back</span></a>
+  <div class="brand"><div class="logo sh-logo-slot"><img class="sh-brand-logo" src="assets/steady-hands-logo.jpg" alt="Steady Hands Operation logo"></div><div><b>Steady Hands LLC</b><small>Field Playbook</small></div></div>
+  <div class="tag"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="phone"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" /> </svg>  Calling Guide</div>
+</div>
+
+<div class="hero">
+  <h1>Cold &amp; Warm <span>Calling Playbook</span></h1>
+  <p>The complete, word-for-word guide for every call type — built on the Steady Hands system: consultative discovery, honest numbers, ethical conduct. Scripts here are <b>structures, not handcuffs</b> — adapt the words, keep the principles.</p>
+</div>
+
+<div class="wrap">
+
+<!-- ============ TABS ============ -->
+<div class="tabs" id="tabs">
+  <button class="tab active" data-p="p0"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="target"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <circle cx="12" cy="12" r="6" />   <circle cx="12" cy="12" r="2" /> </svg>  Start Here</button>
+  <button class="tab" data-p="p1"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="snowflake"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m10 20-1.25-2.5L6 18" />   <path d="M10 4 8.75 6.5 6 6" />   <path d="m14 20 1.25-2.5L18 18" />   <path d="m14 4 1.25 2.5L18 6" />   <path d="m17 21-3-6h-4" />   <path d="m17 3-3 6 1.5 3" />   <path d="M2 12h6.5L10 9" />   <path d="m20 10-1.5 2 1.5 2" />   <path d="M22 12h-6.5L14 15" />   <path d="m4 10 1.5 2L4 14" />   <path d="m7 21 3-6-1.5-3" />   <path d="m7 3 3 6h4" /> </svg>  Cold Calls</button>
+  <button class="tab" data-p="p2"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="flame"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4" /> </svg>  Warm Calls</button>
+  <button class="tab" data-p="p3"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="cassette tape"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <rect width="20" height="16" x="2" y="4" rx="2" />   <circle cx="8" cy="10" r="2" />   <path d="M8 12h8" />   <circle cx="16" cy="10" r="2" />   <path d="m6 20 .7-2.9A1.4 1.4 0 0 1 8.1 16h7.8a1.4 1.4 0 0 1 1.4 1l.7 3" /> </svg>  Voicemail &amp; Gatekeepers</button>
+  <button class="tab" data-p="p4"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="scale"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M12 3v18" />   <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" />   <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" />   <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" />   <path d="M7 21h10" /> </svg>  Compliance Card</button>
+</div>
+
+<!-- ============ PANEL 0 : START HERE ============ -->
+<div class="panel active" id="p0">
+  <h2>Which Call Is This? — The Decision Matrix</h2>
+  <p>Before dialing, know which conversation you're walking into. Each type has its own script below — find your situation, open its tab.</p>
+  <div class="tablewrap">
+    <table>
+      <tr><th>Your Situation</th><th>Call Type</th><th>Go To</th></tr>
+      <tr><td>List from the manager — never spoken to them</td><td><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="snowflake"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m10 20-1.25-2.5L6 18" />   <path d="M10 4 8.75 6.5 6 6" />   <path d="m14 20 1.25-2.5L18 18" />   <path d="m14 4 1.25 2.5L18 6" />   <path d="m17 21-3-6h-4" />   <path d="m17 3-3 6 1.5 3" />   <path d="M2 12h6.5L10 9" />   <path d="m20 10-1.5 2 1.5 2" />   <path d="M22 12h-6.5L14 15" />   <path d="m4 10 1.5 2L4 14" />   <path d="m7 21 3-6-1.5-3" />   <path d="m7 3 3 6h4" /> </svg>  Cold</b></td><td>Cold Calls tab</td></tr>
+      <tr><td>They filled the interest form / visited the site</td><td><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="flame"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4" /> </svg>  Warm — Form Follow-up</b></td><td>Warm Calls tab · Scenario A</td></tr>
+      <tr><td>A happy client gave you their name</td><td><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="flame"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4" /> </svg>  Warm — Referral</b></td><td>Warm Calls tab · Scenario B</td></tr>
+      <tr><td>Past prospect who said "call me in [month]"</td><td><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="flame"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4" /> </svg>  Warm — The Kept Promise</b></td><td>Warm Calls tab · Scenario C</td></tr>
+      <tr><td>Preview sent — no response yet</td><td><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="flame"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4" /> </svg>  Warm — Preview Follow-up</b></td><td>Warm Calls tab · Scenario D</td></tr>
+      <tr><td>They didn't pick up</td><td><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="cassette tape"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <rect width="20" height="16" x="2" y="4" rx="2" />   <circle cx="8" cy="10" r="2" />   <path d="M8 12h8" />   <circle cx="16" cy="10" r="2" />   <path d="m6 20 .7-2.9A1.4 1.4 0 0 1 8.1 16h7.8a1.4 1.4 0 0 1 1.4 1l.7 3" /> </svg>  Voicemail</b></td><td>Voicemail tab</td></tr>
+      <tr><td>Someone other than the owner answered</td><td><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="folders"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M20 5a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2.5a1.5 1.5 0 0 1 1.2.6l.6.8a1.5 1.5 0 0 0 1.2.6z" />   <path d="M3 8.268a2 2 0 0 0-1 1.738V19a2 2 0 0 0 2 2h11a2 2 0 0 0 1.732-1" /> </svg>  Gatekeeper</b></td><td>Gatekeepers section</td></tr>
+    </table>
+  </div>
+
+  <h2>The Dial Rhythm</h2>
+  <div class="grid2">
+    <div class="box"><h4>⏱ The Numbers</h4>
+      <ul>
+        <li><b>15–20 dial attempts per hour</b> — a planning indicator, not a whip</li>
+        <li>Most dials end in seconds — that's the math, not a verdict on you (Ch 9)</li>
+        <li>Every meaningful conversation logged in the CRM <b>before the next dial</b></li>
+        <li>Scores and follow-up dates set while the call is fresh</li>
+      </ul>
+    </div>
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="flower 2"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M12 5a3 3 0 1 1 3 3m-3-3a3 3 0 1 0-3 3m3-3v1M9 8a3 3 0 1 0 3 3M9 8h1m5 0a3 3 0 1 1-3 3m3-3h-1m-2 3v-1" />   <circle cx="12" cy="8" r="2" />   <path d="M12 10v12" />   <path d="M12 22c4.2 0 7-1.667 7-5-4.2 0-7 1.667-7 5Z" />   <path d="M12 22c-4.2 0-7-1.667-7-5 4.2 0 7 1.667 7 5Z" /> </svg>  The Rhythm</h4>
+      <ul>
+        <li>Reset Routine after every rough call: breathe → name → extract → reset the voice (Ch 9)</li>
+        <li>High-score prospects get your peak-energy window</li>
+        <li>Scheduled follow-ups are sacred — the November call happens in November</li>
+        <li>Micro-break between blocks: 2 minutes, eyes off the screen</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>The Offer — Your 30-Second Anchors</h2>
+  <div class="big3">
+    <div class="box"><div class="price">$100</div><p><b>Website Development</b><br>One-time · full design &amp; build · mobile-ready · preview before launch</p></div>
+    <div class="box"><div class="price">$20/mo</div><p><b>Standard Hosting</b><br>Hosting · maintenance · support when needed</p></div>
+    <div class="box"><div class="price">$30/mo</div><p><b>Business Hosting</b><br>Everything in Standard + admin area for content that changes often</p></div>
+  </div>
+  <div class="note"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="pin"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M12 17v5" />   <path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z" /> </svg>  When speaking generally, say hosting <b>"starts at $20/month."</b> Plans are flexible — clients move between hosting levels as their needs change (official policy — use it to remove fear of choosing).</div>
+
+  <h2>The Anatomy of Every Call</h2>
+  <div class="flow">
+    <span>Permission Opener</span><span>CGP Discovery</span><span>TCI Weigh</span><span>BAA Verify</span><span>Honest Math</span><span>LACE on Objections</span><span>Close Once</span>
+  </div>
+  <p>Every script in this playbook is a variation of this one spine. The type of call changes the opener and the context — <b>the spine never changes</b>. Full training: Chapters 4–7.</p>
+</div>
+
+<!-- ============ PANEL 1 : COLD CALLS ============ -->
+<div class="panel" id="p1">
+  <h2><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="snowflake"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m10 20-1.25-2.5L6 18" />   <path d="M10 4 8.75 6.5 6 6" />   <path d="m14 20 1.25-2.5L18 18" />   <path d="m14 4 1.25 2.5L18 6" />   <path d="m17 21-3-6h-4" />   <path d="m17 3-3 6 1.5 3" />   <path d="M2 12h6.5L10 9" />   <path d="m20 10-1.5 2 1.5 2" />   <path d="M22 12h-6.5L14 15" />   <path d="m4 10 1.5 2L4 14" />   <path d="m7 21 3-6-1.5-3" />   <path d="m7 3 3 6h4" /> </svg>  Cold Calls — The Complete Flow</h2>
+  <div class="flow">
+    <span>1. Opener (15 sec)</span><span>2. Permission</span><span>3. CGP Questions</span><span>4. Gap Math</span><span>5. BAA Check</span><span>6. Value Case</span><span>7. Next-Step Close</span>
+  </div>
+
+  <h3>Step 1–2: The Opener + Permission</h3>
+  <div class="script">
+    <h4>Opener A — The Honest Cold Open (default)</h4>
+    <div class="say">
+      <p class="you">"Hi, is this [Name]? … My name is [Name] with Steady Hands — we build and host websites for local businesses here in Las Vegas. This is a cold call — I know you weren't expecting it. Can I have thirty seconds to tell you why I called, and then you decide if it's worth continuing?"</p>
+    </div>
+    <p class="why"><b>Why it works:</b> naming the cold call disarms it. Asking permission hands them control — the opposite of every pushy call they've screened today. Most people grant 30 seconds to someone honest.</p>
+  </div>
+  <div class="script">
+    <h4>Opener B — The Observation Lead (when you did homework)</h4>
+    <div class="say">
+      <p class="you">"Hi [Name] — [Name] from Steady Hands, web design and hosting for local businesses. I was looking at [their industry] here in [area] and noticed most of the shops that come up first in a Google search have websites — and I couldn't find yours. Did I get that right, or is there a site I missed?"</p>
+    </div>
+    <p class="why"><b>Why it works:</b> specific, verifiable, and it opens discovery with a question instead of a pitch. If they DO have a site — you just earned credibility for the honest correction, and pivot to the refresh angle.</p>
+  </div>
+
+  <h3>Step 3: CGP Discovery — The Questions That Earn the Sale</h3>
+  <div class="script">
+    <h4>The Core Ladder (interleave, don't interrogate)</h4>
+    <div class="say">
+      <p class="you">"How do most new customers find you today?"</p>
+      <p class="you">"Do you ever struggle with people not finding you online?" <b>(CGP-C)</b></p>
+      <p class="you">"What goal is that challenge keeping you from — more new faces, fewer interruptions?" <b>(CGP-G)</b></p>
+      <p class="you">"How are you handling that today?" <b>(CGP-P)</b></p>
+      <p class="you">"When do you need to see that change — this season, or is there a better window?" <b>(TCI-T)</b></p>
+    </div>
+    <p class="why"><b>Rules:</b> listen 60–70% · few and purposeful · every answer shapes the next question · write their words down — they become your material.</p>
+  </div>
+
+  <h3>Step 4: The Honest Math — Built From THEIR Numbers</h3>
+  <div class="script">
+    <h4>Facilitate, Never Invent</h4>
+    <div class="say">
+      <p class="you">"You said maybe 3–4 people a month find a competitor instead. Roughly what's an average new customer worth to you per visit? … Okay — so that's about [3–4] × [$X] a month walking past. That's YOUR rough number — am I math-ing your estimate right?"</p>
+      <p class="you">"And if nothing changes for a year?" <b>(TCI-C)</b> — let them say it.</p>
+    </div>
+    <p class="why"><b>Rules:</b> client supplies inputs · round conservatively · label it their estimate · never inflate. The Gap is a mirror, not a weapon (Ch 4).</p>
+  </div>
+
+  <h3>Step 5: BAA — Before Any Price</h3>
+  <div class="script">
+    <h4>Verify Feasibility Early</h4>
+    <div class="say">
+      <p class="you">"What would you plan to invest to fix this?" <b>(Budget)</b></p>
+      <p class="you">"Who else is part of a decision like this?" <b>(Authority)</b></p>
+      <p class="you">"Where does a website sit on your list right now — top, middle, 'someday'?" <b>(Agenda)</b></p>
+    </div>
+    <p class="why"><b>Why before price:</b> every "too expensive," "ask my spouse," and "not a good time" is a BAA question you skipped. Qualify it now and objections mostly evaporate later (Ch 5).</p>
+  </div>
+
+  <h3>Step 6–7: Value Case + The Close</h3>
+  <div class="script">
+    <h4>The Presentation (when BAA checks out)</h4>
+    <div class="say">
+      <p class="you">"Based on everything you've told me: a complete website — designed, built, mobile-ready, launched for you — is $100, one time. Hosting starts at $20/month: we keep it fast, online, and maintained, and support is a phone call away. Against the [their gap number] a month you described — you see the math. And here's the part owners like most: you see a preview of YOUR site before anything goes live."</p>
+      <p class="you">"Want me to get your preview started this week?"</p>
+    </div>
+    <p class="why"><b>The One Rule:</b> ask once. Then stop talking. Silence closes; chatter un-closes (Ch 7).</p>
+  </div>
+
+  <h2>Cold Call Branches</h2>
+  <div class="script">
+    <h4>"I'm busy right now."</h4>
+    <div class="say">
+      <p class="you">"Totally understood — I won't take your working time. Quick one: mornings or afternoons usually better for a two-minute call? … Great, [day/time] it is — I'll call then, and not before."</p>
+    </div>
+    <p class="why"><b>Why:</b> converts a brush-off into a scheduled warm call. Honor the slot exactly — the kept promise IS the reputation.</p>
+  </div>
+  <div class="script">
+    <h4>"Is this a sales call?" / hostility</h4>
+    <div class="say">
+      <p class="you">"It is — and I'd rather be straight with you about that. Thirty seconds on why I called, then your call. Fair?"</p>
+    </div>
+    <p class="why"><b>Why:</b> honesty is disarming. If they still say no: "Fair enough — have a good one." Log it, next dial. No wear-down. Ever.</p>
+  </div>
+  <div class="script">
+    <h4>"Send me an email."</h4>
+    <div class="say">
+      <p class="you">"Happy to — so I send something worth reading instead of spam: what's the one thing you'd want a website to actually do for you? … Got it. I'll send exactly that, and I'll follow up Thursday — does that work?"</p>
+    </div>
+    <p class="why"><b>Why:</b> the question keeps discovery alive, personalizes the email, and books the follow-up. Generic "info" emails die in inboxes; answers to THEIR question get read.</p>
+  </div>
+
+  <div class="warn"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="ban"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <path d="M4.929 4.929 19.07 19.071" /> </svg>  <b>Cold call anti-patterns:</b> pitching price before discovery · talking past the first "no" · fake familiarity ("How are you today?!" cheater-warmth) · wearing them down after a clear no. One respectful call, logged honestly, next dial.</div>
+</div>
+
+<!-- ============ PANEL 2 : WARM CALLS ============ -->
+<div class="panel" id="p2">
+  <h2><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="flame"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4" /> </svg>  Warm Calls — Four Scenarios</h2>
+
+  <h3>Scenario A — Form Follow-up ("They filled the interest form")</h3>
+  <div class="script">
+    <h4>The Opener</h4>
+    <div class="say">
+      <p class="you">"Hi [Name] — [Name] from Steady Hands. You filled out the form on our website about getting [business type] online — thank you for that. Before I talk about anything we offer, can I ask you a few questions so I actually understand your situation?"</p>
+    </div>
+    <p class="why"><b>Why:</b> acknowledges THEIR action (they started this), then immediately moves to discovery — the consultative frame from the first sentence. Run the full CGP ladder from the Cold tab.</p>
+  </div>
+  <div class="script">
+    <h4>If They Say "I was just curious about the price"</h4>
+    <div class="say">
+      <p class="you">"Happy to share it — and I will in a second. One quick question first so the number means something: how are new customers finding you today? … [listens] … Okay. Then here's the honest picture: $100 one-time to build it, hosting from $20/month. And against what you just described — [their situation] — that's the fix. Fair deal?"</p>
+    </div>
+    <p class="why"><b>Why:</b> price in a vacuum invites comparison-shopping. Price after one discovery question lands as an answer, not a quote. Never stall the price — just earn it first.</p>
+  </div>
+
+  <h3>Scenario B — Referral Call ("A happy client gave us your name")</h3>
+  <div class="script">
+    <h4>The Opener — Lead With the Friend</h4>
+    <div class="say">
+      <p class="you">"Hi [Name] — [Name] from Steady Hands. [Referrer] at [their business] gave me your name — we just finished their website, and I'm calling because [Referrer] thought you might be in the same spot they were. Did they mention I'd be reaching out?"</p>
+    </div>
+    <p class="why"><b>Why:</b> borrowed trust is the warmest door in business. Mention the referrer by name, reference their real situation — then still run discovery. Referred ≠ pre-qualified; their situation is their own.</p>
+  </div>
+  <div class="script">
+    <h4>After Discovery — The Soft Close</h4>
+    <div class="say">
+      <p class="you">"Here's what [Referrer] did, for what it's worth: preview first, then decide — never the other way around. Want me to build yours the same way so you can see it before committing to anything?"</p>
+    </div>
+  </div>
+
+  <h3>Scenario C — The Kept Promise ("Call me in [month]")</h3>
+  <div class="script">
+    <h4>The Full Play (from Ch 10 — the Tom scenario)</h4>
+    <div class="say">
+      <p class="you">"Tom — it's [Name] from Steady Hands. I promised I'd call in November, and here I am. How was the season?"</p>
+      <p class="you">"Since we last spoke, what's changed on your end?"</p>
+      <p class="you">"You mentioned winter bookings look thin — so the timing you wanted is actually… now?"</p>
+      <p class="you">"Want the preview before the holidays?"</p>
+    </div>
+    <p class="why"><b>Why:</b> the kept promise IS the rapport — no re-introduction needed. Then re-discover: the old Gap is stale data until re-verified. His June Agenda becomes his November urgency — <b>his calendar, his logic</b>. Full training: Chapter 10, Scenario 2.</p>
+  </div>
+
+  <h3>Scenario D — Preview Follow-up ("Sent it 3 days ago, no response")</h3>
+  <div class="script">
+    <h4>The Check-in</h4>
+    <div class="say">
+      <p class="you">"Hi [Name] — [Name] from Steady Hands. Sent over the preview of your site Thursday — did it come through okay? … If you've had a chance to look: what did you think? And if you haven't — no rush, take your time. Any question at all, I'm at (702) 372-6399."</p>
+    </div>
+    <p class="why"><b>Why:</b> first question is technical ("did it arrive?") — gives them a graceful exit if they haven't looked. Zero pressure. One friendly follow-up after 3 days, one more after a week — then it goes to the nurture list with a logged date. Never daily calls.</p>
+  </div>
+
+  <div class="note"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="lightbulb"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" />   <path d="M9 18h6" />   <path d="M10 22h4" /> </svg>  <b>Warm-call general rule:</b> warm means the CONTEXT is warm — form fill, referral, kept promise. It never means skip discovery. Every warm call still runs the spine; only the opener changes.</div>
+</div>
+
+<!-- ============ PANEL 3 : VOICEMAIL & GATEKEEPERS ============ -->
+<div class="panel" id="p3">
+  <h2><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="cassette tape"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <rect width="20" height="16" x="2" y="4" rx="2" />   <circle cx="8" cy="10" r="2" />   <path d="M8 12h8" />   <circle cx="16" cy="10" r="2" />   <path d="m6 20 .7-2.9A1.4 1.4 0 0 1 8.1 16h7.8a1.4 1.4 0 0 1 1.4 1l.7 3" /> </svg>  Voicemail — The 20-Second Art</h2>
+  <div class="script">
+    <h4>The Script (leave ONE per follow-up cycle — never two in a row)</h4>
+    <div class="say">
+      <p class="you">"Hi [Name] — [Name] with Steady Hands, here in Las Vegas. We build and host websites for local businesses — [Referrer/industry hook if any]. I'll try you again [day]. If it's easier, my number is (702) 372-6399. Thanks!"</p>
+    </div>
+    <p class="why"><b>Rules:</b> under 20 seconds · name twice (yours and theirs) · one hook, zero pitch · clear callback day · number at the end, spoken slowly. A rambling voicemail gets deleted at second ten; a crisp one sometimes gets returned.</p>
+  </div>
+  <div class="note"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="repeat"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m17 2 4 4-4 4" />   <path d="M3 11v-1a4 4 0 0 1 4-4h14" />   <path d="m7 22-4-4 4-4" />   <path d="M21 13v1a4 4 0 0 1-4 4H3" /> </svg>  <b>Voicemail cadence:</b> Call 1 no answer → voicemail. Call 2 (2–3 days later) no answer → no voicemail. Call 3 (following week) → short voicemail variant. Then it moves to the nurture list with a logged date. Three attempts, spaced and varied — that's professional persistence, not pestering.</div>
+
+  <h2><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="folders"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M20 5a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2.5a1.5 1.5 0 0 1 1.2.6l.6.8a1.5 1.5 0 0 0 1.2.6z" />   <path d="M3 8.268a2 2 0 0 0-1 1.738V19a2 2 0 0 0 2 2h11a2 2 0 0 0 1.732-1" /> </svg>  Gatekeepers — Your First Stakeholder</h2>
+  <div class="script">
+    <h4>"Can I ask what this is regarding?" (the Dana moment)</h4>
+    <div class="say">
+      <p class="you">"Of course — [Owner] filled out a form on our website asking about getting [business type] online. I'm following up on THEIR request. Is he seeing clients right now, or is there a better moment today?"</p>
+    </div>
+    <p class="why"><b>Why it works:</b> transparent · references the owner's own action · asks the gatekeeper to help schedule — turning them from filter to scheduler. Respect buys a warm transfer; pushiness buys "some salesperson is holding."</p>
+  </div>
+  <div class="script">
+    <h4>"She's with a client — she's super busy."</h4>
+    <div class="say">
+      <p class="you">"I figured — that's part of why she reached out, actually. Could I grab ten minutes with her this afternoon, or would tomorrow morning be easier on the floor?"</p>
+    </div>
+    <p class="why"><b>Why:</b> the either/or scheduling question shows you understand the business's rhythm — and gives the gatekeeper an easy, useful decision. Full gatekeeper training: Chapter 10, Move 1.</p>
+  </div>
+  <div class="script">
+    <h4>"We don't take sales calls." / the wall</h4>
+    <div class="say">
+      <p class="you">"Completely fair. Could I leave my name and number for [Owner] — (702) 372-6399, Steady Hands, about the website request? And thank you for guarding their time — that's exactly the right instinct."</p>
+    </div>
+    <p class="why"><b>Why:</b> respect the wall, leave a professional trace, and compliment the function. Gates sometimes open months later — the gatekeeper remembers who was decent.</p>
+  </div>
+  <div class="warn"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="ban"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <path d="M4.929 4.929 19.07 19.071" /> </svg>  <b>Never:</b> trick a gatekeeper ("It's a personal call") · talk down to them · push past them to the owner's cell · treat the handoff as your moment to vanish from respectability. They decide what the owner hears about you.</div>
+</div>
+
+<!-- ============ PANEL 4 : COMPLIANCE ============ -->
+<div class="panel" id="p4">
+  <h2><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="scale"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M12 3v18" />   <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" />   <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" />   <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" />   <path d="M7 21h10" /> </svg>  The Compliance Card — Read Before Every Shift</h2>
+
+  <h3>Pricing Rules — Never Broken</h3>
+  <div class="grid2">
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="circle check"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <path d="m16 9-5.5 5.5L8 12" /> </svg>  Always</h4>
+      <ul>
+        <li>Quote exactly: <b>$100</b> one-time · <b>$20/mo</b> Standard · <b>$30/mo</b> Backend</li>
+        <li>Say hosting <b>"starts at $20/month"</b> when speaking generally</li>
+        <li>Present the monthly cost <b>before</b> they ask — never bury it</li>
+        <li>When unsure — stop, don't guess: contact the team</li>
+      </ul>
+    </div>
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="circle x"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <path d="m15 9-6 6" />   <path d="m9 9 6 6" /> </svg>  Never</h4>
+      <ul>
+        <li>Invent discounts or promotions — the price is the price</li>
+        <li>Pretend to "ask a manager" for approval theater</li>
+        <li>Quote custom or personal prices</li>
+        <li>Promise features that aren't on the official pricing page</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>The Banned List — Any One Is a Conduct Violation</h3>
+  <div class="warn">
+    <ul style="margin-bottom:0">
+      <li>Fake urgency or scarcity — "only today," "last spot this month"</li>
+      <li>Invented discounts or fake approval theater</li>
+      <li>Disparaging competitors — or the client's nephew</li>
+      <li>Wearing them down — repeated calls after a clear no</li>
+      <li>Fear-selling — inflating consequences beyond their own stated numbers</li>
+      <li>Fabricated results, testimonials, or statistics</li>
+    </ul>
+  </div>
+  <p>We would rather lose a sale honestly than win one dishonestly. The first keeps the pipeline warm — the second burns the map (Ch 7).</p>
+
+  <h3>Escalation &amp; Honesty Protocols</h3>
+  <div class="grid2">
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="phone"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" /> </svg>  When They Ask Beyond Your Lane</h4>
+      <p>SEO campaigns, ads, social packages, custom development:</p>
+      <p><em>"That's outside what I handle personally — let me connect you with our team."</em></p>
+      <p>Never improvise a promise. Escalate through official channels.</p></div>
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="handshake"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m11 17 2 2a1 1 0 1 0 3-3" />   <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4" />   <path d="m21 3 1 11h-2" />   <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3" />   <path d="M3 4h8" /> </svg>  When Asked for Proof You Don't Hold</h4>
+      <p><em>"Great question — I can connect you with our team for references."</em></p>
+      <p>Reference real client <b>industries</b> freely. Never invent results, quotes, or numbers for named clients. Honesty about proof limits is itself proof of character.</p></div>
+  </div>
+
+  <h3>Logging Discipline — The CRM Is Sacred</h3>
+  <div class="grid2">
+    <div class="box"><h4>After EVERY Meaningful Call</h4>
+      <ul>
+        <li>Outcome + next step + date — logged <b>before the next dial</b></li>
+        <li>Qualification score updated (Ch 5 scorecard)</li>
+        <li>Stakeholders noted — who else decides (Authority map)</li>
+        <li>Direct quotes captured — they're your material for the follow-up</li>
+      </ul>
+    </div>
+    <div class="box"><h4>Follow-up Windows</h4>
+      <ul>
+        <li>Scheduled slots: honored exactly — November means November</li>
+        <li>"Not now" answers: logged with the window they named</li>
+        <li>Preview follow-ups: 3 days, then a week, then nurture</li>
+        <li>Re-qualification trigger: 30–45 days since last contact</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Official Channels — Everything Verifiable</h3>
+  <div class="tablewrap">
+    <table>
+      <tr><th>Channel</th><th>Detail</th><th>When to Give It</th></tr>
+      <tr><td><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="phone"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" /> </svg>  Phone / Text</td><td><b>(702) 372-6399</b></td><td>Trust objections · "how do I know you're real?" · always at close</td></tr>
+      <tr><td><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="mail"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" />   <rect x="2" y="4" width="20" height="16" rx="2" /> </svg>  Email</td><td><b>kiara@steadyhandsop.com</b></td><td>Written confirmations · escalations</td></tr>
+      <tr><td><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="globe"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />   <path d="M2 12h20" /> </svg>  Website</td><td><b>steadyhandsop.com</b></td><td>"Check the pricing page yourself" — verifiable facts</td></tr>
+      <tr><td><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="map pin"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />   <circle cx="12" cy="10" r="3" /> </svg>  Base</td><td>Las Vegas, Nevada · remote team</td><td>Identity questions</td></tr>
+    </table>
+  </div>
+
+  <div class="note"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="shield"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> </svg>  <b>The trust pattern (Ch 7):</b> trust objections are answered with things the prospect can VERIFY — the published prices, the preview process, the real phone number. Insistence builds doubt; verifiability builds trust.</div>
+</div>
+
+</div><!-- /wrap -->
+
+<footer>
+  <b>Steady Hands LLC — Cold &amp; Warm Calling Playbook</b><br>
+  Part of Steady Hands LLC Training Program · Companion to Chapters 1–10 · Developed by Ahmed Kamel · © 2026
+</footer>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.panel');
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      tabs.forEach(function(x){ x.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      t.classList.add('active');
+      document.getElementById(t.dataset.p).classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+</script>
+
+<script>(function(){const bar=document.querySelector('.topbar');if(!bar)return;function fit(){document.documentElement.style.setProperty('--sh-topbar-height',Math.ceil(bar.getBoundingClientRect().height)+'px');}if(window.ResizeObserver)new ResizeObserver(fit).observe(bar);window.addEventListener('resize',fit);fit();})();</script>
+</body>
+</html>

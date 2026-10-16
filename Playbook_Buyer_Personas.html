@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Playbook: Buyer Personas — Steady Hands LLC</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --navy:#1A3A5C; --navy2:#2D4A6B; --gold:#D4A017; --gold2:#F0C24B;
+    --mist:#90A4B8; --paper:#F5F8FB; --ink:#22313F;
+  }
+  body{font-family:'Inter','Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;
+    background:var(--paper);color:var(--ink);line-height:1.65}
+
+  .topbar{position:sticky;top:0;z-index:100;background:rgba(26,58,92,.97);backdrop-filter:blur(8px);
+    display:flex;align-items:center;justify-content:space-between;padding:.8rem 1.6rem;
+    box-shadow:0 2px 14px rgba(0,0,0,.25)}
+  .brand{display:flex;align-items:center;gap:.7rem;color:#fff}
+  .logo{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));
+    display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--navy)}
+  .brand b{display:block;line-height:1.2}
+  .brand small{color:var(--mist);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
+  .topbar .tag{color:var(--gold2);font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+
+  .hero{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:2.6rem 2rem;text-align:center}
+  .hero h1{font-size:2.2rem;font-weight:800}
+  .hero h1 span{color:var(--gold2)}
+  .hero p{max-width:760px;margin:.8rem auto 0;color:#C9D8E6;font-size:1.05rem}
+
+  .wrap{max-width:1150px;margin:0 auto;padding:1.6rem 1.5rem 4rem}
+
+  .tabs{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.6rem;position:sticky;top:64px;z-index:90;
+    background:var(--paper);padding:.7rem 0}
+  .tab{background:#fff;border:1.5px solid #D7E1EA;border-radius:999px;padding:.55rem 1.1rem;
+    font-size:.9rem;font-weight:700;color:var(--navy2);cursor:pointer;transition:.2s}
+  .tab:hover{border-color:var(--gold)}
+  .tab.active{background:var(--navy);border-color:var(--navy);color:#fff}
+
+  .panel{display:none;animation:fade .35s}
+  .panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  h2{color:var(--navy);font-size:1.5rem;margin:1.6rem 0 .8rem;padding-bottom:.4rem;border-bottom:3px solid var(--gold)}
+  h2:first-child{margin-top:.2rem}
+  h3{color:var(--navy2);font-size:1.12rem;margin:1.3rem 0 .5rem}
+  p{margin-bottom:.85rem}
+  ul{margin:0 0 1rem 1.3rem}
+  li{margin-bottom:.4rem}
+  b{color:var(--navy)}
+  em{color:var(--navy2)}
+
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.2rem;margin-bottom:1.2rem}
+  .box{background:#fff;border:1px solid #E3EAF1;border-radius:14px;padding:1.25rem 1.35rem;
+    box-shadow:0 2px 8px rgba(26,58,92,.05)}
+  .box h4{color:var(--gold);font-size:1rem;margin-bottom:.55rem}
+  .box ul{margin-left:1.15rem}
+  .box p{margin-bottom:.4rem;font-size:.95rem}
+
+  .script{background:#fff;border:1px solid #E3EAF1;border-left:6px solid var(--gold);border-radius:14px;
+    padding:1.25rem 1.4rem;margin:1.1rem 0;box-shadow:0 2px 8px rgba(26,58,92,.05)}
+  .script h4{color:var(--navy);font-size:1.02rem;margin-bottom:.6rem}
+  .say{background:rgba(212,160,23,.09);border-radius:10px;padding:.9rem 1.1rem;margin:.65rem 0}
+  .say p{font-style:italic;margin-bottom:.35rem;font-size:.98rem}
+  .say .you{color:var(--navy)}
+  .why{font-size:.86rem;color:#5A6E82;margin-top:.5rem}
+  .why b{color:var(--gold)}
+
+  .snapshot{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border-radius:16px;
+    padding:1.4rem 1.5rem;margin:1.1rem 0}
+  .snapshot h4{color:var(--gold2);font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem}
+  .snapshot ul{list-style:none;margin:0}
+  .snapshot li{color:#DCE7F1;font-size:.98rem;margin-bottom:.4rem;padding-left:1.3rem;position:relative}
+  .snapshot li::before{content:"→";position:absolute;left:0;color:var(--gold)}
+
+  .flow{display:flex;gap:.55rem;flex-wrap:wrap;margin:.9rem 0 1.2rem}
+  .flow span{background:var(--navy);color:#fff;border-radius:999px;padding:.35rem .9rem;font-size:.84rem;font-weight:600}
+  .flow span:nth-child(even){background:var(--gold);color:var(--navy)}
+
+  .note{background:rgba(212,160,23,.1);border:1.5px dashed var(--gold);border-radius:12px;
+    padding:.95rem 1.25rem;margin:1.1rem 0;font-size:.92rem}
+  .warn{background:rgba(255,120,120,.08);border:1.5px dashed #E07070;border-radius:12px;
+    padding:.95rem 1.25rem;margin:1.1rem 0;font-size:.92rem}
+
+  .tablewrap{overflow-x:auto;margin:1.1rem 0}
+  table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid #E3EAF1;
+    border-radius:14px;overflow:hidden;min-width:620px}
+  th,td{padding:.65rem .9rem;text-align:left;font-size:.92rem;border-bottom:1px solid #EDF2F7;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  th{background:var(--navy);color:#fff;font-size:.88rem}
+  td b{color:var(--gold)}
+
+  .anchor{display:inline-block;background:rgba(93,219,138,.15);color:#1d7a45;border-radius:6px;
+    padding:.12rem .6rem;font-size:.8rem;font-weight:700;margin-left:.4rem}
+
+  footer{text-align:center;padding:2rem;color:#7A8DA0;font-size:.85rem;border-top:1px solid #E3EAF1;margin-top:2rem}
+  footer b{color:var(--navy)}
+
+  @media(max-width:640px){.hero{padding:1.8rem 1.2rem}.topbar .tag{display:none}.tabs{top:60px}}
+</style>
+<link rel="icon" href="assets/steady-hands-logo.jpg">
+<style>
+/* Local logo and Lucide icon assets. */
+.sh-icon{display:inline-block;width:1em;height:1em;vertical-align:-.125em;flex-shrink:0;overflow:visible}
+.logo.sh-logo-slot{background:none;overflow:hidden;flex-shrink:0}
+.sh-brand-logo{display:block;width:100%;height:100%;object-fit:contain;border-radius:inherit}
+.brandtag .sh-brand-logo{display:inline-block;width:24px;height:24px;border-radius:5px;vertical-align:middle;margin-right:8px}
+</style>
+<style>
+.sh-playbook-back{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:9px 12px;border-radius:10px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:.85rem;font-weight:600;flex-shrink:0}
+.sh-playbook-back-wrap{padding:.5rem 1rem;text-align:left;background:var(--navy)}
+.topbar{gap:.8rem}.tabs{top:var(--sh-topbar-height,60px)}
+@media(max-width:640px){.topbar{padding:.7rem .8rem;flex-wrap:wrap}.topbar .brand{min-width:0;flex:1}.topbar .brand b{font-size:.85rem}.topbar .brand small{font-size:.65rem}.topbar .logo{flex-shrink:0}.cols{grid-template-columns:minmax(0,1fr)}.pb-grid{grid-template-columns:minmax(0,1fr)}.sheet{padding:1rem}.sh-head .prices{text-align:left}table{max-width:100%}}
+@media print{.sh-playbook-back,.sh-playbook-back-wrap{display:none}}
+</style>
+</head>
+<body>
+
+<div class="topbar"><a class="sh-playbook-back" href="index.html"><svg class="sh-icon" width="1em" height="1em" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m12 19-7-7 7-7" />   <path d="M19 12H5" /> </svg> <span>Back</span></a>
+  <div class="brand"><div class="logo sh-logo-slot"><img class="sh-brand-logo" src="assets/steady-hands-logo.jpg" alt="Steady Hands Operation logo"></div><div><b>Steady Hands LLC</b><small>Field Playbook</small></div></div>
+  <div class="tag"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="user round"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="8" r="5" />   <path d="M20 21a8 8 0 0 0-16 0" /> </svg>  Buyer Personas</div>
+</div>
+
+<div class="hero">
+  <h1>Buyer <span>Personas Guide</span></h1>
+  <p>Know who you're calling before you dial. Each persona is built on the industries we actually serve — anchored by real Steady Hands clients. Personas prepare you; <b>discovery decides</b>. Every person you reach is an individual first.</p>
+</div>
+
+<div class="wrap">
+
+<!-- ============ TABS ============ -->
+<div class="tabs" id="tabs">
+  <button class="tab active" data-p="p0"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="target"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <circle cx="12" cy="12" r="6" />   <circle cx="12" cy="12" r="2" /> </svg>  How to Use</button>
+  <button class="tab" data-p="p1"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="brush"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m11 10 3 3" />   <path d="M6.5 21A3.5 3.5 0 1 0 3 17.5a2.62 2.62 0 0 1-.708 1.792A1 1 0 0 0 3 21z" />   <path d="M9.969 17.031 21.378 5.624a1 1 0 0 0-3.002-3.002L6.967 14.031" /> </svg>  Cleaning Services</button>
+  <button class="tab" data-p="p2"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="scissors"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="6" cy="6" r="3" />   <path d="M8.12 8.12 12 12" />   <path d="M20 4 8.12 15.88" />   <circle cx="6" cy="18" r="3" />   <path d="M14.8 14.8 20 20" /> </svg>  Salon &amp; Beauty</button>
+  <button class="tab" data-p="p3"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="trees"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M10 10v.2A3 3 0 0 1 8.9 16H5a3 3 0 0 1-1-5.8V10a3 3 0 0 1 6 0Z" />   <path d="M7 16v6" />   <path d="M13 19v3" />   <path d="M12 19h8.3a1 1 0 0 0 .7-1.7L18 14h.3a1 1 0 0 0 .7-1.7L16 9h.2a1 1 0 0 0 .8-1.7L13 3l-1.4 1.5" /> </svg>  Landscaping</button>
+  <button class="tab" data-p="p4"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="plus"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M5 12h14" />   <path d="M12 5v14" /> </svg>  More Local Types</button>
+</div>
+
+<!-- ============ PANEL 0 : HOW TO USE ============ -->
+<div class="panel active" id="p0">
+  <h2>What a Persona Is — and What It Isn't</h2>
+  <div class="grid2">
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="circle check"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <path d="m16 9-5.5 5.5L8 12" /> </svg>  A Persona Is</h4>
+      <ul>
+        <li>A <b>lens</b>: a pre-built map of an industry's typical pains, words, and seasons</li>
+        <li>A head start on discovery — you arrive knowing what to listen FOR</li>
+        <li>Tailored openers and objection forecasts so the first minute isn't wasted</li>
+        <li>A plan-fit intuition — which questions to ask about Standard vs Backend</li>
+      </ul>
+    </div>
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="circle x"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <path d="m15 9-6 6" />   <path d="m9 9 6 6" /> </svg>  A Persona Is Not</h4>
+      <ul>
+        <li>A box to force people into — discovery always overrides the profile</li>
+        <li>A script — if their answers contradict the persona, BELIEVE THEM</li>
+        <li>A stereotype engine — "salons are vain" thinking will leak into your tone</li>
+        <li>A substitute for asking — every persona statement ends with a question mark on the call</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>The 60-Second Pre-Call Ritual</h2>
+  <div class="flow">
+    <span>1. Check the industry</span><span>2. Open the persona tab</span><span>3. Recall top pain + season</span><span>4. Pick the tailored opener</span><span>5. Note the plan-fit question</span><span>6. Dial</span>
+  </div>
+  <p>Sixty seconds of preparation turns a generic dial into an informed conversation. Then the moment they speak, <b>the persona goes quiet and the listening takes over</b> (Ch 4).</p>
+
+  <h2>The Universal Fit Question</h2>
+  <div class="note"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="pin"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M12 17v5" />   <path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z" /> </svg>  Every persona has a plan-fit hypothesis — but the deciding question is always the same: <em>"How often does the content on your site change — services, prices, photos, specials?"</em> Rarely → Standard ($20/mo). Weekly or more → Backend ($30/mo). Not sure → start where it fits; plans are flexible (official policy). Never assume — ask.</div>
+
+  <h2>The Real Client Anchors</h2>
+  <div class="tablewrap">
+    <table>
+      <tr><th>Persona</th><th>Real Client Anchor</th><th>How You Use It</th></tr>
+      <tr><td><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="brush"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m11 10 3 3" />   <path d="M6.5 21A3.5 3.5 0 1 0 3 17.5a2.62 2.62 0 0 1-.708 1.792A1 1 0 0 0 3 21z" />   <path d="M9.969 17.031 21.378 5.624a1 1 0 0 0-3.002-3.002L6.967 14.031" /> </svg>  Cleaning Services</td><td><b>Sheyla's Pro Cleaning</b><span class="anchor">Real Client</span></td><td>Industry match: "We work with cleaning companies…"</td></tr>
+      <tr><td><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="scissors"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="6" cy="6" r="3" />   <path d="M8.12 8.12 12 12" />   <path d="M20 4 8.12 15.88" />   <circle cx="6" cy="18" r="3" />   <path d="M14.8 14.8 20 20" /> </svg>  Salon &amp; Beauty</td><td><b>Studio 47 Hair Salon</b><span class="anchor">Real Client</span></td><td>Industry match: "We serve salons like Studio 47…"</td></tr>
+      <tr><td><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="trees"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M10 10v.2A3 3 0 0 1 8.9 16H5a3 3 0 0 1-1-5.8V10a3 3 0 0 1 6 0Z" />   <path d="M7 16v6" />   <path d="M13 19v3" />   <path d="M12 19h8.3a1 1 0 0 0 .7-1.7L18 14h.3a1 1 0 0 0 .7-1.7L16 9h.2a1 1 0 0 0 .8-1.7L13 3l-1.4 1.5" /> </svg>  Landscaping</td><td><b>DF Landscape</b><span class="anchor">Real Client</span></td><td>Industry match: "Landscaping companies like DF…"</td></tr>
+    </table>
+  </div>
+  <div class="warn"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="scale"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M12 3v18" />   <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" />   <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" />   <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" />   <path d="M7 21h10" /> </svg>  <b>The ethics line (Ch 3 &amp; 6):</b> reference the industry match and the real relationship (website + hosting) freely. <b>Never</b> invent results, quotes, or numbers for named clients. If asked for specifics you don't hold: <em>"I can connect you with our team for references."</em></div>
+</div>
+
+<!-- ============ PANEL 1 : CLEANING ============ -->
+<div class="panel" id="p1">
+  <h2><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="brush"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m11 10 3 3" />   <path d="M6.5 21A3.5 3.5 0 1 0 3 17.5a2.62 2.62 0 0 1-.708 1.792A1 1 0 0 0 3 21z" />   <path d="M9.969 17.031 21.378 5.624a1 1 0 0 0-3.002-3.002L6.967 14.031" /> </svg>  Persona: The Cleaning Service Owner</h2>
+
+  <div class="snapshot">
+    <h4>Snapshot</h4>
+    <ul>
+      <li><b>Business:</b> residential &amp; move-out cleaning, small crews (1–5 cleaners)</li>
+      <li><b>Stage:</b> established through word of mouth, landlord referrals, Facebook groups</li>
+      <li><b>Owner's day:</b> cleaning alongside the crew in the morning, quoting and scheduling in the afternoon</li>
+      <li><b>Tech reality:</b> phone + Facebook presence; maybe an old site nobody updated</li>
+      <li><b>Real anchor:</b> Sheyla's Pro Cleaning <span style="color:var(--gold2)">— real Steady Hands client</span></li>
+    </ul>
+  </div>
+
+  <h3>A Day in Their Life</h3>
+  <div class="grid2">
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="sunrise"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M12 2v8" />   <path d="m4.93 10.93 1.41 1.41" />   <path d="M2 18h2" />   <path d="M20 18h2" />   <path d="m19.07 10.93-1.41 1.41" />   <path d="M22 22H2" />   <path d="m8 6 4-4 4 4" />   <path d="M16 18a4 4 0 0 0-8 0" /> </svg>  Morning</h4>
+      <p>On a job by 8am. Phone in the back pocket — every call is an interruption to work in progress. Missed calls = missed bookings they'll never know about.</p></div>
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="building"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M12 10h.01" />   <path d="M12 14h.01" />   <path d="M12 6h.01" />   <path d="M16 10h.01" />   <path d="M16 14h.01" />   <path d="M16 6h.01" />   <path d="M8 10h.01" />   <path d="M8 14h.01" />   <path d="M8 6h.01" />   <path d="M9 22v-3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3" />   <rect x="4" y="2" width="16" height="20" rx="2" /> </svg>  Afternoon</h4>
+      <p>Quoting new jobs, chasing callbacks, posting in local Facebook groups for leads. Quote requests arrive as texts and voicemails — scattered across two phones sometimes.</p></div>
+  </div>
+
+  <h3>Goals &amp; Pains</h3>
+  <div class="grid2">
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="target"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <circle cx="12" cy="12" r="6" />   <circle cx="12" cy="12" r="2" /> </svg>  What They Want</h4>
+      <ul>
+        <li>A full, predictable calendar — crews sitting idle is bleeding money</li>
+        <li>Steady <b>move-in / move-out</b> work — the high-value jobs</li>
+        <li>Fewer phone interruptions while on a job</li>
+        <li>To look established next to the "big name" cleaning companies</li>
+      </ul>
+    </div>
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="zap"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z" /> </svg>  What Hurts</h4>
+      <ul>
+        <li>Invisible when someone searches "cleaning service near me"</li>
+        <li>Losing move-out jobs to competitors with actual websites</li>
+        <li>Quotes lost in text-message chaos — no single place listing services &amp; pricing</li>
+        <li>Fully dependent on Facebook groups they don't control</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>How the Gap Shows Up — Their Language</h3>
+  <div class="script">
+    <h4>The Honest Math Structure (their inputs, always)</h4>
+    <div class="say">
+      <p class="you">"How many quote requests a month do you think you miss — people who searched, found someone else, and never called you? … And what's a typical job worth — a move-out clean, say? … So [missed jobs] × [$X] — that's roughly what's walking past you monthly. Your rough number, not mine."</p>
+    </div>
+    <p class="why"><b>Then the seasonal angle (TCI-T):</b> <em>"Move-out season and spring cleans — when do you WANT the extra bookings lined up by?"</em></p>
+  </div>
+
+  <h3>Plan Fit</h3>
+  <div class="tablewrap">
+    <table>
+      <tr><th>Signal</th><th>Fit</th><th>The Question That Confirms</th></tr>
+      <tr><td>Fixed service list, prices set yearly</td><td><b>Standard — $20/mo</b></td><td>"Do your services and prices change often, or pretty stable?"</td></tr>
+      <tr><td>Runs seasonal promos, updates checklists &amp; pricing</td><td><b>Backend — $30/mo</b></td><td>"How often do you update your service list or specials?"</td></tr>
+      <tr><td>Wants to post client reviews as they come in</td><td><b>Backend — $30/mo</b></td><td>"Would you want to add reviews yourself as they land?"</td></tr>
+    </table>
+  </div>
+
+  <h3>Tailored Opener</h3>
+  <div class="script">
+    <h4>Cleaning-Specific Cold Open (Opener B variant)</h4>
+    <div class="say">
+      <p class="you">"Hi [Name] — [Name] from Steady Hands, web design and hosting for local businesses. I was looking at cleaning services in [area] — most of the ones that come up first in a Google search have a website with their services and pricing listed. I couldn't find yours. Did I get that right, or is there a site I missed?"</p>
+    </div>
+    <p class="why"><b>Why:</b> names the exact comparison moment (the search), uses their vocabulary (services and pricing listed), and opens discovery instead of pitching.</p>
+  </div>
+
+  <h3>Objections You'll Hear From This Persona</h3>
+  <div class="script">
+    <h4>"I get all my work from Facebook groups and landlord referrals."</h4>
+    <div class="say">
+      <p class="you">"That's real business — and it's working for you. The gap is the people who don't know to look for you there: new residents, new landlords, anyone who starts on Google. Your site wouldn't replace referrals — it would catch everyone the referrals miss. Fair way to think about it?"</p>
+    </div>
+    <p class="why"><b>Why:</b> honors the status quo first (LACE-A), then frames the site as a net UNDER the existing channels — not a replacement.</p>
+  </div>
+  <div class="script">
+    <h4>"I'm booked out anyway."</h4>
+    <div class="say">
+      <p class="you">"Love that — genuinely. Two quick thoughts: is that every month, or does it dip? … And when it's full, does the site still earn its keep? Most owners tell us the phone-answering alone — hours, pricing, what's included — pays for the peace of mind. If you're truly full year-round, I'll be the first to say a website isn't urgent."</p>
+    </div>
+    <p class="why"><b>Why:</b> the honest "not urgent" escape (TCI both-sides ethics) is what makes everything else you say believable — and the tax-season dip question usually opens the door.</p>
+  </div>
+  <div class="script">
+    <h4>"My clients aren't the type to look online."</h4>
+    <div class="say">
+      <p class="you">"Some of them, sure. Quick test though: the last three NEW clients — where exactly did each come from? … [listens] … Interesting — so some do come from searching. That's the slice the site grows. And the ones who find you through referrals? First thing they do is look you up to check you're legit."</p>
+    </div>
+    <p class="why"><b>Why:</b> turns an opinion into data (their own last three clients) — the CGP method applied to the objection itself.</p>
+  </div>
+
+  <h3>What Leads &amp; Language</h3>
+  <div class="grid2">
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="medal"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15" />   <path d="M11 12 5.12 2.2" />   <path d="m13 12 5.88-9.8" />   <path d="M8 7h8" />   <circle cx="12" cy="17" r="5" />   <path d="M12 18v-2h-.5" /> </svg>  Value Types That Lead</h4>
+      <ul>
+        <li><b>1. Operational:</b> "Your services, pricing, and booking info — answering for you while you're on a job"</li>
+        <li><b>2. Financial:</b> the missed-quote Gap math</li>
+        <li><b>3. Strategic:</b> "Established next to the big-name companies"</li>
+        <li><b>4. Emotional:</b> pride in a professional presence</li>
+      </ul>
+    </div>
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="speech"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M8.8 20v-4.1l1.9.2a2.3 2.3 0 0 0 2.164-2.1V8.3A5.37 5.37 0 0 0 2 8.25c0 2.8.656 3.054 1 4.55a5.77 5.77 0 0 1 .029 2.758L2 20" />   <path d="M19.8 17.8a7.5 7.5 0 0 0 .003-10.603" />   <path d="M17 15a3.5 3.5 0 0 0-.025-4.975" /> </svg>  Language Map</h4>
+      <ul>
+        <li><b>Say:</b> booked out · move-outs · landlords · recurring clients · quotes · crews</li>
+        <li><b>Avoid:</b> SEO, CMS, "digital presence," "conversion rates" — plain words only</li>
+        <li><b>Best call windows:</b> mid-morning (between jobs) or early afternoon; avoid 7–9am (start of jobs)</li>
+        <li><b>Season:</b> pitch before spring-cleaning season and summer move-out peaks; December = slower, good for warm conversations</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PANEL 2 : SALON ============ -->
+<div class="panel" id="p2">
+  <h2><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="scissors"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="6" cy="6" r="3" />   <path d="M8.12 8.12 12 12" />   <path d="M20 4 8.12 15.88" />   <circle cx="6" cy="18" r="3" />   <path d="M14.8 14.8 20 20" /> </svg>  Persona: The Salon &amp; Beauty Owner</h2>
+
+  <div class="snapshot">
+    <h4>Snapshot</h4>
+    <ul>
+      <li><b>Business:</b> hair salon, barbershop, nail studio — chair-based service business</li>
+      <li><b>Stage:</b> loyal regulars, walk-ins, and Instagram as the de-facto "website"</li>
+      <li><b>Owner's day:</b> booked back-to-back with clients; the phone interrupts constantly</li>
+      <li><b>Tech reality:</b> active Instagram, maybe Facebook; online booking handled by DMs or not at all</li>
+      <li><b>Real anchor:</b> Studio 47 Hair Salon <span style="color:var(--gold2)">— real Steady Hands client</span></li>
+    </ul>
+  </div>
+
+  <h3>A Day in Their Life</h3>
+  <div class="grid2">
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="sunrise"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M12 2v8" />   <path d="m4.93 10.93 1.41 1.41" />   <path d="M2 18h2" />   <path d="M20 18h2" />   <path d="m19.07 10.93-1.41 1.41" />   <path d="M22 22H2" />   <path d="m8 6 4-4 4 4" />   <path d="M16 18a4 4 0 0 0-8 0" /> </svg>  The Chair Is Money</h4>
+      <p>Every minute off the chair is unpaid. Yet the phone rings all day: "How much for a cut?" "Are you open Saturday?" "Do you do color?" — each one stops a service.</p></div>
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="smartphone"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />   <path d="M12 18h.01" /> </svg>  The Instagram Trap</h4>
+      <p>Their work LOOKS amazing on Instagram — but new residents searching "salon near me" on Google never find it. And DMs don't show services, prices, or availability at a glance.</p></div>
+  </div>
+
+  <h3>Goals &amp; Pains</h3>
+  <div class="grid2">
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="target"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <circle cx="12" cy="12" r="6" />   <circle cx="12" cy="12" r="2" /> </svg>  What They Want</h4>
+      <ul>
+        <li>New faces — clients who move to the area and need a NEW salon</li>
+        <li>Fewer interruption calls during appointments</li>
+        <li>A place to show the portfolio properly — not buried in a feed</li>
+        <li>Pride: a link they're happy to put on business cards</li>
+      </ul>
+    </div>
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="zap"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z" /> </svg>  What Hurts</h4>
+      <ul>
+        <li>"I looked you up and couldn't find you" — told by lost potential clients</li>
+        <li>Prices/services changing with trends — and no easy way to update anything</li>
+        <li>The salon down the street shows up in searches. They don't.</li>
+        <li>Income tied to the chair — every interrupted service is lost money</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>How the Gap Shows Up — Their Language</h3>
+  <div class="script">
+    <h4>The Honest Math Structure</h4>
+    <div class="say">
+      <p class="you">"How many new clients a month would make a real difference — three, four? … And what does a first visit usually run — cut, maybe color? … So that's roughly [$X] per new face. If even two of those a month started finding you instead of the other salons — what does that do over a year?"</p>
+      <p class="you">"And the interruption calls — how many during appointments on a busy day?"</p>
+    </div>
+    <p class="why"><b>The double Gap:</b> salons uniquely have TWO costs of inaction — lost new clients AND lost service time to interruptions. Quantify both; the second one often lands harder because they live it daily.</p>
+  </div>
+
+  <h3>Plan Fit — The Strongest Backend Persona</h3>
+  <div class="tablewrap">
+    <table>
+      <tr><th>Signal</th><th>Fit</th><th>The Question That Confirms</th></tr>
+      <tr><td>Price list updates with trends &amp; seasons</td><td><b>Backend — $30/mo</b></td><td>"How often do your prices or services change through the year?"</td></tr>
+      <tr><td>Wants to post new work / client transformations</td><td><b>Backend — $30/mo</b></td><td>"Would you want to update photos yourself as you do new work?"</td></tr>
+      <tr><td>Stable service menu, simple presence needs</td><td><b>Standard — $20/mo</b></td><td>Only if update frequency is genuinely low — confirm, don't assume</td></tr>
+    </table>
+  </div>
+  <div class="note"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="lightbulb"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" />   <path d="M9 18h6" />   <path d="M10 22h4" /> </svg>  Salons are the textbook <b>"content that changes more often"</b> business — the official Backend positioning line was practically written for them. Lead them there through their OWN change-frequency answer, never by pushing the upsell.</div>
+
+  <h3>Tailored Opener</h3>
+  <div class="script">
+    <h4>Salon-Specific Cold Open</h4>
+    <div class="say">
+      <p class="you">"Hi [Name] — [Name] from Steady Hands. We build websites for local salons — actually, a salon like yours is one of our clients. I noticed most salons showing up first when people search in [area] have their own site with services and prices. Yours is on Instagram — which looks great — but I couldn't find a website. Am I right, or did I miss one?"</p>
+    </div>
+    <p class="why"><b>Why:</b> compliments the Instagram honestly (it IS their portfolio), then names the gap precisely — Google search invisibility. The Studio 47 mention builds instant credibility for this persona.</p>
+  </div>
+
+  <h3>Objections You'll Hear From This Persona</h3>
+  <div class="script">
+    <h4>"Instagram is my portfolio — that's where my clients are."</h4>
+    <div class="say">
+      <p class="you">"And it's genuinely good — that's where your work shines. Here's the piece it can't do: when someone new to the area types 'salon near me,' Instagram doesn't show up — websites do. Think of it this way: Instagram is for people who already follow you. The site is for the ones who don't know you exist yet. Both together is the full picture."</p>
+    </div>
+    <p class="why"><b>Why:</b> never fight their love for Instagram — position the site as the missing half, not the replacement. "Rented land vs. owned address" (Ch 2) works well here.</p>
+  </div>
+  <div class="script">
+    <h4>"My clients just DM me to book."</h4>
+    <div class="say">
+      <p class="you">"So every booking runs through you personally — even on your day off? … That's exactly it. The site answers hours, prices, and services for you around the clock — the DMs that stay are the actual conversations, not the 'how much is a cut?' ones. How would a Tuesday look without those?"</p>
+    </div>
+    <p class="why"><b>Why:</b> the operational value hits hardest here — every DM-answered-by-the-site is an uninterrupted service. Let them do the day-off math.</p>
+  </div>
+  <div class="script">
+    <h4>"Money's tight month to month — the chair income fluctuates."</h4>
+    <div class="say">
+      <p class="you">"Then let's keep this simple: $100 once — that's the whole build. The hosting is $20 a month, everything included, and you can move plans or step back whenever things shift — that's the official policy, not a sales line. Against the two-to-four new clients a month you said would matter… does the math work?"</p>
+    </div>
+    <p class="why"><b>Why:</b> income fluctuation is a REAL constraint — acknowledge it, present the flexibility policy honestly, and let their Gap math answer. Never pressure a fluctuating-income owner.</p>
+  </div>
+
+  <h3>What Leads &amp; Language</h3>
+  <div class="grid2">
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="medal"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15" />   <path d="M11 12 5.12 2.2" />   <path d="m13 12 5.88-9.8" />   <path d="M8 7h8" />   <circle cx="12" cy="17" r="5" />   <path d="M12 18v-2h-.5" /> </svg>  Value Types That Lead</h4>
+      <ul>
+        <li><b>1. Operational:</b> the quiet chair — interruptions answered by the site</li>
+        <li><b>2. Emotional:</b> pride, the link on the business card, "look what I built"</li>
+        <li><b>3. Strategic:</b> new residents finding them first</li>
+        <li><b>4. Financial:</b> the new-client math (strong but leads second here)</li>
+      </ul>
+    </div>
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="speech"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M8.8 20v-4.1l1.9.2a2.3 2.3 0 0 0 2.164-2.1V8.3A5.37 5.37 0 0 0 2 8.25c0 2.8.656 3.054 1 4.55a5.77 5.77 0 0 1 .029 2.758L2 20" />   <path d="M19.8 17.8a7.5 7.5 0 0 0 .003-10.603" />   <path d="M17 15a3.5 3.5 0 0 0-.025-4.975" /> </svg>  Language Map</h4>
+      <ul>
+        <li><b>Say:</b> appointments · new faces · regulars · the chair · front-desk calls · walk-ins</li>
+        <li><b>Avoid:</b> "lead generation," "web traffic" — say "new clients finding you"</li>
+        <li><b>Best call windows:</b> early morning before first appointment, or mid-afternoon lull; NEVER during a Friday/Saturday rush</li>
+        <li><b>Season:</b> pitch before holiday season (Nov–Dec rush) and spring (prom/wedding); those are the windows THEY named</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PANEL 3 : LANDSCAPING ============ -->
+<div class="panel" id="p3">
+  <h2><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="trees"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M10 10v.2A3 3 0 0 1 8.9 16H5a3 3 0 0 1-1-5.8V10a3 3 0 0 1 6 0Z" />   <path d="M7 16v6" />   <path d="M13 19v3" />   <path d="M12 19h8.3a1 1 0 0 0 .7-1.7L18 14h.3a1 1 0 0 0 .7-1.7L16 9h.2a1 1 0 0 0 .8-1.7L13 3l-1.4 1.5" /> </svg>  Persona: The Landscaping &amp; Yard Services Owner</h2>
+
+  <div class="snapshot">
+    <h4>Snapshot</h4>
+    <ul>
+      <li><b>Business:</b> lawn care, landscape design, maintenance contracts — truck-and-equipment business</li>
+      <li><b>Stage:</b> built on route density and word of mouth; often zero web presence</li>
+      <li><b>Owner's day:</b> on jobs or driving between them; quoting happens from the truck</li>
+      <li><b>Tech reality:</b> a Google Business listing at best; photos buried in a phone camera roll</li>
+      <li><b>Real anchor:</b> DF Landscape <span style="color:var(--gold2)">— real Steady Hands client</span></li>
+    </ul>
+  </div>
+
+  <h3>A Day in Their Life</h3>
+  <div class="grid2">
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="sunrise"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M12 2v8" />   <path d="m4.93 10.93 1.41 1.41" />   <path d="M2 18h2" />   <path d="M20 18h2" />   <path d="m19.07 10.93-1.41 1.41" />   <path d="M22 22H2" />   <path d="m8 6 4-4 4 4" />   <path d="M16 18a4 4 0 0 0-8 0" /> </svg>  The Route</h4>
+      <p>Up at dawn, jobs back-to-back through the heat. Homeowners stop them mid-work: "Do you do design?" "Can you quote my yard?" — each conversation costs route time.</p></div>
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="file text"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z" />   <path d="M14 2v5a1 1 0 0 0 1 1h5" />   <path d="M10 9H8" />   <path d="M16 13H8" />   <path d="M16 17H8" /> </svg>  The Bid World</h4>
+      <p>Bigger jobs — designs, installs, contracts — go out as bids. Homeowners collecting three quotes compare them that evening… and the landscaper with no website, no gallery, no reviews online loses credibility before the call.</p></div>
+  </div>
+
+  <h3>Goals &amp; Pains</h3>
+  <div class="grid2">
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="target"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <circle cx="12" cy="12" r="6" />   <circle cx="12" cy="12" r="2" /> </svg>  What They Want</h4>
+      <ul>
+        <li>Win more BIDS — the high-value design &amp; install jobs, not just mow routes</li>
+        <li>Look established: a gallery of finished projects doing the selling</li>
+        <li>Quote requests arriving while they're on jobs</li>
+        <li>Fill the winter gap — the slow-season bookings</li>
+      </ul>
+    </div>
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="zap"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M15.914 4a1.5 1.5 0 00-2.474-1.561l-9 9A1.5 1.5 0 005.5 14h4.002a.5.5 0 01.471.666L8.086 20a1.5 1.5 0 002.475 1.56l9-9A1.5 1.5 0 0018.5 10h-3.997a.5.5 0 01-.472-.667z" /> </svg>  What Hurts</h4>
+      <ul>
+        <li>Losing bids to competitors whose sites show galleries and reviews</li>
+        <li>"Send me some pictures of your work" — with nothing professional to send</li>
+        <li>Seasonal whiplash: crazy summers, thin winters (the Tom story — Ch 10)</li>
+        <li>Being invisible to new homeowners — the best landscaping customers</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>How the Gap Shows Up — Their Language</h3>
+  <div class="script">
+    <h4>The Honest Math Structure</h4>
+    <div class="say">
+      <p class="you">"Out of the bids you send — how many do you feel you lost because the other guy had a site with photos and reviews? … And what's a typical design or install bid worth when it lands? … So even [X] extra bids a year at [$Y] — that's the number. Your estimate, your call."</p>
+      <p class="you">"And the winter months — how thin do bookings get?" <b>(the Ch 10 Tom window)</b></p>
+    </div>
+    <p class="why"><b>The bid-credibility angle:</b> for this persona the site isn't lead-gen first — it's a <b>bid-support tool</b>. The gallery and reviews close the bids they're already losing. That reframe opens ears.</p>
+  </div>
+
+  <h3>Plan Fit</h3>
+  <div class="tablewrap">
+    <table>
+      <tr><th>Signal</th><th>Fit</th><th>The Question That Confirms</th></tr>
+      <tr><td>Fixed service list, mow-and-maintain focus</td><td><b>Standard — $20/mo</b></td><td>"Your services pretty steady, or do they shift with the seasons?"</td></tr>
+      <tr><td>Seasonal service changes, growing project gallery</td><td><b>Backend — $30/mo</b></td><td>"Would you want to add finished-project photos yourself after each job?"</td></tr>
+      <tr><td>Runs seasonal offers (aeration, cleanups, lighting)</td><td><b>Backend — $30/mo</b></td><td>"How often do you rotate seasonal services?"</td></tr>
+    </table>
+  </div>
+
+  <h3>Tailored Opener</h3>
+  <div class="script">
+    <h4>Landscaper-Specific Cold Open</h4>
+    <div class="say">
+      <p class="you">"Hi Tom — [Name] from Steady Hands, websites for local businesses. Quick context: when a homeowner collects three landscaping bids, that evening they usually look all three companies up online. If two have sites with project photos and reviews and one doesn't — who feels safer to hire? … That's the whole reason I'm calling: we work with landscaping companies — DF Landscape is a client — and I wanted to see if that gap exists for you too."</p>
+    </div>
+    <p class="why"><b>Why:</b> leads with the bid-evening scenario — the exact moment this persona loses money. The DF Landscape mention lands as proof we know the trade.</p>
+  </div>
+
+  <h3>Objections You'll Hear From This Persona</h3>
+  <div class="script">
+    <h4>"My business is trucks and equipment — not computers."</h4>
+    <div class="say">
+      <p class="you">"Which is exactly why this works — you never touch a computer. We build it, host it, maintain it, support it — $100 once and $20 a month. The only thing you'd ever do is maybe send me photos of finished jobs. The site works the routes so you don't have to."</p>
+    </div>
+    <p class="why"><b>Why:</b> "done for you" is the entire value proposition for hands-on trades. Zero tech expectation, stated plainly.</p>
+  </div>
+  <div class="script">
+    <h4>"In summer I'm too slammed to even think about this."</h4>
+    <div class="say">
+      <p class="you">"Completely fair — summer IS the crazy season. So here's what I'd suggest: we talk in [November/your slow window]. You tell me when your planning season starts, I'll call then — and not before. Sound fair?"</p>
+    </div>
+    <p class="why"><b>Why:</b> the Agenda answer (Ch 5) gets scheduled, not overcome. This literally sets up the Ch 10 "November Call" — the kept promise becomes the warmest re-engagement in your pipeline.</p>
+  </div>
+  <div class="script">
+    <h4>"All my work is repeat clients anyway."</h4>
+    <div class="say">
+      <p class="you">"Repeats are the best business — no argument. Two gaps though: the new homeowners moving in who search before they ever see a truck, and the bids you're losing on presentation. Your repeat base doesn't shrink — the site just catches what the route can't reach. Worth ten minutes to see if the gap's real?"</p>
+    </div>
+    <p class="why"><b>Why:</b> same structure as the cleaning objection — net UNDER the existing engine, not a replacement. New-homeowner searches are the sharpest angle here.</p>
+  </div>
+
+  <h3>What Leads &amp; Language</h3>
+  <div class="grid2">
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="medal"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15" />   <path d="M11 12 5.12 2.2" />   <path d="m13 12 5.88-9.8" />   <path d="M8 7h8" />   <circle cx="12" cy="17" r="5" />   <path d="M12 18v-2h-.5" /> </svg>  Value Types That Lead</h4>
+      <ul>
+        <li><b>1. Strategic:</b> bid credibility — the gallery that closes the bids they already send</li>
+        <li><b>2. Financial:</b> extra bids won × average install value</li>
+        <li><b>3. Operational:</b> quote requests without phone tag from the truck</li>
+        <li><b>4. Emotional:</b> "established company" — not just a truck and a phone number</li>
+      </ul>
+    </div>
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="speech"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M8.8 20v-4.1l1.9.2a2.3 2.3 0 0 0 2.164-2.1V8.3A5.37 5.37 0 0 0 2 8.25c0 2.8.656 3.054 1 4.55a5.77 5.77 0 0 1 .029 2.758L2 20" />   <path d="M19.8 17.8a7.5 7.5 0 0 0 .003-10.603" />   <path d="M17 15a3.5 3.5 0 0 0-.025-4.975" /> </svg>  Language Map</h4>
+      <ul>
+        <li><b>Say:</b> bids · quotes · properties · crews · season · routes · design &amp; install</li>
+        <li><b>Avoid:</b> anything that sounds like office work — "portfolio" beats "website content"</li>
+        <li><b>Best call windows:</b> early morning (pre-route) or after 5pm; midday = on jobs</li>
+        <li><b>Season:</b> Vegas landscaping = crazy summers, thin winters. Pitch for the WINTER planning window — November conversations build spring pipelines (the Tom story, Ch 10)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============ PANEL 4 : EXPANSION ============ -->
+<div class="panel" id="p4">
+  <h2><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="plus"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M5 12h14" />   <path d="M12 5v14" /> </svg>  Expansion Personas — Other Local Business Types</h2>
+  <p>The three anchor personas cover our current client base. These four expansion profiles cover the broader local market you'll dial into — lighter treatment, same method: <b>hypothesis on the call, verification in discovery.</b></p>
+
+  <h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="wrench"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z" /> </svg>  Home &amp; Trade Services — Plumbers, Electricians, Handymen</h3>
+  <div class="grid2">
+    <div class="box"><h4>Profile &amp; Pain</h4>
+      <ul>
+        <li>Emergency-driven business: customers search in a CRISIS ("plumber near me NOW")</li>
+        <li>Search visibility is worth more here than any other persona — the searcher has money in hand</li>
+        <li>Often an old, broken, or nonexistent site</li>
+        <li>Trust gap: "who IS this person entering my home?" — reviews and photos answer it</li>
+      </ul>
+    </div>
+    <div class="box"><h4>Fit &amp; Angle</h4>
+      <ul>
+        <li><b>Plan:</b> usually Standard — service lists are stable; confirm update frequency</li>
+        <li><b>Lead value:</b> Financial (emergency searches = highest-intent Gap math in our whole market)</li>
+        <li><b>Opener seed:</b> "When someone's pipe bursts at 8pm, where do they find you?"</li>
+        <li><b>Best window:</b> mid-morning or after 5pm — never mid-job</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="car"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2" />   <circle cx="7" cy="17" r="2" />   <path d="M9 17h6" />   <circle cx="17" cy="17" r="2" /> </svg>  Auto Services — Detailers, Mechanics, Tint &amp; Audio Shops</h3>
+  <div class="grid2">
+    <div class="box"><h4>Profile &amp; Pain</h4>
+      <ul>
+        <li>Visual, trust-heavy trade — results are photos, credibility is reviews</li>
+        <li>Often burned before: paid web companies big money, got nothing (remember Frank, Ch 10 — the $2,000 detailing veteran)</li>
+        <li>Word of mouth strong; digital presence often years stale</li>
+      </ul>
+    </div>
+    <div class="box"><h4>Fit &amp; Angle</h4>
+      <ul>
+        <li><b>Plan:</b> Standard usually; Backend if they post gallery work or pricing packages often</li>
+        <li><b>Lead value:</b> Trust FIRST (verifiable facts, preview process, real phone number — Ch 7 slow close)</li>
+        <li><b>Opener seed:</b> "When someone compares detailers online, what do they find for you?"</li>
+        <li><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="triangle alert"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" />   <path d="M12 9v4" />   <path d="M12 17h.01" /> </svg>  Persona note:</b> highest burned-before rate — run the Ch 10 Scenario 3 playbook: patience, verifiability, zero pressure</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="pizza"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m12 14-1 1" />   <path d="m13.75 18.25-1.25 1.42" />   <path d="M17.775 5.654a15.68 15.68 0 0 0-12.121 12.12" />   <path d="M18.8 9.3a1 1 0 0 0 2.1 7.7" />   <path d="M21.964 20.732a1 1 0 0 1-1.232 1.232l-18-5a1 1 0 0 1-.695-1.232A19.68 19.68 0 0 1 15.732 2.037a1 1 0 0 1 1.232.695z" /> </svg>  Food &amp; Cafés — Restaurants, Coffee Shops, Bakeries</h3>
+  <div class="grid2">
+    <div class="box"><h4>Profile &amp; Pain</h4>
+      <ul>
+        <li>Menus, hours, and specials change CONSTANTLY — the definition of "content that changes more often"</li>
+        <li>Customers check menus online before visiting — an outdated or missing menu costs real covers</li>
+        <li>Often rely on delivery-platform pages they don't own and pay commissions on</li>
+      </ul>
+    </div>
+    <div class="box"><h4>Fit &amp; Angle</h4>
+      <ul>
+        <li><b>Plan:</b> <b>Backend is the natural home</b> — menus and specials updated by the owner in minutes</li>
+        <li><b>Lead value:</b> Operational ("change the menu yourself, no calling anyone") + Strategic (owned address vs. platform-rented pages)</li>
+        <li><b>Opener seed:</b> "When someone Googles your food, do they find your current menu — or last year's?"</li>
+        <li><b>Best window:</b> mid-afternoon lull (2–4:30pm) — never meal rushes</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="dog"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M11.25 16.25h1.5L12 17z" />   <path d="M16 14v.5" />   <path d="M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444a11.702 11.702 0 0 0-.493-3.309" />   <path d="M8 14v.5" />   <path d="M8.5 8.5c-.384 1.05-1.083 2.028-2.344 2.5-1.931.722-3.576-.297-3.656-1-.113-.994 1.177-6.53 4-7 1.923-.321 3.651.845 3.651 2.235A7.497 7.497 0 0 1 14 5.277c0-1.39 1.844-2.598 3.767-2.277 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5" /> </svg>  Pet &amp; Personal Services — Groomers, Trainers, Sitters</h3>
+  <div class="grid2">
+    <div class="box"><h4>Profile &amp; Pain</h4>
+      <ul>
+        <li>Emotionally-driven purchase: "who do I trust with my DOG?" — reviews and warmth decide</li>
+        <li>Salon-adjacent dynamics: appointments, repeat clients, price-list updates</li>
+        <li>New-resident angle strong: new pet owners search for a groomer/vet-adjacent services immediately</li>
+      </ul>
+    </div>
+    <div class="box"><h4>Fit &amp; Angle</h4>
+      <ul>
+        <li><b>Plan:</b> Backend often fits (prices, services, policies change; client photos)</li>
+        <li><b>Lead value:</b> Emotional (trust, warmth, pride) + Strategic (new-resident capture)</li>
+        <li><b>Opener seed:</b> "When someone new to the area needs a groomer, how do they find you?"</li>
+        <li><b>Season:</b> before holidays (boarding/grooming demand) and summer</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>The Cross-Persona Comparison</h2>
+  <div class="tablewrap">
+    <table>
+      <tr><th>Persona</th><th>Top Pain</th><th>Lead Value</th><th>Plan Lean</th><th>Season Window</th></tr>
+      <tr><td><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="brush"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m11 10 3 3" />   <path d="M6.5 21A3.5 3.5 0 1 0 3 17.5a2.62 2.62 0 0 1-.708 1.792A1 1 0 0 0 3 21z" />   <path d="M9.969 17.031 21.378 5.624a1 1 0 0 0-3.002-3.002L6.967 14.031" /> </svg>  Cleaning</td><td>Invisible in searches; lost move-out jobs</td><td>Operational</td><td>Standard</td><td>Pre-spring &amp; summer move-outs</td></tr>
+      <tr><td><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="scissors"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="6" cy="6" r="3" />   <path d="M8.12 8.12 12 12" />   <path d="M20 4 8.12 15.88" />   <circle cx="6" cy="18" r="3" />   <path d="M14.8 14.8 20 20" /> </svg>  Salon</td><td>Interruptions + search invisibility</td><td>Operational + Emotional</td><td><b>Backend</b></td><td>Pre-holiday &amp; pre-spring</td></tr>
+      <tr><td><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="trees"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M10 10v.2A3 3 0 0 1 8.9 16H5a3 3 0 0 1-1-5.8V10a3 3 0 0 1 6 0Z" />   <path d="M7 16v6" />   <path d="M13 19v3" />   <path d="M12 19h8.3a1 1 0 0 0 .7-1.7L18 14h.3a1 1 0 0 0 .7-1.7L16 9h.2a1 1 0 0 0 .8-1.7L13 3l-1.4 1.5" /> </svg>  Landscaping</td><td>Losing bids on presentation</td><td>Strategic</td><td>Either — ask</td><td>Winter planning (Nov call)</td></tr>
+      <tr><td><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="wrench"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-8.259 7.057l-7.91 7.91a1 1 0 0 1-2.999-3l7.91-7.91a6 6 0 0 1 7.057-8.259c.438.12.54.662.219.984z" /> </svg>  Trades</td><td>Invisible in emergency searches</td><td>Financial</td><td>Standard</td><td>Year-round; pre-storm awareness</td></tr>
+      <tr><td><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="car"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2" />   <circle cx="7" cy="17" r="2" />   <path d="M9 17h6" />   <circle cx="17" cy="17" r="2" /> </svg>  Auto</td><td>Burned-before trust gap</td><td><b>Trust first</b></td><td>Standard/Backend</td><td>Pre-holiday detailing</td></tr>
+      <tr><td><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="pizza"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m12 14-1 1" />   <path d="m13.75 18.25-1.25 1.42" />   <path d="M17.775 5.654a15.68 15.68 0 0 0-12.121 12.12" />   <path d="M18.8 9.3a1 1 0 0 0 2.1 7.7" />   <path d="M21.964 20.732a1 1 0 0 1-1.232 1.232l-18-5a1 1 0 0 1-.695-1.232A19.68 19.68 0 0 1 15.732 2.037a1 1 0 0 1 1.232.695z" /> </svg>  Food</td><td>Stale/missing menu online</td><td>Operational</td><td><b>Backend</b></td><td>Slow afternoons; pre-holiday</td></tr>
+      <tr><td><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="dog"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M11.25 16.25h1.5L12 17z" />   <path d="M16 14v.5" />   <path d="M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444a11.702 11.702 0 0 0-.493-3.309" />   <path d="M8 14v.5" />   <path d="M8.5 8.5c-.384 1.05-1.083 2.028-2.344 2.5-1.931.722-3.576-.297-3.656-1-.113-.994 1.177-6.53 4-7 1.923-.321 3.651.845 3.651 2.235A7.497 7.497 0 0 1 14 5.277c0-1.39 1.844-2.598 3.767-2.277 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.239-2.5" /> </svg>  Pet/Personal</td><td>Trust + new-resident capture</td><td>Emotional</td><td>Backend</td><td>Pre-holiday &amp; summer</td></tr>
+    </table>
+  </div>
+
+  <div class="note"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="library big"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <rect width="8" height="18" x="3" y="3" rx="1" />   <path d="M7 3v18" />   <path d="M20.4 18.9c.2.5-.1 1.1-.6 1.3l-1.9.7c-.5.2-1.1-.1-1.3-.6L11.1 5.1c-.2-.5.1-1.1.6-1.3l1.9-.7c.5-.2 1.1.1 1.3.6Z" /> </svg>  <b>Living document:</b> when YOUR calls teach you something new about an industry — a new objection, a season you didn't know, a phrase that lands — post it in the team chat. Personas improve the same way reps do: one insight per week, compounding.</div>
+</div>
+
+</div><!-- /wrap -->
+
+<footer>
+  <b>Steady Hands LLC — Buyer Personas Guide</b><br>
+  Part of Steady Hands LLC Training Program · Companion to Chapters 1–10 · Developed by Ahmed Kamel · © 2026
+</footer>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.panel');
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      tabs.forEach(function(x){ x.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      t.classList.add('active');
+      document.getElementById(t.dataset.p).classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+</script>
+
+<script>(function(){const bar=document.querySelector('.topbar');if(!bar)return;function fit(){document.documentElement.style.setProperty('--sh-topbar-height',Math.ceil(bar.getBoundingClientRect().height)+'px');}if(window.ResizeObserver)new ResizeObserver(fit).observe(bar);window.addEventListener('resize',fit);fit();})();</script>
+</body>
+</html>

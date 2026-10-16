@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 10: Steady Hands LLC in Action — Complex Scenarios &amp; Integrated Mastery</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --navy:#1A3A5C; --navy2:#2D4A6B; --gold:#D4A017; --gold2:#F0C24B;
+    --mist:#90A4B8; --paper:#E8F1F5;
+  }
+  body{font-family:'Inter','Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;
+    background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);
+    color:#fff;overflow:hidden;height:100vh}
+  .presentation{width:100vw;height:100vh;position:relative}
+  .slide{width:100%;height:100%;position:absolute;top:0;left:0;opacity:0;
+    transform:translateX(100px);transition:all .6s cubic-bezier(.25,.46,.45,.94);
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    padding:60px 80px;text-align:center;overflow-y:auto}
+  .slide.active{opacity:1;transform:translateX(0)}
+  .slide.prev{transform:translateX(-100px)}
+
+  h1.t{font-size:3rem;font-weight:800;margin-bottom:1.2rem;line-height:1.15;
+    background:linear-gradient(135deg,#fff 0%,var(--gold2) 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  h2.s{font-size:1.6rem;color:var(--mist);font-weight:300;margin-bottom:2rem}
+  .content{font-size:1.2rem;line-height:1.75;max-width:1000px;color:var(--paper);margin-bottom:1.5rem}
+
+  .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;max-width:1050px;width:100%;margin-bottom:1.5rem}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem;max-width:1050px;width:100%;margin-bottom:1.5rem}
+  .card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
+    border-radius:16px;padding:1.5rem 1.4rem;text-align:left;backdrop-filter:blur(8px);transition:.3s}
+  .card:hover{transform:translateY(-5px);border-color:rgba(212,160,23,.5)}
+  .card h3{color:var(--gold2);font-size:1.2rem;margin-bottom:.8rem}
+  .card ul{list-style:none}
+  .card li{font-size:1rem;color:var(--paper);margin-bottom:.55rem;padding-left:1.3rem;position:relative;line-height:1.5}
+  .card li::before{content:"→";position:absolute;left:0;color:var(--gold);font-weight:700}
+
+  .vs .old{border-color:rgba(255,120,120,.4)}
+  .vs .old h3{color:#FF9E9E}
+  .vs .new{border-color:rgba(212,160,23,.55)}
+  .vs .new h3{color:var(--gold2)}
+
+  .flow{max-width:980px;width:100%;text-align:left}
+  .flow .step{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
+    border-left:5px solid var(--gold);border-radius:12px;padding:1.1rem 1.3rem;margin-bottom:.9rem}
+  .flow .step b{display:block;color:var(--gold2);font-size:1.05rem;margin-bottom:.35rem;letter-spacing:.03em}
+  .flow .step span{font-size:.98rem;color:var(--paper);line-height:1.55;display:block}
+  .flow .step em{color:#fff;font-style:italic}
+
+  .quote{max-width:900px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
+    border-left:6px solid var(--gold);border-radius:16px;padding:2.2rem;text-align:left;backdrop-filter:blur(8px)}
+  .quote p{font-size:1.35rem;font-style:italic;line-height:1.6;margin-bottom:1rem;color:#fff}
+  .quote span{color:var(--gold2);font-weight:700;font-size:1.05rem}
+
+  .creed{max-width:950px;width:100%;background:rgba(212,160,23,.12);
+    border:2px solid var(--gold);border-radius:20px;padding:2.4rem;margin-bottom:1.5rem}
+  .creed .line{font-size:1.9rem;font-weight:800;color:var(--gold2);line-height:1.7}
+  .creed .sub{font-size:.95rem;color:var(--mist);margin-top:1rem}
+
+  .bar{height:6px;background:rgba(255,255,255,.15);border-radius:6px;max-width:1050px;width:100%;margin-top:1.5rem;overflow:hidden}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .4s;border-radius:6px}
+
+  .quiz{max-width:900px;width:100%;text-align:left}
+  .quiz .q{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:14px;
+    padding:1.2rem 1.4rem;margin-bottom:1rem}
+  .quiz .q p.qt{font-size:1.05rem;font-weight:600;margin-bottom:.7rem;color:#fff}
+  .quiz .q .opt{display:block;font-size:.95rem;color:var(--paper);padding:.4rem 0 .4rem 1.9rem;position:relative;cursor:default}
+  .quiz .q .opt::before{content:"○";position:absolute;left:0;color:var(--mist)}
+  .quiz .q .opt.correct{color:#B8F5D0}
+  .quiz .q .opt.correct::before{content:"✓";color:#5DDB8A;font-weight:800}
+  .quiz .q .ans{margin-top:.6rem;font-size:.85rem;color:#5DDB8A;font-weight:600}
+
+  .diagram{display:flex;gap:.9rem;align-items:stretch;justify-content:center;max-width:1080px;width:100%;flex-wrap:wrap}
+  .node{background:rgba(212,160,23,.12);border:1.5px solid var(--gold);border-radius:14px;padding:1.1rem 1.2rem;min-width:190px;flex:1}
+  .node b{display:block;color:var(--gold2);font-size:1.05rem;margin-bottom:.4rem}
+  .node span{font-size:.9rem;color:var(--paper);line-height:1.45;display:block}
+  .arrow{display:flex;align-items:center;color:var(--gold);font-size:1.7rem;font-weight:800}
+
+  .note{max-width:1000px;font-size:.88rem;color:var(--mist);background:rgba(255,255,255,.05);
+    border:1px dashed rgba(144,164,184,.5);border-radius:10px;padding:.8rem 1.2rem;margin-top:.5rem}
+
+  .cmp{width:100%;max-width:1020px;border-collapse:separate;border-spacing:0;
+    background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);
+    border-radius:14px;overflow:hidden;margin-bottom:1.5rem}
+  .cmp th,.cmp td{padding:.55rem .9rem;text-align:left;font-size:.92rem;
+    border-bottom:1px solid rgba(255,255,255,.1)}
+  .cmp tr:last-child td{border-bottom:none}
+  .cmp th{background:rgba(212,160,23,.15);color:var(--gold2);font-size:.95rem}
+  .cmp td b{color:var(--gold2)}
+
+  .nav{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);display:flex;gap:.8rem;z-index:1000}
+  .nav button{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;
+    padding:.7rem 1.4rem;border-radius:24px;cursor:pointer;font-size:.95rem;font-weight:600;transition:.25s}
+  .nav button:hover{background:var(--gold);color:var(--navy);border-color:var(--gold)}
+  .counter{position:fixed;top:20px;right:24px;background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.25);padding:.55rem 1.1rem;border-radius:24px;font-size:.9rem;font-weight:600;z-index:1000}
+  .brandtag{position:fixed;top:20px;left:24px;background:rgba(212,160,23,.15);border:1px solid rgba(212,160,23,.4);
+    color:var(--gold2);padding:.5rem 1rem;border-radius:24px;font-size:.75rem;font-weight:700;letter-spacing:.08em;z-index:1000;text-transform:uppercase}
+
+  @media(max-width:820px){
+    .grid2,.grid3{grid-template-columns:1fr}
+    .slide{padding:80px 22px 120px}
+    h1.t{font-size:2.1rem}
+    .creed .line{font-size:1.3rem}
+    .brandtag{display:none}
+  }
+</style>
+<link rel="icon" href="assets/steady-hands-logo.jpg">
+<style>
+/* Local logo and Lucide icon assets. */
+.sh-icon{display:inline-block;width:1em;height:1em;vertical-align:-.125em;flex-shrink:0;overflow:visible}
+.logo.sh-logo-slot{background:none;overflow:hidden;flex-shrink:0}
+.sh-brand-logo{display:block;width:100%;height:100%;object-fit:contain;border-radius:inherit}
+.brandtag .sh-brand-logo{display:inline-block;width:24px;height:24px;border-radius:5px;vertical-align:middle;margin-right:8px}
+</style>
+<style>
+/* Viewport-aware slide area and chapter navigation. */
+:root{--sh-header-height:72px;--sh-footer-height:76px}
+html,body{width:100%;height:100%;height:100dvh;overflow:hidden}
+.chapter-header{position:fixed;inset:0 0 auto;z-index:1100;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px;padding:12px 24px;background:rgba(26,58,92,.97);border-bottom:1px solid rgba(255,255,255,.14)}
+.chapter-header .brandtag{position:static;display:flex;align-items:center;min-width:0;margin:0;padding:0;border:0;border-radius:0;background:none;font-size:.7rem;line-height:1.35}
+.chapter-header .brandtag .sh-brand-logo{flex:0 0 28px;width:28px;height:28px}
+.chapter-tools{display:flex;align-items:center;gap:10px}
+.chapter-header .counter{position:static;white-space:nowrap;margin:0;padding:.55rem .85rem;font-size:.85rem}
+.sh-back,.sh-fullscreen,.sh-course{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid rgba(255,255,255,.3);border-radius:12px;padding:10px 13px;background:rgba(255,255,255,.1);color:#fff;font-family:inherit;font-size:.85rem;font-weight:600;text-decoration:none;cursor:pointer;min-height:44px;line-height:1.3}
+.sh-back:hover,.sh-fullscreen:hover,.sh-course:hover{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+.sh-course[aria-disabled="true"]{opacity:.4;cursor:default;pointer-events:none}
+.sh-fullscreen:disabled{opacity:.4;cursor:default}
+.sh-back:focus-visible,.sh-fullscreen:focus-visible,.sh-course:focus-visible,.nav button:focus-visible{outline:3px solid var(--gold2);outline-offset:3px}
+.presentation{position:fixed;inset:var(--sh-header-height) 0 var(--sh-footer-height);width:100%;height:auto;min-height:0;overflow:hidden}
+.slide{display:block;height:100%;width:100%;padding:24px clamp(20px,5vw,80px);overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;scrollbar-gutter:auto;visibility:hidden;pointer-events:none;outline:none;scroll-padding:20px}
+.slide.active{visibility:visible;pointer-events:auto}
+.slide-content{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100%;width:100%;min-width:0}
+.slide-content>*{flex-shrink:0;max-width:100%}
+.slide-content .grid2,.slide-content .grid3{min-width:0}
+.slide-content .card,.slide-content .node{min-width:0;overflow-wrap:break-word}
+.chapter-footer{position:fixed;inset:auto 0 0;z-index:1100;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:12px;align-items:center;padding:12px 24px max(12px,env(safe-area-inset-bottom));background:rgba(26,58,92,.97);border-top:1px solid rgba(255,255,255,.14)}
+.chapter-footer>.sh-course:first-child{justify-self:start}
+.chapter-footer>.sh-course:last-child{justify-self:end}
+.chapter-footer .nav{position:static;left:auto;bottom:auto;transform:none;gap:8px}
+.chapter-footer .nav button{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;min-width:44px;padding:0;border-radius:12px;font-size:20px}
+@media(max-width:820px){
+ .chapter-header{padding:10px 14px;gap:10px}
+ .chapter-header .brandtag{display:flex;font-size:.6rem;letter-spacing:.03em}
+ .chapter-header .counter{font-size:.78rem;padding:8px 10px}
+ .sh-fullscreen .sh-fullscreen-label{display:none}
+ .sh-fullscreen{width:44px;padding:10px}
+ .slide{padding:20px 18px}
+ .slide-content h1.t{font-size:clamp(1.6rem,5.8vw,2.1rem)}
+ .slide-content h2.s{font-size:clamp(1.1rem,4.5vw,1.6rem)}
+ .slide-content .content{font-size:1rem;overflow-wrap:break-word}
+ .slide-content .grid2,.slide-content .grid3{grid-template-columns:minmax(0,1fr);width:100%}
+ .slide-content .diagram{width:100%;min-width:0}
+ .slide-content .node{flex-basis:100%;max-width:100%}
+ .slide-content table{display:block;max-width:100%;overflow-x:auto}
+ .slide-content .quote{padding:1.4rem}
+ .slide-content .quote p{font-size:1.1rem}
+ .chapter-footer{padding:10px 12px max(10px,env(safe-area-inset-bottom));gap:8px}
+ .sh-course{padding:9px 10px;font-size:.78rem;max-width:100%;text-align:center}
+}
+@media(max-width:480px){
+ .chapter-header{padding:8px 10px;gap:8px}
+ .chapter-header .brandtag{font-size:0;letter-spacing:0;justify-content:center}
+ .chapter-header .brandtag .sh-brand-logo{width:28px;height:28px;margin:0}
+ .chapter-tools{gap:6px}
+ .sh-back{padding:9px 10px;font-size:.8rem}
+ .chapter-header .counter{padding:8px;font-size:.75rem}
+ .sh-course{padding:8px 4px;font-size:.68rem;gap:4px;min-height:44px}
+ .sh-course .sh-icon{display:none}
+}
+</style>
+<style>
+/* Centered slide controls: labels on desktop, icons on compact screens. */
+.chapter-footer .nav{gap:8px}
+.chapter-footer .nav button.sh-slide-control{width:auto;min-width:44px;gap:7px;padding:10px 13px;font-size:.85rem;line-height:1.3}
+.chapter-footer .nav .sh-icon{width:1.1em;height:1.1em}
+.chapter-footer .nav .sh-fullscreen{display:inline-flex}
+.chapter-footer .nav .sh-fullscreen .sh-maximize,.chapter-footer .nav .sh-fullscreen .sh-minimize{line-height:1}
+.chapter-footer .nav .sh-fullscreen [hidden]{display:none}
+@media(max-width:820px){
+ .chapter-footer .nav button.sh-slide-control{width:44px;height:44px;padding:0;font-size:20px}
+ .chapter-footer .nav .sh-control-label{display:none}
+ .chapter-footer .nav{gap:6px}
+ .chapter-footer{gap:6px}
+ .chapter-footer .sh-course{font-size:.7rem;padding:8px 5px}
+}
+@media(max-width:380px){
+ .chapter-footer{padding-left:6px;padding-right:6px;gap:4px}
+ .chapter-footer .nav{gap:4px}
+ .chapter-footer .sh-course{font-size:.65rem;padding-left:3px;padding-right:3px;overflow-wrap:normal}
+}
+</style>
+</head>
+<body>
+
+<header class="chapter-header"><a class="sh-back" href="index.html"><svg class="sh-icon" width="1em" height="1em" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m12 19-7-7 7-7" />   <path d="M19 12H5" /> </svg> <span>Back</span></a><div class="brandtag"><img class="sh-brand-logo" src="assets/steady-hands-logo.jpg" alt="Steady Hands Operation logo">Steady Hands LLC · Sales Training</div><div class="chapter-tools"><div class="counter"><span id="cur">1</span> / <span id="tot"></span></div></div></header>
+
+<div class="presentation">
+
+<!-- ============ SLIDE 1 : TITLE ============ -->
+<div class="slide active" tabindex="0"><div class="slide-content">
+  <p style="font-size:.85rem;letter-spacing:.15em;color:var(--gold2);font-weight:700;margin-bottom:1rem;text-transform:uppercase">Steady Hands LLC · Chapter 10 · The Finale</p>
+  <h1 class="t">Steady Hands LLC in Action</h1>
+  <h2 class="s">Complex Scenarios, Integrated Frameworks &amp; the Making of Mastery</h2>
+  <p class="content">Nine chapters built your system. This one tests it — <b>everything at once, under pressure, in real conversations</b>. The true test of a Steady Hands LLC lies not in knowing the frameworks, but in weaving them together when it matters.</p>
+  <div class="diagram">
+    <div class="node"><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="drama"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M10 11h.01" />   <path d="M14 6h.01" />   <path d="M18 6h.01" />   <path d="M6.5 13.1h.01" />   <path d="M22 5c0 9-4 12-6 12s-6-3-6-12c0-2 2-3 6-3s6 1 6 3" />   <path d="M17.4 9.9c-.8.8-2 .8-2.8 0" />   <path d="M10.1 7.1C9 7.2 7.7 7.7 6 8.6c-3.5 2-4.7 3.9-3.7 5.6 4.5 7.8 9.5 8.4 11.2 7.4.9-.5 1.9-2.1 1.9-4.7" />   <path d="M9.1 16.5c.3-1.1 1.4-1.7 2.4-1.4" /> </svg>  Multi-Stakeholder</b><span>Owner + spouse + gatekeeper — one deal</span></div>
+    <div class="node"><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="puzzle"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M15.39 4.39a1 1 0 0 0 1.68-.474 2.5 2.5 0 1 1 3.014 3.015 1 1 0 0 0-.474 1.68l1.683 1.682a2.414 2.414 0 0 1 0 3.414L19.61 15.39a1 1 0 0 1-1.68-.474 2.5 2.5 0 1 0-3.014 3.015 1 1 0 0 1 .474 1.68l-1.683 1.682a2.414 2.414 0 0 1-3.414 0L8.61 19.61a1 1 0 0 0-1.68.474 2.5 2.5 0 1 1-3.014-3.015 1 1 0 0 0 .474-1.68l-1.683-1.682a2.414 2.414 0 0 1 0-3.414L4.39 8.61a1 1 0 0 1 1.68.474 2.5 2.5 0 1 0 3.014-3.015 1 1 0 0 1-.474-1.68l1.683-1.682a2.414 2.414 0 0 1 3.414 0z" /> </svg>  Integration</b><span>All 8 frameworks — one call</span></div>
+    <div class="node"><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="trophy"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M10 14.66V17a1 1 0 0 1-1 1 2 2 0 0 0-2 2v2" />   <path d="M14 14.66V17a1 1 0 0 0 1 1 2 2 0 0 1 2 2v2" />   <path d="M17.916 10H19.5A2.5 2.5 0 0 0 22 7.5V5a1 1 0 0 0-1-1h-3" />   <path d="M4 22h16" />   <path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z" />   <path d="M6.084 10H4.5A2.5 2.5 0 0 1 2 7.5V5a1 1 0 0 1 1-1h3" /> </svg>  Simulations</b><span>Role-play to mastery, scored &amp; debriefed</span></div>
+  </div>
+  <div class="bar"><i style="width:4%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 2 : CHAPTER OVERVIEW ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">The Final Exam Is a Real Conversation</h1>
+  <h2 class="s">What This Chapter Demands</h2>
+  <div class="grid2">
+    <div class="card"><h3>What You Bring</h3>
+      <ul>
+        <li>The Mandate and the ethics (Ch 1–2)</li>
+        <li>Product mastery — every price, every fit (Ch 3)</li>
+        <li>DARE &amp; SPIN diagnosis (Ch 4)</li>
+        <li>CGP · TCI · BAA qualification (Ch 5)</li>
+      </ul>
+    </div>
+    <div class="card"><h3>What You Prove</h3>
+      <ul>
+        <li>Value propositions built on honest math (Ch 6)</li>
+        <li>LACE, the Value Shield, the single close (Ch 7)</li>
+        <li>Flywheel thinking — the long game (Ch 8)</li>
+        <li>The mindset that survives it all (Ch 9)</li>
+      </ul>
+    </div>
+  </div>
+  <p class="content">Until now, you practiced frameworks one at a time. Real calls don't work that way — <b>they demand everything, interleaved, in seconds</b>. That weaving is the last skill. And it's the one that makes you a Steady Hands LLC.</p>
+  <div class="bar"><i style="width:8%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 3 : MULTI-STAKEHOLDER REALITY ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">The Multi-Stakeholder Reality</h1>
+  <h2 class="s">In Local Business, "The Client" Is Rarely One Person</h2>
+  <div class="grid3">
+    <div class="card"><h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="user round"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="8" r="5" />   <path d="M20 21a8 8 0 0 0-16 0" /> </svg>  The Owner</h3>
+      <ul>
+        <li>Runs the business — your primary voice</li>
+        <li>Cares about: growth, time, pride, less hassle</li>
+        <li>Often the FIRST conversation, not the only one</li>
+      </ul>
+    </div>
+    <div class="card"><h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="users round"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M18 21a8 8 0 0 0-16 0" />   <circle cx="10" cy="8" r="5" />   <path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3" /> </svg>  The Spouse / Partner</h3>
+      <ul>
+        <li>Co-decides money in a huge share of local businesses</li>
+        <li>Cares about: household risk, "is this worth it?"</li>
+        <li>Usually joins LATE — or never, silently vetoing</li>
+      </ul>
+    </div>
+    <div class="card"><h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="folders"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M20 5a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h2.5a1.5 1.5 0 0 1 1.2.6l.6.8a1.5 1.5 0 0 0 1.2.6z" />   <path d="M3 8.268a2 2 0 0 0-1 1.738V19a2 2 0 0 0 2 2h11a2 2 0 0 0 1.732-1" /> </svg>  The Gatekeeper / Manager</h3>
+      <ul>
+        <li>Answers the phone first — front desk, office manager</li>
+        <li>Filters access and shapes first impressions</li>
+        <li>An ally to win, never an obstacle to push past</li>
+      </ul>
+    </div>
+  </div>
+  <p class="content">Chapter 5's Authority question — <em>"Who else needs to be involved?"</em> — mapped this circle early. Chapter 10 is where you learn to <b>work the whole circle as one system</b>: a deal isn't won when one person is convinced. It's won when the circle is aligned.</p>
+  <div class="bar"><i style="width:13%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 4 : STAKEHOLDER MAPPING ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">The Stakeholder Map</h1>
+  <h2 class="s">A 60-Second Tool You Run Before Every Serious Deal</h2>
+  <table class="cmp">
+    <tr><th>Question</th><th>What It Reveals</th></tr>
+    <tr><td><b>Role</b> — who does what in this business?</td><td>Who uses the site, who pays, who answers the phone</td></tr>
+    <tr><td><b>Influence</b> — whose "no" is final?</td><td>The real decision structure (Ch 5 Authority)</td></tr>
+    <tr><td><b>Stance</b> — supportive, neutral, or opposed?</td><td>Where resistance will come from — before it arrives</td></tr>
+    <tr><td><b>Criteria</b> — what does EACH person need to hear?</td><td>The tailored value case for each (Ch 6)</td></tr>
+    <tr><td><b>Relationships</b> — who influences whom?</td><td>The manager who sways the spouse; the owner who defers to the partner</td></tr>
+  </table>
+  <div class="note"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="clipboard list"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />   <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />   <path d="M12 11h4" />   <path d="M12 16h4" />   <path d="M8 11h.01" />   <path d="M8 16h.01" /> </svg>  Best practice: the map is a LIVING document — update it in the CRM after every conversation as new stakeholders surface. The deal where "suddenly a husband appeared at close" was a deal where the map was never drawn.</div>
+  <div class="bar"><i style="width:17%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 5 : BUILDING CONSENSUS ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Building Consensus</h1>
+  <h2 class="s">Navigating the Circle Without Politics</h2>
+  <div class="grid2">
+    <div class="card"><h3>The Strategies</h3>
+      <ul>
+        <li><b>Common ground:</b> frame the goal everyone shares — "more customers, less stress"</li>
+        <li><b>Progressive commitment:</b> small yeses first — a preview, then a call, then the start</li>
+        <li><b>Arm your ally:</b> give the owner the preview link and the one-liner to show the spouse</li>
+        <li><b>Invite, don't bypass:</b> the deciding conversation happens WITH us present — never sold around anyone</li>
+      </ul>
+    </div>
+    <div class="card"><h3>The Dynamics to Respect</h3>
+      <ul>
+        <li>Never put the owner in an awkward spot before their partner — no "just sign now"</li>
+        <li>Never make the gatekeeper feel small — they shape the owner's mood before you're on</li>
+        <li>Seasonal cycles are political too: budgets, busy seasons, family calendars (Ch 5 Agenda)</li>
+        <li>Consensus built slowly holds; consensus forced quickly collapses</li>
+      </ul>
+    </div>
+  </div>
+  <p class="content">In family businesses, you're not just navigating a sale — you're navigating a <b>relationship that outlasts your call</b>. Handle the circle with respect and the whole circle remembers. Handle it carelessly and one "no" becomes three.</p>
+  <div class="bar"><i style="width:22%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 6 : INTEGRATION PRINCIPLE ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">The Integration Principle</h1>
+  <h2 class="s">Frameworks Flow — They Don't Stack</h2>
+  <div class="grid2 vs">
+    <div class="card old"><h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="circle x"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <path d="m15 9-6 6" />   <path d="m9 9 6 6" /> </svg>  The Novice's Stack</h3>
+      <ul>
+        <li>"First I do ALL of CGP… then ALL of TCI… then ALL of BAA…"</li>
+        <li>Checklist energy — the client feels processed</li>
+        <li>Rigid order breaks the moment reality interrupts</li>
+        <li>Frameworks as a script to recite</li>
+      </ul>
+    </div>
+    <div class="card new"><h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="circle check"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <path d="m16 9-5.5 5.5L8 12" /> </svg>  Steady Hands LLC's Flow</h3>
+      <ul>
+        <li>Frameworks <b>interleave</b> — guided by what the client says</li>
+        <li>A Budget answer mid-discovery? Noted and woven back — no whiplash</li>
+        <li>The client feels a great conversation — never a framework</li>
+        <li>Frameworks as instincts, not scripts (Ch 9's compounding promise)</li>
+      </ul>
+    </div>
+  </div>
+  <p class="content">The mastery indicator: in one deal you run DARE with the owner, tailor value for the spouse, respect the gatekeeper's timing — and run LACE on every objection that surfaces from any of them. <b>Fluid, natural, and invisible.</b> That's the summit.</p>
+  <div class="bar"><i style="width:26%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 7 : ANATOMY OF AN INTEGRATED CALL ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">The Anatomy of an Integrated Call</h1>
+  <h2 class="s">Every Moment Mapped to Its Framework — The Program in One Table</h2>
+  <table class="cmp">
+    <tr><th>Call Moment</th><th>Framework in Action</th></tr>
+    <tr><td>Permission-based opening</td><td>Trust posture (Ch 7) — respect earns the conversation</td></tr>
+    <tr><td>"Do you ever struggle with…?"</td><td><b>CGP-C</b> + <b>SPIN</b> Situation/Problem (Ch 4–5)</td></tr>
+    <tr><td>"What goal is your challenge preventing?"</td><td><b>CGP-G</b> → <b>DARE-D</b>efine — one quantifiable outcome</td></tr>
+    <tr><td>"How do you plan to overcome it?"</td><td><b>CGP-P</b> — expose the weak current plan, gently</td></tr>
+    <tr><td>"When do you need to achieve this?"</td><td><b>TCI-T</b>imeline — honest windows, real seasons</td></tr>
+    <tr><td>"What happens if things stay as they are?"</td><td><b>TCI-C</b>onsequences + <b>DARE-R</b> gap math (their numbers)</td></tr>
+    <tr><td>"After you achieve this goal, what next?"</td><td><b>TCI-I</b>mplications + <b>SPIN-N</b>eed-payoff — their vision, their voice</td></tr>
+    <tr><td>"What would you invest? Who else decides?"</td><td><b>BAA</b> — Budget + Authority (Ch 5)</td></tr>
+    <tr><td>"Where does this sit on your priorities?"</td><td><b>BAA-A</b>genda — scheduling info, not rejection</td></tr>
+    <tr><td>The case: their Gap vs $100 + $20/mo</td><td><b>VALUE = BENEFIT − COST</b>, four value types (Ch 6)</td></tr>
+    <tr><td>Any objection — from anyone</td><td><b>LACE</b> — Listen · Acknowledge · Clarify · Execute (Ch 7)</td></tr>
+    <tr><td>"Shall we get the preview started?"</td><td>Next-Step Close — ask once, stop talking (Ch 7)</td></tr>
+    <tr><td>After YES — handoff, launch, check-in</td><td><b>FLYWHEEL</b> — Deliver → Delight → Amplify (Ch 8)</td></tr>
+  </table>
+  <div class="bar"><i style="width:30%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 8 : SCENARIO 1 SETUP ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Scenario 1 — The Salon Deal</h1>
+  <h2 class="s"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="clapperboard"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m12.296 3.464 3.02 3.956" />   <path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3z" />   <path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />   <path d="m6.18 5.276 3.1 3.899" /> </svg>  Training Simulation — Multi-Stakeholder, Full Cycle</h2>
+  <div class="grid2">
+    <div class="card"><h3>The Cast</h3>
+      <ul>
+        <li><b>Nina</b> — owner, 5 years in business, phone constantly interrupting appointments</li>
+        <li><b>Marcus</b> — her husband, handles the books, skeptical of "web people"</li>
+        <li><b>Dana</b> — front-desk manager, answers every call first, protective of Nina's time</li>
+      </ul>
+    </div>
+    <div class="card"><h3>The Situation</h3>
+      <ul>
+        <li>Warm lead: Nina filled the interest form on steadyhandsop.com</li>
+        <li>Dana answers: <em>"Can I ask what this is regarding?"</em> — your first stakeholder moment is NOW</li>
+        <li>Nina available for 10 minutes only — between clients</li>
+        <li>Marcus will need to approve any monthly commitment</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="library big"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <rect width="8" height="18" x="3" y="3" rx="1" />   <path d="M7 3v18" />   <path d="M20.4 18.9c.2.5-.1 1.1-.6 1.3l-1.9.7c-.5.2-1.1-.1-1.3-.6L11.1 5.1c-.2-.5.1-1.1.6-1.3l1.9-.7c.5-.2 1.1.1 1.3.6Z" /> </svg>  All names and numbers in these scenarios are fictional training simulations — in real calls, real people and their real numbers replace everything.</div>
+  <div class="bar"><i style="width:35%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 9 : SCENARIO 1 — THE GATEKEEPER ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Scenario 1 — Move 1: Winning Dana</h1>
+  <h2 class="s">The Gatekeeper Is Your First Stakeholder</h2>
+  <div class="flow">
+    <div class="step"><b>DANA: "Can I ask what this is regarding?"</b>
+      <span>You: <em>"Of course — Nina filled out a form on our website asking about getting the salon online. I'm following up on HER request. Is she seeing clients right now, or is there a better moment today?"</em> — Transparent, respectful of Nina's time, gives Dana control. You're now Dana's ally, not her problem.</span></div>
+    <div class="step"><b>DANA: "She's with a client. She's super busy."</b>
+      <span>You: <em>"I figured — that's actually part of why she reached out. Could I grab ten minutes with her this afternoon, or would tomorrow morning be easier on the floor?"</em> — You've shown Dana you understand the business's rhythm. She goes from gatekeeper to <b>scheduler</b>.</span></div>
+    <div class="step"><b>THE STAKEHOLDER LESSON</b>
+      <span>Dana decides what Nina hears about you. A respectful 60 seconds with Dana buys a warm transfer. A pushy one buys "some salesperson is holding." <b>Every person who answers the phone is a stakeholder.</b></span></div>
+  </div>
+  <div class="bar"><i style="width:39%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 10 : SCENARIO 1 — THE INTEGRATED CALL ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Scenario 1 — Move 2: The 10-Minute Integrated Call</h1>
+  <h2 class="s">Frameworks Interleaving in Real Time</h2>
+  <div class="flow">
+    <div class="step"><b>MINUTE 1–2: OPEN + CGP-C / SPIN-S</b>
+      <span><em>"Nina — you asked about getting online. Before anything about us: walk me through how new clients find the salon today."</em> → <em>"Word of mouth, Instagram a little… but the new people moving in? They find the other salons."</em></span></div>
+    <div class="step"><b>MINUTE 3–4: CGP-G / DARE-D + TCI-T</b>
+      <span><em>"What goal is that blocking — in numbers, roughly?"</em> → <em>"Maybe 4–5 new appointment requests a month? That's real money."</em> → <em>"And when do you want to feel that shift — before holiday season?"</em> → <em>"Yes. That's exactly the window."</em></span></div>
+    <div class="step"><b>MINUTE 5–6: TCI-C/I + DARE-R — THE HONEST MATH</b>
+      <span><em>"And if it stays as it is?"</em> → <em>"The other salons just keep getting the new people."</em> <em>"And once they start finding YOU — what changes?"</em> → <em>"Fewer interruptions… and new faces. Growth."</em> Then, HER numbers: ~4–5 missed clients × her average visit ≈ her monthly Gap. Conservative. Labeled. Hers.</span></div>
+    <div class="step"><b>MINUTE 7–8: BAA — Budget, Authority, Agenda</b>
+      <span><em>"What would you plan to invest to fix this?"</em> → <em>"Honestly, Marcus watches the money — but if it made sense, sure."</em> <em>"Smart — it's a family decision. When we show you the preview, I'll give you what you need to show him in two minutes."</em> Authority mapped. Ally armed.</span></div>
+    <div class="step"><b>MINUTE 9–10: VALUE CASE + NEXT-STEP CLOSE</b>
+      <span><em>"Full site — built, customized, launched — $100 once. Hosting from $20/month. Against the gap you just described… you see the math. And you'll see a preview before anything goes live. Want me to get your preview started this week?"</em> → <em>"…Yes. Send it."</em> Ask once. Stop talking.</span></div>
+  </div>
+  <div class="bar"><i style="width:43%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 11 : SCENARIO 1 — MOVE 3 ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Scenario 1 — Move 3: The Marcus Call</h1>
+  <h2 class="s">One Deal, Three Conversations — Each Tailored</h2>
+  <div class="grid2">
+    <div class="card"><h3>The Setup</h3>
+      <ul>
+        <li>Nina shows Marcus the preview link that night — armed exactly as promised</li>
+        <li>Marcus calls with the skeptical question: <em>"So what's this really going to cost me?"</em></li>
+        <li>Your stakeholder map says: lead with <b>financial value + risk removal</b> (Ch 6 tailoring)</li>
+      </ul>
+    </div>
+    <div class="card"><h3>The Conversation</h3>
+      <ul>
+        <li><em>"Fair question. $100 total to build it — one time. Then $20/month, everything included, cancel whenever. Nina can show you the exact preview — nothing hidden."</em></li>
+        <li>His math question? <b>His wife's numbers</b> — the Gap she stated. You never invented a figure</li>
+        <li><em>"And the preview already exists — you're not paying to find out what you'd get."</em></li>
+        <li>Marcus: <em>"…That's less than I expected. Yeah. Go ahead."</em></li>
+      </ul>
+    </div>
+  </div>
+  <div class="note"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="target"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <circle cx="12" cy="12" r="6" />   <circle cx="12" cy="12" r="2" /> </svg>  The post-mortem: one deal, three conversations — Dana (respect + rhythm), Nina (discovery + her numbers + her close), Marcus (financial value + risk removal). The frameworks were invisible. The circle is aligned. <b>That's integration.</b></div>
+  <div class="bar"><i style="width:48%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 12 : SCENARIO 2 SETUP ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Scenario 2 — The November Call</h1>
+  <h2 class="s"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="clapperboard"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m12.296 3.464 3.02 3.956" />   <path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3z" />   <path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />   <path d="m6.18 5.276 3.1 3.899" /> </svg>  Training Simulation — Re-Engaging the Stalled Deal</h2>
+  <div class="grid2">
+    <div class="card"><h3>The Backstory</h3>
+      <ul>
+        <li><b>Tom's Landscaping</b> — warm discovery call back in June</li>
+        <li>Real interest, real Gap math done together — then: <em>"Call me in November. Summer is our crazy season."</em></li>
+        <li>You logged it, honored it, and didn't pester once all summer (Ch 5 Agenda + Ch 7 discipline)</li>
+        <li>Now it's the first week of November</li>
+      </ul>
+    </div>
+    <div class="card"><h3>What Makes This Hard</h3>
+      <ul>
+        <li>Three months is a long time — has anything changed?</li>
+        <li>He may not remember the conversation's details</li>
+        <li>Re-pitching the old pitch ignores that HIS situation has moved</li>
+        <li>The kept promise is your opener — and your proof of character</li>
+      </ul>
+    </div>
+  </div>
+  <p class="content">Stalled deals are where average reps lose the thread and great reps <b>harvest</b>. The re-engagement is not a restart — it's a <b>resumption of trust</b>, and the trust was banked in June.</p>
+  <div class="bar"><i style="width:52%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 13 : SCENARIO 2 — THE PLAY ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Scenario 2 — The Re-Engagement Play</h1>
+  <h2 class="s">Four Moves to Resume — Not Restart</h2>
+  <div class="flow">
+    <div class="step"><b>1. HONOR THE PROMISE — the opener</b>
+      <span><em>"Tom — it's [name] from Steady Hands. I promised I'd call in November, and here I am. How was the season?"</em> — The kept promise IS the rapport. No re-introduction needed. Ask about HIS season first — you're a person who remembered, not a script that dialed.</span></div>
+    <div class="step"><b>2. RE-DISCOVER — re-run mini-CGP</b>
+      <span><em>"Since June, what's changed on your end?"</em> — Maybe he lost a crew. Maybe a competitor launched a site. Maybe winter bookings look thin. <b>Re-run the discovery on today's reality</b> — the June Gap is stale data until verified.</span></div>
+    <div class="step"><b>3. RE-WEIGH — fresh TCI, fresh numbers</b>
+      <span>His new numbers, his new window: <em>"You mentioned winter bookings are thin — so the timing you wanted is actually… now?"</em> The Agenda he set in June becomes the urgency he owns in November. <b>His calendar, his logic.</b></span></div>
+    <div class="step"><b>4. RE-CLOSE — the case, then the ask</b>
+      <span>Rebuild the honest math on November's numbers. Then: <em>"Based on all this — want the preview before the holidays?"</em> Ask once. Stop. Or if it's a "not yet": <em>"Fair — when's your spring planning? I'll call then, same promise."</em> And mean it again.</span></div>
+  </div>
+  <div class="note"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="repeat"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m17 2 4 4-4 4" />   <path d="M3 11v-1a4 4 0 0 1 4-4h14" />   <path d="m7 22-4-4 4-4" />   <path d="M21 13v1a4 4 0 0 1-4 4H3" /> </svg>  Every kept-promise re-engagement compounds the Flywheel (Ch 8): even a second "not yet," handled this way, deepens the reputation that eventually refers.</div>
+  <div class="bar"><i style="width:57%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 14 : SCENARIO 3 ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Scenario 3 — The Burned Veteran</h1>
+  <h2 class="s"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="clapperboard"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m12.296 3.464 3.02 3.956" />   <path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3z" />   <path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />   <path d="m6.18 5.276 3.1 3.899" /> </svg>  Training Simulation — Rebuilding Trust From Zero</h2>
+  <div class="grid2">
+    <div class="card"><h3>The Backstory</h3>
+      <ul>
+        <li><b>Frank</b> — auto detailing, 12 years in business</li>
+        <li>Paid another company <b>$2,000</b> three years ago; site never worked right, support vanished</li>
+        <li>Cold call — and you're the third "web person" to call this month</li>
+        <li>His opening: <em>"You people already took two grand off me once. Why would I talk to you?"</em></li>
+      </ul>
+    </div>
+    <div class="card"><h3>Why This Scenario Matters</h3>
+      <ul>
+        <li>It tests EVERYTHING: LACE order under hostility, the Banned List under temptation, trust-building with verifiable facts (Ch 7)</li>
+        <li>One wrong move — defensiveness, pushing, discounting — confirms his worldview</li>
+        <li>Done right, the burned veteran becomes the <b>loudest advocate</b> in the Flywheel — he has the most to gain from being wrong about you</li>
+      </ul>
+    </div>
+  </div>
+  <div class="bar"><i style="width:61%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 15 : SCENARIO 3 — THE PLAY ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Scenario 3 — The Trust Rebuild</h1>
+  <h2 class="s">LACE Under Fire — Verifiable Facts, Zero Pressure</h2>
+  <div class="flow">
+    <div class="step"><b>L + A — ABSORB, THEN VALIDATE</b>
+      <span><em>"…That would make me skeptical too. Two thousand dollars and a site that didn't work — I'd be done with this whole industry."</em> — No defending the industry. No "but we're different." Feel his experience first. The pause after this line is doing more work than any pitch could.</span></div>
+    <div class="step"><b>C — CLARIFY THE REAL WOUND</b>
+      <span><em>"Can I ask — what stung most? The money, or how you were treated after?"</em> → <em>"After. Vanished. Nobody picked up."</em> — The real objection was never price. It was abandonment. Now you know exactly what to answer.</span></div>
+    <div class="step"><b>E — EXECUTE WITH VERIFIABLE FACTS ONLY</b>
+      <span><em>"Here's what I can point to, and you can check every word: our prices are published — $100 to build, $20 a month, on the site right now. You see the preview before anything goes live. And our phone number is (702) 372-6399 — call it right now if you want. Someone answers."</em> — Nothing to take on faith. Everything checkable.</span></div>
+    <div class="step"><b>THE SLOW CLOSE — AND THE HONEST OUT</b>
+      <span><em>"I'm not going to push you tonight. Look at the pricing page, call the number, decide in your own time. If the answer's no — I respect it, and I won't call back to wear you down."</em> → <em>"…Send me the site."</em> The slowest close in the book — and often the only honest one.</span></div>
+  </div>
+  <div class="note"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="shield"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> </svg>  The temptation this scenario tests: inflating promises to "overcome" his skepticism. Never. With the burned veteran, <b>verifiability is the only currency</b> — and patience is the only technique.</div>
+  <div class="bar"><i style="width:65%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 16 : ROLE-PLAY PROGRAM ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">The Role-Play Program</h1>
+  <h2 class="s">Where Steady Hands LLC team members Are Actually Made</h2>
+  <div class="grid2">
+    <div class="card"><h3>How We Practice</h3>
+      <ul>
+        <li><b>Weekly sessions:</b> one scenario per session — salon deal, November call, burned veteran, and ones your manager invents</li>
+        <li><b>Rotating roles:</b> rep, client, gatekeeper, observer — playing the CLIENT teaches you what pitching feels like from the other side</li>
+        <li><b>Real constraints:</b> 10-minute timer, interruptions, hostile openers — simulations include the chaos of real days</li>
+        <li><b>Escalating difficulty:</b> master the friendly salon, then earn the burned veteran</li>
+      </ul>
+    </div>
+    <div class="card"><h3>The Rules of the Room</h3>
+      <ul>
+        <li>Stay in character until the debrief — no breaking to explain yourself mid-scene</li>
+        <li>Clients play it REAL: skeptical, busy, sometimes rude — kindness in role-play is cheating</li>
+        <li>Ethics count double in practice: run the Banned List scenarios so the temptation is familiar when it's real</li>
+        <li>Every rep practices before they perform — nobody's first LACE happens on a live prospect</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="drama"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M10 11h.01" />   <path d="M14 6h.01" />   <path d="M18 6h.01" />   <path d="M6.5 13.1h.01" />   <path d="M22 5c0 9-4 12-6 12s-6-3-6-12c0-2 2-3 6-3s6 1 6 3" />   <path d="M17.4 9.9c-.8.8-2 .8-2.8 0" />   <path d="M10.1 7.1C9 7.2 7.7 7.7 6 8.6c-3.5 2-4.7 3.9-3.7 5.6 4.5 7.8 9.5 8.4 11.2 7.4.9-.5 1.9-2.1 1.9-4.7" />   <path d="M9.1 16.5c.3-1.1 1.4-1.7 2.4-1.4" /> </svg>  The payoff: in the simulation you can fail safely. The awkward close, the skipped discovery, the defensive reflex — better to meet them here, with a teammate playing Frank, than on a live call that matters.</div>
+  <div class="bar"><i style="width:69%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 17 : OBSERVER SCORECARD ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">The Observer Scorecard</h1>
+  <h2 class="s">100 Points — The Same Discipline as Qualification, Turned Inward</h2>
+  <table class="cmp">
+    <tr><th>Dimension</th><th>What the Observer Watches For</th><th>Points</th></tr>
+    <tr><td><b>Opening &amp; Permission</b></td><td>Respectful, brief, framed — earned the conversation</td><td>0–10</td></tr>
+    <tr><td><b>Discovery Depth</b></td><td>CGP explored; SPIN flowed naturally; listened 60%+</td><td>0–20</td></tr>
+    <tr><td><b>Ethical Quantification</b></td><td>Client's numbers, conservative, labeled, IF-framed</td><td>0–15</td></tr>
+    <tr><td><b>Qualification (BAA)</b></td><td>Budget, Authority, Agenda all surfaced — no surprises at close</td><td>0–15</td></tr>
+    <tr><td><b>Value Presentation</b></td><td>Outcome first, full costs visible, four value types touched</td><td>0–15</td></tr>
+    <tr><td><b>Objection Handling</b></td><td>LACE in order; real objection found; one loop at a time</td><td>0–15</td></tr>
+    <tr><td><b>Close &amp; Conduct</b></td><td>Asked once, stopped talking; graceful on "no"; no Banned List items</td><td>0–10</td></tr>
+  </table>
+  <div class="note"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="chart column"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M3 3v16a2 2 0 0 0 2 2h16" />   <path d="M18 17V9" />   <path d="M13 17V5" />   <path d="M8 17v-3" /> </svg>  Scoring culture: 80+ is Steady Hands LLC-ready. 60–79 means targeted drilling. Below 60 means more role-play reps — never shame, always a next rep. The scorecard measures the SKILL, not the person.</div>
+  <div class="bar"><i style="width:74%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 18 : DEBRIEF PROTOCOL ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">The Debrief Protocol</h1>
+  <h2 class="s">Where the Actual Learning Happens</h2>
+  <div class="flow">
+    <div class="step"><b>1. SELF-REVIEW FIRST — the rep speaks first</b>
+      <span><em>"What did I do well? What would I change?"</em> — Self-assessment before external feedback builds the Ch 9 muscle. Never skipped.</span></div>
+    <div class="step"><b>2. OBSERVER FEEDBACK — specific, not general</b>
+      <span>Not "it was good." Instead: <em>"At minute four you jumped to the price before asking the Agenda question — that's the gap that shows up in the scorecard."</em> Specific beats polite.</span></div>
+    <div class="step"><b>3. GROUP LEARNING — one insight harvested</b>
+      <span>The room extracts one transferable lesson: <em>"Gatekeepers respond to rhythm-questions — 'morning or afternoon?'"</em> Posted to the team chat. Compounds for everyone.</span></div>
+    <div class="step"><b>4. ACTION PLAN — ONE change, next session</b>
+      <span><em>"Next simulation: I will ask the Authority question before minute six."</em> — One commitment, tracked next time. One per session — the same discipline as Ch 9's weekly review.</span></div>
+  </div>
+  <div class="note"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="refresh cw"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />   <path d="M21 3v5h-5" />   <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />   <path d="M8 16H3v5" /> </svg>  The loop mirrors everything: Learn → Apply → Adjust (Ch 9). Simulations ARE the Apply gear — and the debrief IS the Adjust. Skip the debrief and you've done theater, not training.</div>
+  <div class="bar"><i style="width:78%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 19 : THE COMPLETE SYSTEM ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">The Complete System</h1>
+  <h2 class="s">Ten Chapters. Eight Frameworks. One Steady Hands LLC.</h2>
+  <div class="grid2" style="max-width:1100px">
+    <div class="card"><h3>Foundation (Ch 1–3)</h3>
+      <ul>
+        <li><b>The Mandate:</b> grow through value, never price or pressure</li>
+        <li><b>Value-First:</b> "So What?" and "What If?" as reflexes</li>
+        <li><b>Portfolio Mastery:</b> $100 · $20/mo · $30/mo — cold</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Conversation Engine (Ch 4–5)</h3>
+      <ul>
+        <li><b>DARE:</b> Define · Analyze · Report · Establish</li>
+        <li><b>SPIN:</b> Situation · Problem · Implication · Need-payoff</li>
+        <li><b>CGP / TCI / BAA:</b> Challenges·Goals·Plans / Timeline·Consequences·Implications / Budget·Authority·Agenda</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Persuasion Engine (Ch 6–7)</h3>
+      <ul>
+        <li><b>VALUE = BENEFIT − COST</b> — honest math, four value types</li>
+        <li><b>LACE:</b> Listen · Acknowledge · Clarify · Execute</li>
+        <li><b>The Price Is the Price</b> — the Value Shield holds it</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Growth Engine (Ch 8–9)</h3>
+      <ul>
+        <li><b>Flywheel:</b> Attract · Engage · Deliver · Delight · Amplify</li>
+        <li><b>Mindset:</b> growth language, rejection math, the reset routine</li>
+        <li><b>Character:</b> ethics as identity — the Banned List holds under pressure</li>
+      </ul>
+    </div>
+  </div>
+  <p class="content" style="font-size:1.05rem"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="pin"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M12 17v5" />   <path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z" /> </svg>  The official glossary holds across all of it. If any slide anywhere contradicts it — <b>the glossary wins</b> — and now you know why: because every definition was built to interlock with the others.</p>
+  <div class="bar"><i style="width:82%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 20 : CHAPTER SUMMARY ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Chapter 10 — Summary</h1>
+  <h2 class="s">What You Must Walk Away With</h2>
+  <div class="grid2">
+    <div class="card"><h3>Integration Skills</h3>
+      <ul>
+        <li>Frameworks <b>flow</b> — interleaved, invisible, natural</li>
+        <li>The decision circle worked as one system: owner, spouse, gatekeeper</li>
+        <li>Stalled deals are resumed with kept promises — never restarted with old pitches</li>
+        <li>Burned veterans are rebuilt with verifiable facts and patience</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Practice Discipline</h3>
+      <ul>
+        <li>Weekly role-play — earn the hard scenarios</li>
+        <li>The Observer Scorecard — 100 points, skill not shame</li>
+        <li>The Debrief Protocol — self-review first, ONE change per session</li>
+        <li>Mastery = the client feels a conversation, never a framework</li>
+      </ul>
+    </div>
+  </div>
+  <div class="bar"><i style="width:86%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 21 : FINAL QUIZ ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">The Final Check</h1>
+  <h2 class="s">Steady Hands LLC Exam — Before the Manifesto</h2>
+  <div class="quiz">
+    <div class="q">
+      <p class="qt">1. Mid-discovery, the owner says: "My husband handles these decisions." The integrated move:</p>
+      <span class="opt">Press on with HER — get the yes first, involve him after</span>
+      <span class="opt correct">Map the Authority (BAA) on the spot: arm her with the preview for a two-minute show, or invite him to the next call — the deciding conversation happens with us present, never around anyone</span>
+      <span class="opt">End the call — no decision-maker, no deal</span>
+      <p class="ans">Authority surfaced mid-flow gets woven in, not feared. Arm the ally, invite the circle — consensus built slowly holds.</p>
+    </div>
+    <div class="q">
+      <p class="qt">2. It's November. You call the landscaper who said "call me in November." Your opener:</p>
+      <span class="opt">"Tom! Great news — we're running a fall promotion on websites!"</span>
+      <span class="opt">Re-pitch the June presentation from the top — he's probably forgotten it</span>
+      <span class="opt correct">"Tom — I promised I'd call in November, and here I am. How was the season?" — then re-discover what's changed before re-running the numbers</span>
+      <p class="ans">The kept promise IS the opener. Then re-run mini-CGP on today's reality — his June Gap is stale data until he re-verifies it.</p>
+    </div>
+    <div class="q">
+      <p class="qt">3. The burned veteran opens with: "You people already took two grand off me once." Your first response:</p>
+      <span class="opt">"But we're different — our prices are only $100!" (defend immediately)</span>
+      <span class="opt correct">Absorb and validate: "That would make me skeptical too. Two thousand and a site that didn't work — I'd be done with this whole industry." Then clarify the real wound before anything else</span>
+      <span class="opt">Offer a discount to make up for the industry's reputation</span>
+      <p class="ans">LACE in order under fire: Listen, Acknowledge, Clarify — the real objection was abandonment, not price. Then E with verifiable facts only. The slow close is often the only honest one.</p>
+    </div>
+  </div>
+  <div class="bar"><i style="width:90%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 22 : THE MANIFESTO ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Steady Hands LLC Manifesto</h1>
+  <div class="quote">
+    <p>"This playbook was never a set of rules. It is a manifesto for a new way of selling at Steady Hands — a commitment to professional excellence, ethical conduct, and relentless client focus. You didn't memorize it. You didn't recite it. Over ten chapters, you became it. The frameworks no longer feel like frameworks — they feel like you. That was the design. That was the point."</p>
+    <span>— Steady Hands LLC</span>
+  </div>
+  <div class="bar"><i style="width:94%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 23 : THE CREED ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">The Creed</h1>
+  <h2 class="s">Say It Before Every Session Until It's a Reflex</h2>
+  <div class="creed">
+    <div class="line">Be Steady Hands LLC.</div>
+    <div class="line">Lead with value.</div>
+    <div class="line">Build with trust.</div>
+    <div class="line">Sustain with excellence.</div>
+    <div class="sub">Four lines. The whole program. The Mandate (Ch 1), the Value-First Paradigm (Ch 2), the honest sale (Ch 4–7), and the Flywheel that never stops (Ch 8) — compressed into something you can carry onto every call for the rest of your career.</div>
+  </div>
+  <div class="bar"><i style="width:97%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 24 : GRADUATION ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Welcome to Steady Hands LLC</h1>
+  <h2 class="s">The Journey Is Complete — The Work Begins</h2>
+  <div class="diagram">
+    <div class="node"><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="book open"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M12 5v16" />   <path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /> </svg>  Ch 1–3</b><span>Identity · Value · Mastery</span></div>
+    <div class="node"><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="stethoscope"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M11 2v2" />   <path d="M5 2v2" />   <path d="M5 3H4a2 2 0 0 0-2 2v4a6 6 0 0 0 12 0V5a2 2 0 0 0-2-2h-1" />   <path d="M8 15a6 6 0 0 0 12 0v-3" />   <circle cx="20" cy="10" r="2" /> </svg>  Ch 4–5</b><span>Diagnose · Qualify</span></div>
+    <div class="node"><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="shield"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> </svg>  Ch 6–7</b><span>Prove · Handle · Close</span></div>
+    <div class="node"><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="ferris wheel"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="2" />   <path d="M12 2v4" />   <path d="m6.8 15-3.5 2" />   <path d="m20.7 7-3.5 2" />   <path d="M6.8 9 3.3 7" />   <path d="m20.7 17-3.5-2" />   <path d="m9 22 3-8 3 8" />   <path d="M8 22h8" />   <path d="M18 18.7a9 9 0 1 0-12 0" /> </svg>  Ch 8–9</b><span>Compound · Endure</span></div>
+    <div class="node"><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="trophy"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M10 14.66V17a1 1 0 0 1-1 1 2 2 0 0 0-2 2v2" />   <path d="M14 14.66V17a1 1 0 0 0 1 1 2 2 0 0 1 2 2v2" />   <path d="M17.916 10H19.5A2.5 2.5 0 0 0 22 7.5V5a1 1 0 0 0-1-1h-3" />   <path d="M4 22h16" />   <path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z" />   <path d="M6.084 10H4.5A2.5 2.5 0 0 1 2 7.5V5a1 1 0 0 1 1-1h3" /> </svg>  Ch 10</b><span>Integrate · Master</span></div>
+  </div>
+  <div class="grid2" style="margin-top:1.4rem">
+    <div class="card"><h3>What Happens Next</h3>
+      <ul>
+        <li>Shadowing: listen to live calls with your manager</li>
+        <li>First supervised dials — with the scorecard, in the room</li>
+        <li>Weekly role-play and the team chat — your break room and war room</li>
+        <li>The Playbooks: calling scripts, objection guide, personas — your field companions</li>
+      </ul>
+    </div>
+    <div class="card"><h3>What You Carry</h3>
+      <ul>
+        <li>A system: eight frameworks that interlock</li>
+        <li>A standard: the Banned List and the Mandate</li>
+        <li>A market edge: in a small town, your reputation IS the moat</li>
+        <li>A profession: sales, done ethically, is noble work</li>
+      </ul>
+    </div>
+  </div>
+  <div class="quote" style="margin-top:1.4rem">
+    <p>"Sales, at its best, is a noble profession — built on understanding, empathy, expertise, and an unwavering commitment to mutual value. The future of sales is here. It begins with you. Welcome to Steady Hands LLC."</p>
+    <span>— Steady Hands LLC · Las Vegas, Nevada · (702) 372-6399</span>
+  </div>
+  <div class="bar"><i style="width:100%"></i></div>
+</div></div>
+
+</div><!-- /presentation -->
+
+<footer class="chapter-footer"><a class="sh-course" href="Chapter_09_Comprehensive_Presentation.html"><svg class="sh-icon" width="1em" height="1em" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m12 19-7-7 7-7" />   <path d="M19 12H5" /> </svg> <span>Previous Course</span></a><nav class="nav" aria-label="Slide navigation"><button class="sh-slide-control" type="button" onclick="previousSlide()" aria-label="Previous slide" title="Previous slide"><svg class="sh-icon" width="1em" height="1em" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m12 19-7-7 7-7" />   <path d="M19 12H5" /> </svg> <span class="sh-control-label">Previous</span></button><button class="sh-fullscreen sh-slide-control" type="button" onclick="toggleFullscreen()" aria-label="Toggle fullscreen" title="Fullscreen" aria-pressed="false"><span class="sh-maximize"><svg class="sh-icon" width="1em" height="1em" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M8 3H5a2 2 0 0 0-2 2v3" />   <path d="M21 8V5a2 2 0 0 0-2-2h-3" />   <path d="M3 16v3a2 2 0 0 0 2 2h3" />   <path d="M16 21h3a2 2 0 0 0 2-2v-3" /> </svg> </span><span class="sh-minimize" hidden><svg class="sh-icon" width="1em" height="1em" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M8 3v3a2 2 0 0 1-2 2H3" />   <path d="M21 8h-3a2 2 0 0 1-2-2V3" />   <path d="M3 16h3a2 2 0 0 1 2 2v3" />   <path d="M16 21v-3a2 2 0 0 1 2-2h3" /> </svg> </span><span class="sh-control-label">Fullscreen</span></button><button class="sh-slide-control" type="button" onclick="nextSlide()" aria-label="Next slide" title="Next slide"><svg class="sh-icon" width="1em" height="1em" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M5 12h14" />   <path d="m12 5 7 7-7 7" /> </svg> <span class="sh-control-label">Next</span></button></nav><span class="sh-course" aria-disabled="true"><span>Next course</span><svg class="sh-icon" width="1em" height="1em" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M5 12h14" />   <path d="m12 5 7 7-7 7" /> </svg> </span></footer>
+
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  document.getElementById('tot').textContent = slides.length;
+
+  function showSlide(n) {
+    slides[currentSlide].classList.remove('active');
+    slides[currentSlide].classList.add('prev');
+    currentSlide = (n + slides.length) % slides.length;
+    slides[currentSlide].classList.remove('prev');
+    slides[currentSlide].classList.add('active');
+    document.getElementById('cur').textContent = currentSlide + 1;
+    slides[currentSlide].scrollTop = 0;
+    slides[currentSlide].focus({preventScroll:true});
+    const pct = ((currentSlide + 1) / slides.length) * 100;
+    document.querySelectorAll('.bar i').forEach(function(b){ b.style.width = pct + '%'; });
+    if(window.SteadyHandsProgress)window.SteadyHandsProgress.save();
+  }
+
+  function nextSlide() { showSlide(currentSlide + 1); }
+  function previousSlide() { showSlide(currentSlide - 1); }
+
+  function toggleFullscreen() {
+    const action=document.fullscreenElement ? document.exitFullscreen && document.exitFullscreen() : document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
+    if(action && action.catch)action.catch(function(){});
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if(e.target.closest('input,textarea,select,button,a,[contenteditable="true"]'))return;
+    if(e.key===' ' && slides[currentSlide].scrollHeight>slides[currentSlide].clientHeight+1)return;
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); previousSlide(); }
+    else if (e.key === 'f' || e.key === 'F') { e.preventDefault(); toggleFullscreen(); }
+  });
+</script>
+
+
+<script>
+(function(){
+  const header=document.querySelector('.chapter-header');
+  const footer=document.querySelector('.chapter-footer');
+  function fitViewport(){
+    document.documentElement.style.setProperty('--sh-header-height',Math.ceil(header.getBoundingClientRect().bottom)+'px');
+    document.documentElement.style.setProperty('--sh-footer-height',Math.ceil(footer.getBoundingClientRect().height)+'px');
+  }
+  if(window.ResizeObserver){const observer=new ResizeObserver(fitViewport);observer.observe(header);observer.observe(footer);}
+  window.addEventListener('resize',fitViewport);
+  if(window.visualViewport)window.visualViewport.addEventListener('resize',fitViewport);
+  document.addEventListener('fullscreenchange',function(){
+    const on=!!document.fullscreenElement;
+    document.querySelector('.sh-fullscreen').setAttribute('aria-pressed',String(on));
+    document.querySelector('.sh-maximize').hidden=on;
+    document.querySelector('.sh-minimize').hidden=!on;
+    fitViewport();
+  });
+  const fs=document.querySelector('.sh-fullscreen');
+  if(!document.documentElement.requestFullscreen){fs.disabled=true;fs.title='Fullscreen is not supported by this browser';}
+  fitViewport();
+  document.querySelector('.slide.active').focus({preventScroll:true});
+})();
+</script>
+
+<script src="assets/chapter-progress.js"></script>
+</body>
+</html>

@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 1: The Steady Hands Mandate — Ethics as Our Competitive Edge</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --navy:#1A3A5C; --navy2:#2D4A6B; --gold:#D4A017; --gold2:#F0C24B;
+    --mist:#90A4B8; --paper:#E8F1F5;
+  }
+  body{font-family:'Inter','Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;
+    background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);
+    color:#fff;overflow:hidden;height:100vh}
+  .presentation{width:100vw;height:100vh;position:relative}
+  .slide{width:100%;height:100%;position:absolute;top:0;left:0;opacity:0;
+    transform:translateX(100px);transition:all .6s cubic-bezier(.25,.46,.45,.94);
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    padding:60px 80px;text-align:center;overflow-y:auto}
+  .slide.active{opacity:1;transform:translateX(0)}
+  .slide.prev{transform:translateX(-100px)}
+
+  h1.t{font-size:3rem;font-weight:800;margin-bottom:1.2rem;line-height:1.15;
+    background:linear-gradient(135deg,#fff 0%,var(--gold2) 100%);
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  h2.s{font-size:1.6rem;color:var(--mist);font-weight:300;margin-bottom:2rem}
+  .content{font-size:1.2rem;line-height:1.75;max-width:1000px;color:var(--paper);margin-bottom:1.5rem}
+
+  .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem;max-width:1050px;width:100%;margin-bottom:1.5rem}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.3rem;max-width:1050px;width:100%;margin-bottom:1.5rem}
+  .card{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
+    border-radius:16px;padding:1.5rem 1.4rem;text-align:left;backdrop-filter:blur(8px);transition:.3s}
+  .card:hover{transform:translateY(-5px);border-color:rgba(212,160,23,.5)}
+  .card h3{color:var(--gold2);font-size:1.2rem;margin-bottom:.8rem}
+  .card ul{list-style:none}
+  .card li{font-size:1rem;color:var(--paper);margin-bottom:.55rem;padding-left:1.3rem;position:relative;line-height:1.5}
+  .card li::before{content:"→";position:absolute;left:0;color:var(--gold);font-weight:700}
+
+  .stat .num{display:block;font-size:2.4rem;font-weight:800;color:var(--gold2);margin-bottom:.3rem}
+
+  .quote{max-width:900px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
+    border-left:6px solid var(--gold);border-radius:16px;padding:2.2rem;text-align:left;backdrop-filter:blur(8px)}
+  .quote p{font-size:1.4rem;font-style:italic;line-height:1.6;margin-bottom:1rem;color:#fff}
+  .quote span{color:var(--gold2);font-weight:700;font-size:1.05rem}
+
+  .bar{height:6px;background:rgba(255,255,255,.15);border-radius:6px;max-width:1050px;width:100%;margin-top:1.5rem;overflow:hidden}
+  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .4s;border-radius:6px}
+
+  .vs .old{border-color:rgba(255,120,120,.4)}
+  .vs .old h3{color:#FF9E9E}
+  .vs .new{border-color:rgba(212,160,23,.55)}
+  .vs .new h3{color:var(--gold2)}
+
+  .quiz{max-width:900px;width:100%;text-align:left}
+  .quiz .q{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:14px;
+    padding:1.2rem 1.4rem;margin-bottom:1rem}
+  .quiz .q p.qt{font-size:1.05rem;font-weight:600;margin-bottom:.7rem;color:#fff}
+  .quiz .q .opt{display:block;font-size:.95rem;color:var(--paper);padding:.4rem 0 .4rem 1.9rem;position:relative;cursor:default}
+  .quiz .q .opt::before{content:"○";position:absolute;left:0;color:var(--mist)}
+  .quiz .q .opt.correct{color:#B8F5D0}
+  .quiz .q .opt.correct::before{content:"✓";color:#5DDB8A;font-weight:800}
+  .quiz .q .ans{margin-top:.6rem;font-size:.85rem;color:#5DDB8A;font-weight:600}
+
+  .diagram{display:flex;gap:.9rem;align-items:stretch;justify-content:center;max-width:1080px;width:100%;flex-wrap:wrap}
+  .node{background:rgba(212,160,23,.12);border:1.5px solid var(--gold);border-radius:14px;padding:1.1rem 1.2rem;min-width:190px;flex:1}
+  .node b{display:block;color:var(--gold2);font-size:1.05rem;margin-bottom:.4rem}
+  .node span{font-size:.9rem;color:var(--paper);line-height:1.45;display:block}
+  .arrow{display:flex;align-items:center;color:var(--gold);font-size:1.7rem;font-weight:800}
+
+  .nav{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);display:flex;gap:.8rem;z-index:1000}
+  .nav button{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);color:#fff;
+    padding:.7rem 1.4rem;border-radius:24px;cursor:pointer;font-size:.95rem;font-weight:600;transition:.25s}
+  .nav button:hover{background:var(--gold);color:var(--navy);border-color:var(--gold)}
+  .counter{position:fixed;top:20px;right:24px;background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.25);padding:.55rem 1.1rem;border-radius:24px;font-size:.9rem;font-weight:600;z-index:1000}
+  .brandtag{position:fixed;top:20px;left:24px;background:rgba(212,160,23,.15);border:1px solid rgba(212,160,23,.4);
+    color:var(--gold2);padding:.5rem 1rem;border-radius:24px;font-size:.75rem;font-weight:700;letter-spacing:.08em;z-index:1000;text-transform:uppercase}
+
+  @media(max-width:820px){
+    .grid2,.grid3{grid-template-columns:1fr}
+    .slide{padding:80px 22px 120px}
+    h1.t{font-size:2.1rem}
+    .brandtag{display:none}
+  }
+</style>
+<link rel="icon" href="assets/steady-hands-logo.jpg">
+<style>
+/* Local logo and Lucide icon assets. */
+.sh-icon{display:inline-block;width:1em;height:1em;vertical-align:-.125em;flex-shrink:0;overflow:visible}
+.logo.sh-logo-slot{background:none;overflow:hidden;flex-shrink:0}
+.sh-brand-logo{display:block;width:100%;height:100%;object-fit:contain;border-radius:inherit}
+.brandtag .sh-brand-logo{display:inline-block;width:24px;height:24px;border-radius:5px;vertical-align:middle;margin-right:8px}
+</style>
+<style>
+/* Viewport-aware slide area and chapter navigation. */
+:root{--sh-header-height:72px;--sh-footer-height:76px}
+html,body{width:100%;height:100%;height:100dvh;overflow:hidden}
+.chapter-header{position:fixed;inset:0 0 auto;z-index:1100;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px;padding:12px 24px;background:rgba(26,58,92,.97);border-bottom:1px solid rgba(255,255,255,.14)}
+.chapter-header .brandtag{position:static;display:flex;align-items:center;min-width:0;margin:0;padding:0;border:0;border-radius:0;background:none;font-size:.7rem;line-height:1.35}
+.chapter-header .brandtag .sh-brand-logo{flex:0 0 28px;width:28px;height:28px}
+.chapter-tools{display:flex;align-items:center;gap:10px}
+.chapter-header .counter{position:static;white-space:nowrap;margin:0;padding:.55rem .85rem;font-size:.85rem}
+.sh-back,.sh-fullscreen,.sh-course{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid rgba(255,255,255,.3);border-radius:12px;padding:10px 13px;background:rgba(255,255,255,.1);color:#fff;font-family:inherit;font-size:.85rem;font-weight:600;text-decoration:none;cursor:pointer;min-height:44px;line-height:1.3}
+.sh-back:hover,.sh-fullscreen:hover,.sh-course:hover{background:var(--gold);border-color:var(--gold);color:var(--navy)}
+.sh-course[aria-disabled="true"]{opacity:.4;cursor:default;pointer-events:none}
+.sh-fullscreen:disabled{opacity:.4;cursor:default}
+.sh-back:focus-visible,.sh-fullscreen:focus-visible,.sh-course:focus-visible,.nav button:focus-visible{outline:3px solid var(--gold2);outline-offset:3px}
+.presentation{position:fixed;inset:var(--sh-header-height) 0 var(--sh-footer-height);width:100%;height:auto;min-height:0;overflow:hidden}
+.slide{display:block;height:100%;width:100%;padding:24px clamp(20px,5vw,80px);overflow-y:auto;overflow-x:hidden;overscroll-behavior-y:contain;scrollbar-gutter:auto;visibility:hidden;pointer-events:none;outline:none;scroll-padding:20px}
+.slide.active{visibility:visible;pointer-events:auto}
+.slide-content{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100%;width:100%;min-width:0}
+.slide-content>*{flex-shrink:0;max-width:100%}
+.slide-content .grid2,.slide-content .grid3{min-width:0}
+.slide-content .card,.slide-content .node{min-width:0;overflow-wrap:break-word}
+.chapter-footer{position:fixed;inset:auto 0 0;z-index:1100;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:12px;align-items:center;padding:12px 24px max(12px,env(safe-area-inset-bottom));background:rgba(26,58,92,.97);border-top:1px solid rgba(255,255,255,.14)}
+.chapter-footer>.sh-course:first-child{justify-self:start}
+.chapter-footer>.sh-course:last-child{justify-self:end}
+.chapter-footer .nav{position:static;left:auto;bottom:auto;transform:none;gap:8px}
+.chapter-footer .nav button{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;min-width:44px;padding:0;border-radius:12px;font-size:20px}
+@media(max-width:820px){
+ .chapter-header{padding:10px 14px;gap:10px}
+ .chapter-header .brandtag{display:flex;font-size:.6rem;letter-spacing:.03em}
+ .chapter-header .counter{font-size:.78rem;padding:8px 10px}
+ .sh-fullscreen .sh-fullscreen-label{display:none}
+ .sh-fullscreen{width:44px;padding:10px}
+ .slide{padding:20px 18px}
+ .slide-content h1.t{font-size:clamp(1.6rem,5.8vw,2.1rem)}
+ .slide-content h2.s{font-size:clamp(1.1rem,4.5vw,1.6rem)}
+ .slide-content .content{font-size:1rem;overflow-wrap:break-word}
+ .slide-content .grid2,.slide-content .grid3{grid-template-columns:minmax(0,1fr);width:100%}
+ .slide-content .diagram{width:100%;min-width:0}
+ .slide-content .node{flex-basis:100%;max-width:100%}
+ .slide-content table{display:block;max-width:100%;overflow-x:auto}
+ .slide-content .quote{padding:1.4rem}
+ .slide-content .quote p{font-size:1.1rem}
+ .chapter-footer{padding:10px 12px max(10px,env(safe-area-inset-bottom));gap:8px}
+ .sh-course{padding:9px 10px;font-size:.78rem;max-width:100%;text-align:center}
+}
+@media(max-width:480px){
+ .chapter-header{padding:8px 10px;gap:8px}
+ .chapter-header .brandtag{font-size:0;letter-spacing:0;justify-content:center}
+ .chapter-header .brandtag .sh-brand-logo{width:28px;height:28px;margin:0}
+ .chapter-tools{gap:6px}
+ .sh-back{padding:9px 10px;font-size:.8rem}
+ .chapter-header .counter{padding:8px;font-size:.75rem}
+ .sh-course{padding:8px 4px;font-size:.68rem;gap:4px;min-height:44px}
+ .sh-course .sh-icon{display:none}
+}
+</style>
+<style>
+/* Centered slide controls: labels on desktop, icons on compact screens. */
+.chapter-footer .nav{gap:8px}
+.chapter-footer .nav button.sh-slide-control{width:auto;min-width:44px;gap:7px;padding:10px 13px;font-size:.85rem;line-height:1.3}
+.chapter-footer .nav .sh-icon{width:1.1em;height:1.1em}
+.chapter-footer .nav .sh-fullscreen{display:inline-flex}
+.chapter-footer .nav .sh-fullscreen .sh-maximize,.chapter-footer .nav .sh-fullscreen .sh-minimize{line-height:1}
+.chapter-footer .nav .sh-fullscreen [hidden]{display:none}
+@media(max-width:820px){
+ .chapter-footer .nav button.sh-slide-control{width:44px;height:44px;padding:0;font-size:20px}
+ .chapter-footer .nav .sh-control-label{display:none}
+ .chapter-footer .nav{gap:6px}
+ .chapter-footer{gap:6px}
+ .chapter-footer .sh-course{font-size:.7rem;padding:8px 5px}
+}
+@media(max-width:380px){
+ .chapter-footer{padding-left:6px;padding-right:6px;gap:4px}
+ .chapter-footer .nav{gap:4px}
+ .chapter-footer .sh-course{font-size:.65rem;padding-left:3px;padding-right:3px;overflow-wrap:normal}
+}
+</style>
+</head>
+<body>
+
+<header class="chapter-header"><a class="sh-back" href="index.html"><svg class="sh-icon" width="1em" height="1em" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m12 19-7-7 7-7" />   <path d="M19 12H5" /> </svg> <span>Back</span></a><div class="brandtag"><img class="sh-brand-logo" src="assets/steady-hands-logo.jpg" alt="Steady Hands Operation logo">Steady Hands LLC · Sales Training</div><div class="chapter-tools"><div class="counter"><span id="cur">1</span> / <span id="tot"></span></div></div></header>
+
+<div class="presentation">
+
+<!-- ============ SLIDE 1 : TITLE ============ -->
+<div class="slide active" tabindex="0"><div class="slide-content">
+  <p style="font-size:.85rem;letter-spacing:.15em;color:var(--gold2);font-weight:700;margin-bottom:1rem;text-transform:uppercase">Steady Hands LLC · Internal Training</p>
+  <h1 class="t">Chapter 1</h1>
+  <h2 class="s">The Steady Hands Mandate: Ethics as Our Competitive Edge</h2>
+  <p class="content">Mastering the Art of Value-Driven Sales — the journey from <b>order-taker</b> to <b>trusted advisor</b>.</p>
+  <div class="diagram">
+    <div class="node"><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="handshake"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m11 17 2 2a1 1 0 1 0 3-3" />   <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4" />   <path d="m21 3 1 11h-2" />   <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3" />   <path d="M3 4h8" /> </svg>  Who We Serve</b><span>Small &amp; local businesses — Las Vegas and beyond</span></div>
+    <div class="node"><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="globe"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />   <path d="M2 12h20" /> </svg>  What We Sell</b><span>Websites, hosting &amp; support — $100 dev · $20–30/mo hosting</span></div>
+    <div class="node"><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="target"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <circle cx="12" cy="12" r="6" />   <circle cx="12" cy="12" r="2" /> </svg>  How We Sell</b><span>Value-driven, ethical, consultative — every single call</span></div>
+  </div>
+  <div class="bar"><i style="width:5%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 2 : WHY THIS PROGRAM EXISTS ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Why This Program Exists</h1>
+  <h2 class="s">The Problem We're Solving — In Ourselves</h2>
+  <div class="grid2">
+    <div class="card"><h3>The Old Way Feels Normal</h3>
+      <ul>
+        <li>Most new reps default to pitching features</li>
+        <li>Cold calls get 2–3 seconds of attention</li>
+        <li>Small business owners are pitched constantly — they've heard it all</li>
+      </ul>
+    </div>
+    <div class="card"><h3>The Steady Hands Way</h3>
+      <ul>
+        <li>We don't pitch — we <b>diagnose</b></li>
+        <li>We don't push — we <b>guide</b></li>
+        <li>We don't sell websites — we <b>solve visibility and credibility problems</b></li>
+      </ul>
+    </div>
+  </div>
+  <p class="content">This program exists to rewire how you think about selling. Not tricks. Not scripts to recite. A <b>complete operating system</b> for ethical, value-driven selling.</p>
+  <div class="bar"><i style="width:10%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 3 : THE MANDATE ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">The Steady Hands Mandate</h1>
+  <h2 class="s">One Principle Above Everything</h2>
+  <div class="grid3">
+    <div class="card stat"><span class="num">Grow</span>through value — never through price</div>
+    <div class="card stat"><span class="num">Sell</span>outcomes and transformation — never just features</div>
+    <div class="card stat"><span class="num">Build</span>partnerships — never just transactions</div>
+  </div>
+  <p class="content">This mandate is the <b>guiding light</b> for every strategy, every client interaction, and every decision made by our sales team. If an action doesn't align with it — we don't do it.</p>
+  <div class="bar"><i style="width:16%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 4 : KNOW YOUR COMPANY ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Know Your Company</h1>
+  <h2 class="s">Steady Hands LLC — The Facts</h2>
+  <div class="grid2">
+    <div class="card"><h3>Who We Are</h3>
+      <ul>
+        <li>Web development, hosting &amp; support company</li>
+        <li>Based in Las Vegas, Nevada — our team works remotely</li>
+        <li>Focus: small &amp; local businesses</li>
+      </ul>
+    </div>
+    <div class="card"><h3>What We Sell</h3>
+      <ul>
+        <li><b>$100 one-time</b> — Website development: full design &amp; build, mobile-ready, launched for you</li>
+        <li><b>$20/month</b> — Standard Hosting: hosting, maintenance &amp; support</li>
+        <li><b>$30/month</b> — Business Hosting: adds an admin area to manage products, services or reviews</li>
+        <li><b>$2/month per mailbox or $20/year</b> — Professional Business Email: this comes with an email page as well to manage users; who has access to each email</li>
+        <li><b>$100 for 1k, $70 for 500, $30 for 100</b> — Professional Business Cards including design, shipping costs seperate</li>
+      </ul>
+    </div>
+  </div>
+  <p class="content">Our offer is simple, honest, and affordable by design. Our clients aren't tech companies — they're <b>salons, cleaners, landscapers</b> and busy local owners who need their website to just work.</p>
+  <div class="bar"><i style="width:21%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 5 : KNOW YOUR CLIENT ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Know Your Client</h1>
+  <h2 class="s">The Small Business Reality</h2>
+  <div class="grid2">
+    <div class="card"><h3>Their World</h3>
+      <ul>
+        <li>Running the business consumes their day</li>
+        <li>Marketing and tech are not their expertise</li>
+        <li>"I know I need a website, but I don't have time or tech skills"</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Why They Buy From Us</h3>
+      <ul>
+        <li>Affordable, transparent pricing</li>
+        <li>One call — we handle everything</li>
+        <li>Real humans who answer the phone</li>
+        <li>Ongoing support, not build-and-vanish</li>
+      </ul>
+    </div>
+  </div>
+  <p class="content">Empathy is not a technique here — it's the operating requirement. You'll talk to owners between customers, after shifts, at night. <b>Respect their time. Make it easy.</b></p>
+  <div class="bar"><i style="width:26%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 6 : THE SALES RENAISSANCE ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">The Sales Renaissance</h1>
+  <h2 class="s">The Era of Transactional Selling Is Over</h2>
+  <div class="grid2 vs">
+    <div class="card old"><h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="circle x"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <path d="m15 9-6 6" />   <path d="m9 9 6 6" /> </svg>  Traditional Sales</h3>
+      <ul>
+        <li>Focus on quotas and quick closes</li>
+        <li>Product pitching and feature lists</li>
+        <li>One-off transactions</li>
+        <li>Vendor mentality</li>
+      </ul>
+    </div>
+    <div class="card new"><h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="circle check"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <path d="m16 9-5.5 5.5L8 12" /> </svg>  Trusted Advisor</h3>
+      <ul>
+        <li>Strategic partnership mindset</li>
+        <li>Consulting approach — diagnose first</li>
+        <li>Value creation before anything else</li>
+        <li>Long-term relationships</li>
+      </ul>
+    </div>
+  </div>
+  <p class="content">Clients today can research prices, read reviews, and compare options in seconds. What they <b>can't</b> research is a partner who genuinely cares whether their business grows. That's our edge.</p>
+  <div class="bar"><i style="width:31%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 7 : THE FRAMEWORK MAP (OFFICIAL GLOSSARY) ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Your Toolkit: The Framework Map</h1>
+  <h2 class="s">Eight Frameworks — One Coherent System</h2>
+  <div class="grid2" style="max-width:1100px">
+    <div class="card"><h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="search"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m21 21-4.34-4.34" />   <circle cx="11" cy="11" r="8" /> </svg>  Discovery &amp; Diagnosis</h3>
+      <ul>
+        <li><b>CGP</b> — Challenges · Goals · Plans</li>
+        <li><b>SPIN</b> — Situation · Problem · Implication · Need-payoff</li>
+        <li><b>DARE</b> — Define · Analyze · Report · Establish</li>
+      </ul>
+    </div>
+    <div class="card"><h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="scale"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M12 3v18" />   <path d="m19 8 3 8a5 5 0 0 1-6 0zV7" />   <path d="M3 7h1a17 17 0 0 0 8-2 17 17 0 0 0 8 2h1" />   <path d="m5 8 3 8a5 5 0 0 1-6 0zV7" />   <path d="M7 21h10" /> </svg>  Qualification (Ethical)</h3>
+      <ul>
+        <li><b>TCI</b> — Timeline · Consequences · Implications</li>
+        <li><b>BAA</b> — Budget · Authority · Agenda</li>
+        <li><b>BANT</b> — legacy reference only</li>
+      </ul>
+    </div>
+    <div class="card"><h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="message circle"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719" /> </svg>  Engagement &amp; Objections</h3>
+      <ul>
+        <li><b>LACE</b> — Listen · Acknowledge · Clarify · Execute</li>
+        <li><b>Challenger</b> — Teach · Tailor · Take Control</li>
+      </ul>
+    </div>
+    <div class="card"><h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="trending up"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M16 7h6v6" />   <path d="m22 7-8.5 8.5-5-5L2 17" /> </svg>  Growth &amp; Retention</h3>
+      <ul>
+        <li><b>Flywheel</b> — Attract · Engage · Deliver · Delight · Amplify</li>
+        <li><b>Value-First Paradigm</b> — outcomes over features</li>
+      </ul>
+    </div>
+  </div>
+  <p class="content" style="font-size:1.05rem"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="pin"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M12 17v5" />   <path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z" /> </svg>  These definitions are the <b>official glossary</b> of this program. If any slide anywhere contradicts them — the glossary wins.</p>
+  <div class="bar"><i style="width:37%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 8 : ETHICS AS EDGE ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Why Ethics Is Our Competitive Edge</h1>
+  <h2 class="s">Not a Constraint — A Weapon</h2>
+  <div class="grid2 vs">
+    <div class="card old"><h3>What Most Sellers Do</h3>
+      <ul>
+        <li>Pressure, fake urgency, manipulation</li>
+        <li>Hide costs, oversell, vanish after payment</li>
+        <li>Result: clients have learned to <b>distrust</b> sellers</li>
+      </ul>
+    </div>
+    <div class="card new"><h3>What We Do</h3>
+      <ul>
+        <li>Full transparency — one-time $100, clear monthly costs</li>
+        <li>Pros &amp; cons presented honestly (the TCI mindset)</li>
+        <li>We think WITH the client, in the same corner</li>
+        <li>Freedom to decide — no pressure</li>
+      </ul>
+    </div>
+  </div>
+  <p class="content">When everyone else pressures, honesty stands out. Small business owners talk to each other. <b>Reputation compounds.</b></p>
+  <div class="bar"><i style="width:42%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 9 : CORE ETHICAL PRINCIPLES ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Core Ethical Principles</h1>
+  <h2 class="s">The Four Pillars</h2>
+  <div class="grid2">
+    <div class="card"><h3>1. Integrity First</h3>
+      <ul>
+        <li>Unwavering commitment to honesty</li>
+        <li>Transparent communication — always</li>
+        <li>Consistent ethical conduct, even when no one is watching</li>
+      </ul>
+    </div>
+    <div class="card"><h3>2. Client-Centric Focus</h3>
+      <ul>
+        <li>Client success is the primary goal</li>
+        <li>Long-term relationships over transactions</li>
+        <li>Value creation before revenue</li>
+      </ul>
+    </div>
+    <div class="card"><h3>3. Professional Excellence</h3>
+      <ul>
+        <li>Continuous skill development</li>
+        <li>Knowledge-based interactions, not memorized lines</li>
+        <li>Demonstrated expertise on every call</li>
+      </ul>
+    </div>
+    <div class="card"><h3>4. Mutual Benefit</h3>
+      <ul>
+        <li>Win-win outcomes only</li>
+        <li>Sustainable partnerships</li>
+        <li>Shared value creation</li>
+      </ul>
+    </div>
+  </div>
+  <div class="bar"><i style="width:47%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 10 : Steady Hands LLC DEFINED ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Steady Hands LLC Defined</h1>
+  <h2 class="s">Part Consultant · Part Strategist · Part Relationship Architect</h2>
+  <div class="grid3">
+    <div class="card"><h3>Beyond Product Knowledge</h3>
+      <ul>
+        <li>Deep business acumen</li>
+        <li>Ethical persuasion skills</li>
+        <li>Consultative engagement</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Core Competencies</h3>
+      <ul>
+        <li>Understand client needs deeply</li>
+        <li>Diagnose business challenges</li>
+        <li>Position solutions as strategic investments</li>
+      </ul>
+    </div>
+    <div class="card"><h3>What "Steady Hands LLC" Means</h3>
+      <ul>
+        <li>The front line of our reputation</li>
+        <li>The first voice a client hears</li>
+        <li>The difference between a vendor and a partner</li>
+      </ul>
+    </div>
+  </div>
+  <div class="bar"><i style="width:53%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 11 : TRANSFORMATION ROADMAP ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">The Transformation Roadmap</h1>
+  <h2 class="s">Four Dimensions of Becoming a Trusted Advisor</h2>
+  <div class="diagram">
+    <div class="node"><b>1. Ethics</b><span>Internalize integrity as instinct — not policy</span></div>
+    <div class="node"><b>2. Mastery</b><span>Know every service, price, and outcome cold</span></div>
+    <div class="node"><b>3. Process</b><span>Framework-driven discovery &amp; qualification</span></div>
+    <div class="node"><b>4. Tools</b><span>Use data &amp; AI ethically to deepen insight</span></div>
+  </div>
+  <p class="content">This program takes you through all four — chapter by chapter, skill by skill. By the end, the frameworks won't feel like frameworks. <b>They'll feel like you.</b></p>
+  <div class="bar"><i style="width:58%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 12 : THE Steady Hands LLC CONTRACT ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">What We Expect From Each Other</h1>
+  <h2 class="s">Steady Hands LLC Contract</h2>
+  <div class="grid2">
+    <div class="card"><h3>You Can Expect From Us</h3>
+      <ul>
+        <li>Complete frameworks and scripts — no missing pieces</li>
+        <li>Transparent compensation: $12/hr + $30 per confirmed sale + weekly bonuses</li>
+        <li>Coaching, role-play, and honest feedback</li>
+      </ul>
+    </div>
+    <div class="card"><h3>We Expect From You</h3>
+      <ul>
+        <li>Ethical conduct on every single call</li>
+        <li>Framework discipline — CGP, TCI, BAA, LACE</li>
+        <li>Honest, accurate CRM logging</li>
+        <li>Respect for every client's time</li>
+      </ul>
+    </div>
+  </div>
+  <div class="bar"><i style="width:63%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 13 : DIGITAL TOOLS, ETHICALLY ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Leveraging Digital Tools — Ethically</h1>
+  <h2 class="s">Business Intelligence &amp; AI as Amplifiers</h2>
+  <div class="grid2">
+    <div class="card"><h3>What We Use</h3>
+      <ul>
+        <li>Research on each prospect before the call</li>
+        <li>Market &amp; competitor insight to bring real value</li>
+        <li>AI to prepare, personalize, and review — <b>never</b> to deceive</li>
+      </ul>
+    </div>
+    <div class="card"><h3>The Line We Never Cross</h3>
+      <ul>
+        <li>No fake urgency or artificial scarcity</li>
+        <li>No fabricated results or testimonials</li>
+        <li>No pressure tactics — ever</li>
+      </ul>
+    </div>
+  </div>
+  <p class="content">Technology makes a good consultant faster. It never makes a bad one trustworthy.</p>
+  <div class="bar"><i style="width:68%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 14 : MANIFESTO ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">The Steady Hands Manifesto</h1>
+  <div class="quote">
+    <p>"This playbook is more than a set of rules; it is a manifesto for a new way of selling at Steady Hands. It is a commitment to professional excellence, ethical conduct, and relentless client focus."</p>
+    <span>— Steady Hands LLC</span>
+  </div>
+  <div class="bar"><i style="width:74%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 15 : SUSTAINABLE SUCCESS ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Sustainable Success</h1>
+  <h2 class="s">Ethics as the Cornerstone</h2>
+  <div class="grid3">
+    <div class="card stat"><span class="num">Ethics</span>sound actions, always</div>
+    <div class="card stat"><span class="num">Value</span>client focus, first</div>
+    <div class="card stat"><span class="num">Trust</span>the advisor's currency</div>
+  </div>
+  <p class="content">True, sustainable success comes only when actions are ethically sound and the primary focus is creating <b>tangible, lasting value</b> for clients. Everything else follows.</p>
+  <div class="bar"><i style="width:79%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 16 : INTERNALIZE ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Internalize — Don't Memorize</h1>
+  <h2 class="s">How to Study This Program</h2>
+  <div class="grid3">
+    <div class="card"><h3>Reflect</h3>
+      <ul>
+        <li>Ask "why" behind every rule</li>
+        <li>Connect each idea to a real client you've spoken with</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Apply</h3>
+      <ul>
+        <li>Use one framework per real call this week</li>
+        <li>Log what worked and what didn't</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Challenge</h3>
+      <ul>
+        <li>Challenge your own assumptions</li>
+        <li>Discomfort means growth</li>
+      </ul>
+    </div>
+  </div>
+  <div class="bar"><i style="width:84%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 17 : SUMMARY ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Chapter 1 — Summary</h1>
+  <h2 class="s">What You Must Walk Away With</h2>
+  <div class="grid2">
+    <div class="card"><h3>Key Ideas</h3>
+      <ul>
+        <li>The Mandate: grow through value — never through price</li>
+        <li>Ethics is our competitive edge, not a constraint</li>
+        <li>Trusted advisor &gt; vendor. Always.</li>
+        <li>Know the company, know the client, know the offer</li>
+      </ul>
+    </div>
+    <div class="card"><h3>Official Glossary Introduced</h3>
+      <ul>
+        <li><b>CGP</b> — Challenges · Goals · Plans</li>
+        <li><b>TCI</b> — Timeline · Consequences · Implications</li>
+        <li><b>BAA</b> — Budget · Authority · Agenda</li>
+        <li>Plus: SPIN · DARE · LACE · Challenger · Flywheel · BANT (legacy)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="bar"><i style="width:89%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 18 : QUIZ ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">Quick Check</h1>
+  <h2 class="s">Test Yourself Before Moving On</h2>
+  <div class="quiz">
+    <div class="q">
+      <p class="qt">1. In our TCI framework, what does "C" stand for?</p>
+      <span class="opt">Cost of the solution</span>
+      <span class="opt correct">Consequences — the objective downsides of not solving the problem</span>
+      <span class="opt">Context of the client</span>
+      <p class="ans">TCI = Timeline · Consequences · Implications (the positive side of solving it).</p>
+    </div>
+    <div class="q">
+      <p class="qt">2. In BAA, the last "A" is:</p>
+      <span class="opt correct">Agenda — the client's priorities, timing, and schedule</span>
+      <span class="opt">Action</span>
+      <span class="opt">Alignment</span>
+      <p class="ans">BAA = Budget · Authority · Agenda — our ethical successor to legacy BANT.</p>
+    </div>
+    <div class="q">
+      <p class="qt">3. A prospect asks: "Why should I pay $100?" According to the Mandate, you should:</p>
+      <span class="opt">Offer a discount immediately</span>
+      <span class="opt">List every technical feature of the website</span>
+      <span class="opt correct">Sell the outcome — what a working website does for their business</span>
+      <p class="ans">Grow through value — never through price.</p>
+    </div>
+  </div>
+  <div class="bar"><i style="width:95%"></i></div>
+</div></div>
+
+<!-- ============ SLIDE 19 : NEXT CHAPTER ============ -->
+<div class="slide" tabindex="0"><div class="slide-content">
+  <h1 class="t">What's Next</h1>
+  <h2 class="s">Chapter 2: The Value-First Paradigm</h2>
+  <div class="diagram">
+    <div class="node"><b>"So What?"</b><span>Turn every feature into a client outcome</span></div>
+    <div class="node"><b>"What If?"</b><span>Paint the future they could have</span></div>
+    <div class="node"><b>Value Stacking</b><span>Layer financial, strategic, operational &amp; emotional value</span></div>
+  </div>
+  <div class="quote" style="margin-top:1.5rem">
+    <p>"The future of sales is here — and it begins with you."</p>
+    <span>— Steady Hands LLC</span>
+  </div>
+  <div class="bar"><i style="width:100%"></i></div>
+</div></div>
+
+</div><!-- /presentation -->
+
+<footer class="chapter-footer"><span class="sh-course" aria-disabled="true"><svg class="sh-icon" width="1em" height="1em" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m12 19-7-7 7-7" />   <path d="M19 12H5" /> </svg> <span>Previous Course</span></span><nav class="nav" aria-label="Slide navigation"><button class="sh-slide-control" type="button" onclick="previousSlide()" aria-label="Previous slide" title="Previous slide"><svg class="sh-icon" width="1em" height="1em" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m12 19-7-7 7-7" />   <path d="M19 12H5" /> </svg> <span class="sh-control-label">Previous</span></button><button class="sh-fullscreen sh-slide-control" type="button" onclick="toggleFullscreen()" aria-label="Toggle fullscreen" title="Fullscreen" aria-pressed="false"><span class="sh-maximize"><svg class="sh-icon" width="1em" height="1em" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M8 3H5a2 2 0 0 0-2 2v3" />   <path d="M21 8V5a2 2 0 0 0-2-2h-3" />   <path d="M3 16v3a2 2 0 0 0 2 2h3" />   <path d="M16 21h3a2 2 0 0 0 2-2v-3" /> </svg> </span><span class="sh-minimize" hidden><svg class="sh-icon" width="1em" height="1em" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M8 3v3a2 2 0 0 1-2 2H3" />   <path d="M21 8h-3a2 2 0 0 1-2-2V3" />   <path d="M3 16h3a2 2 0 0 1 2 2v3" />   <path d="M16 21v-3a2 2 0 0 1 2-2h3" /> </svg> </span><span class="sh-control-label">Fullscreen</span></button><button class="sh-slide-control" type="button" onclick="nextSlide()" aria-label="Next slide" title="Next slide"><svg class="sh-icon" width="1em" height="1em" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M5 12h14" />   <path d="m12 5 7 7-7 7" /> </svg> <span class="sh-control-label">Next</span></button></nav><a class="sh-course" href="Chapter_02_Comprehensive_Presentation.html"><span>Next course</span><svg class="sh-icon" width="1em" height="1em" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M5 12h14" />   <path d="m12 5 7 7-7 7" /> </svg> </a></footer>
+
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+  document.getElementById('tot').textContent = slides.length;
+
+  function showSlide(n) {
+    slides[currentSlide].classList.remove('active');
+    slides[currentSlide].classList.add('prev');
+    currentSlide = (n + slides.length) % slides.length;
+    slides[currentSlide].classList.remove('prev');
+    slides[currentSlide].classList.add('active');
+    document.getElementById('cur').textContent = currentSlide + 1;
+    slides[currentSlide].scrollTop = 0;
+    slides[currentSlide].focus({preventScroll:true});
+    const pct = ((currentSlide + 1) / slides.length) * 100;
+    document.querySelectorAll('.bar i').forEach(function(b){ b.style.width = pct + '%'; });
+    if(window.SteadyHandsProgress)window.SteadyHandsProgress.save();
+  }
+
+  function nextSlide() { showSlide(currentSlide + 1); }
+  function previousSlide() { showSlide(currentSlide - 1); }
+
+  function toggleFullscreen() {
+    const action=document.fullscreenElement ? document.exitFullscreen && document.exitFullscreen() : document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
+    if(action && action.catch)action.catch(function(){});
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if(e.target.closest('input,textarea,select,button,a,[contenteditable="true"]'))return;
+    if(e.key===' ' && slides[currentSlide].scrollHeight>slides[currentSlide].clientHeight+1)return;
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); previousSlide(); }
+    else if (e.key === 'f' || e.key === 'F') { e.preventDefault(); toggleFullscreen(); }
+  });
+</script>
+
+
+<script>
+(function(){
+  const header=document.querySelector('.chapter-header');
+  const footer=document.querySelector('.chapter-footer');
+  function fitViewport(){
+    document.documentElement.style.setProperty('--sh-header-height',Math.ceil(header.getBoundingClientRect().bottom)+'px');
+    document.documentElement.style.setProperty('--sh-footer-height',Math.ceil(footer.getBoundingClientRect().height)+'px');
+  }
+  if(window.ResizeObserver){const observer=new ResizeObserver(fitViewport);observer.observe(header);observer.observe(footer);}
+  window.addEventListener('resize',fitViewport);
+  if(window.visualViewport)window.visualViewport.addEventListener('resize',fitViewport);
+  document.addEventListener('fullscreenchange',function(){
+    const on=!!document.fullscreenElement;
+    document.querySelector('.sh-fullscreen').setAttribute('aria-pressed',String(on));
+    document.querySelector('.sh-maximize').hidden=on;
+    document.querySelector('.sh-minimize').hidden=!on;
+    fitViewport();
+  });
+  const fs=document.querySelector('.sh-fullscreen');
+  if(!document.documentElement.requestFullscreen){fs.disabled=true;fs.title='Fullscreen is not supported by this browser';}
+  fitViewport();
+  document.querySelector('.slide.active').focus({preventScroll:true});
+})();
+</script>
+
+<script src="assets/chapter-progress.js"></script>
+</body>
+</html>

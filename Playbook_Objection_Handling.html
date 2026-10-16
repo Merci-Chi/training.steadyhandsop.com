@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Playbook: Objection Handling Guide — Steady Hands LLC</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --navy:#1A3A5C; --navy2:#2D4A6B; --gold:#D4A017; --gold2:#F0C24B;
+    --mist:#90A4B8; --paper:#F5F8FB; --ink:#22313F;
+  }
+  body{font-family:'Inter','Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;
+    background:var(--paper);color:var(--ink);line-height:1.65}
+
+  .topbar{position:sticky;top:0;z-index:100;background:rgba(26,58,92,.97);backdrop-filter:blur(8px);
+    display:flex;align-items:center;justify-content:space-between;padding:.8rem 1.6rem;
+    box-shadow:0 2px 14px rgba(0,0,0,.25)}
+  .brand{display:flex;align-items:center;gap:.7rem;color:#fff}
+  .logo{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));
+    display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--navy)}
+  .brand b{display:block;line-height:1.2}
+  .brand small{color:var(--mist);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
+  .topbar .tag{color:var(--gold2);font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+
+  .hero{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:2.6rem 2rem;text-align:center}
+  .hero h1{font-size:2.2rem;font-weight:800}
+  .hero h1 span{color:var(--gold2)}
+  .hero p{max-width:760px;margin:.8rem auto 0;color:#C9D8E6;font-size:1.05rem}
+
+  .wrap{max-width:1150px;margin:0 auto;padding:1.6rem 1.5rem 4rem}
+
+  .tabs{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.6rem;position:sticky;top:64px;z-index:90;
+    background:var(--paper);padding:.7rem 0}
+  .tab{background:#fff;border:1.5px solid #D7E1EA;border-radius:999px;padding:.55rem 1.05rem;
+    font-size:.88rem;font-weight:700;color:var(--navy2);cursor:pointer;transition:.2s}
+  .tab:hover{border-color:var(--gold)}
+  .tab.active{background:var(--navy);border-color:var(--navy);color:#fff}
+
+  .panel{display:none;animation:fade .35s}
+  .panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  h2{color:var(--navy);font-size:1.5rem;margin:1.6rem 0 .8rem;padding-bottom:.4rem;border-bottom:3px solid var(--gold)}
+  h2:first-child{margin-top:.2rem}
+  h3{color:var(--navy2);font-size:1.12rem;margin:1.3rem 0 .5rem}
+  p{margin-bottom:.85rem}
+  ul{margin:0 0 1rem 1.3rem}
+  li{margin-bottom:.4rem}
+  b{color:var(--navy)}
+  em{color:var(--navy2)}
+
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.2rem;margin-bottom:1.2rem}
+  .box{background:#fff;border:1px solid #E3EAF1;border-radius:14px;padding:1.25rem 1.35rem;
+    box-shadow:0 2px 8px rgba(26,58,92,.05)}
+  .box h4{color:var(--gold);font-size:1rem;margin-bottom:.55rem}
+  .box ul{margin-left:1.15rem}
+  .box p{margin-bottom:.4rem;font-size:.95rem}
+
+  .obj{background:#fff;border:1px solid #E3EAF1;border-radius:14px;padding:1.25rem 1.4rem;
+    margin:1.1rem 0;box-shadow:0 2px 8px rgba(26,58,92,.05)}
+  .obj-head{color:var(--navy);font-size:1.1rem;font-weight:800;margin-bottom:.35rem}
+  .real{font-size:.92rem;color:#5A6E82;margin-bottom:.85rem;padding-bottom:.7rem;border-bottom:1px dashed #E3EAF1}
+  .real b{color:#8a6d0b}
+  .lace-step{background:rgba(212,160,23,.09);border-radius:10px;padding:.75rem 1rem;margin:.5rem 0;font-size:.96rem}
+  .lace-step b{display:inline-block;background:var(--gold);color:var(--navy);border-radius:6px;
+    padding:.05rem .5rem;margin-right:.5rem;font-weight:800}
+  .lace-step em{display:block;color:var(--navy);font-style:italic;margin-top:.2rem}
+  .branch{background:rgba(26,58,92,.05);border-radius:8px;padding:.5rem .8rem;margin:.4rem 0;font-size:.9rem}
+  .branch b{color:var(--navy2)}
+  .neversay{background:rgba(255,120,120,.08);border:1.5px dashed #E07070;border-radius:12px;
+    padding:.75rem 1.05rem;margin:.85rem 0 0;font-size:.9rem}
+  .neversay b{color:#c0392b}
+
+  .flow{display:flex;gap:.55rem;flex-wrap:wrap;margin:.9rem 0 1.2rem}
+  .flow span{background:var(--navy);color:#fff;border-radius:999px;padding:.35rem .9rem;font-size:.84rem;font-weight:600}
+  .flow span:nth-child(even){background:var(--gold);color:var(--navy)}
+
+  .note{background:rgba(212,160,23,.1);border:1.5px dashed var(--gold);border-radius:12px;
+    padding:.95rem 1.25rem;margin:1.1rem 0;font-size:.92rem}
+  .warn{background:rgba(255,120,120,.08);border:1.5px dashed #E07070;border-radius:12px;
+    padding:.95rem 1.25rem;margin:1.1rem 0;font-size:.92rem}
+
+  .tablewrap{overflow-x:auto;margin:1.1rem 0}
+  table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid #E3EAF1;
+    border-radius:14px;overflow:hidden;min-width:620px}
+  th,td{padding:.6rem .9rem;text-align:left;font-size:.9rem;border-bottom:1px solid #EDF2F7;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  th{background:var(--navy);color:#fff;font-size:.87rem}
+  td b{color:var(--gold)}
+
+  footer{text-align:center;padding:2rem;color:#7A8DA0;font-size:.85rem;border-top:1px solid #E3EAF1;margin-top:2rem}
+  footer b{color:var(--navy)}
+
+  @media(max-width:640px){.hero{padding:1.8rem 1.2rem}.topbar .tag{display:none}.tabs{top:60px}}
+</style>
+<link rel="icon" href="assets/steady-hands-logo.jpg">
+<style>
+/* Local logo and Lucide icon assets. */
+.sh-icon{display:inline-block;width:1em;height:1em;vertical-align:-.125em;flex-shrink:0;overflow:visible}
+.logo.sh-logo-slot{background:none;overflow:hidden;flex-shrink:0}
+.sh-brand-logo{display:block;width:100%;height:100%;object-fit:contain;border-radius:inherit}
+.brandtag .sh-brand-logo{display:inline-block;width:24px;height:24px;border-radius:5px;vertical-align:middle;margin-right:8px}
+</style>
+<style>
+.sh-playbook-back{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:9px 12px;border-radius:10px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:.85rem;font-weight:600;flex-shrink:0}
+.sh-playbook-back-wrap{padding:.5rem 1rem;text-align:left;background:var(--navy)}
+.topbar{gap:.8rem}.tabs{top:var(--sh-topbar-height,60px)}
+@media(max-width:640px){.topbar{padding:.7rem .8rem;flex-wrap:wrap}.topbar .brand{min-width:0;flex:1}.topbar .brand b{font-size:.85rem}.topbar .brand small{font-size:.65rem}.topbar .logo{flex-shrink:0}.cols{grid-template-columns:minmax(0,1fr)}.pb-grid{grid-template-columns:minmax(0,1fr)}.sheet{padding:1rem}.sh-head .prices{text-align:left}table{max-width:100%}}
+@media print{.sh-playbook-back,.sh-playbook-back-wrap{display:none}}
+</style>
+</head>
+<body>
+
+<div class="topbar"><a class="sh-playbook-back" href="index.html"><svg class="sh-icon" width="1em" height="1em" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m12 19-7-7 7-7" />   <path d="M19 12H5" /> </svg> <span>Back</span></a>
+  <div class="brand"><div class="logo sh-logo-slot"><img class="sh-brand-logo" src="assets/steady-hands-logo.jpg" alt="Steady Hands Operation logo"></div><div><b>Steady Hands LLC</b><small>Field Playbook</small></div></div>
+  <div class="tag"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="shield"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> </svg>  Objection Guide</div>
+</div>
+
+<div class="hero">
+  <h1>Objection <span>Handling Guide</span></h1>
+  <p>The written reference for every objection you will hear — each one classified, decoded, and answered through <b>LACE</b>. Every card tells you what the objection <b>usually really means</b>, the full loop response, and what <b>never</b> to say. These are structures, not handcuffs — adapt the words, keep the order.</p>
+</div>
+
+<div class="wrap">
+
+<!-- ============ TABS ============ -->
+<div class="tabs" id="tabs">
+  <button class="tab active" data-p="p0"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="compass"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z" /> </svg>  Method</button>
+  <button class="tab" data-p="p1"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="banknote"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <rect width="20" height="12" x="2" y="6" rx="2" />   <circle cx="12" cy="12" r="2" />   <path d="M6 12h.01M18 12h.01" /> </svg>  Value &amp; Price</button>
+  <button class="tab" data-p="p2"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="house"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />   <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /> </svg>  Status Quo</button>
+  <button class="tab" data-p="p3"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="calendar days"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M8 2v3" />   <path d="M16 2v3" />   <rect x="3" y="3" width="18" height="18" rx="2" />   <path d="M3 9h18" />   <path d="M8 13h.01" />   <path d="M12 13h.01" />   <path d="M16 13h.01" />   <path d="M8 17h.01" />   <path d="M12 17h.01" />   <path d="M16 17h.01" /> </svg>  Timing &amp; Agenda</button>
+  <button class="tab" data-p="p4"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="key round"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z" />   <circle cx="16.5" cy="7.5" r=".5" fill="currentColor" /> </svg>  Authority</button>
+  <button class="tab" data-p="p5"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="handshake"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m11 17 2 2a1 1 0 1 0 3-3" />   <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4" />   <path d="m21 3 1 11h-2" />   <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3" />   <path d="M3 4h8" /> </svg>  Trust</button>
+  <button class="tab" data-p="p6"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="ban"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <path d="M4.929 4.929 19.07 19.071" /> </svg>  Special Cases</button>
+</div>
+
+<!-- ============ PANEL 0 : METHOD ============ -->
+<div class="panel active" id="p0">
+  <h2>The Method — Read Once, Use Forever</h2>
+  <p>Every objection on this site is answered with the same loop, in the same order. The order IS the ethics: <b>understand before you answer</b>.</p>
+  <div class="flow">
+    <span>L — Listen completely</span><span>A — Acknowledge the person</span><span>C — Clarify to the REAL objection</span><span>E — Execute with value</span>
+  </div>
+
+  <h2>The Five Rules of the Loop</h2>
+  <div class="grid2">
+    <div class="box"><h4>The Loop Rules</h4>
+      <ul>
+        <li><b>One loop at a time</b> — resolve, check ("does that address it?"), then handle the next. Three objections answered in one breath = none answered.</li>
+        <li><b>Clarify 1–3 times</b> — the first objection stated is rarely the real one. Dig until you're confident.</li>
+        <li><b>Never argue</b> — you can win a point and lose the deal in the same sentence.</li>
+      </ul>
+    </div>
+    <div class="box"><h4>The Conduct Rules</h4>
+      <ul>
+        <li><b>The price is the price</b> — value answers price pressure, never discounts.</li>
+        <li><b>LACE order is non-negotiable</b> — skipping to the answer is how brilliant responses hit the wrong target.</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>The Objection Map — Find Yours Fast</h2>
+  <p>Every objection belongs to a category, and each category has a core move. Scan the left column for what you just heard.</p>
+  <div class="tablewrap">
+    <table>
+      <tr><th>You Hear…</th><th>Category</th><th>Core Move</th><th>Tab</th></tr>
+      <tr><td>"Too expensive" · "What's the catch?" · "$50 and I'll sign"</td><td><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="banknote"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <rect width="20" height="12" x="2" y="6" rx="2" />   <circle cx="12" cy="12" r="2" />   <path d="M6 12h.01M18 12h.01" /> </svg>  Value</b></td><td>Clarify the comparison point → their Gap math</td><td>Value &amp; Price</td></tr>
+      <tr><td>"Why not free (Wix)?" · "No budget"</td><td><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="banknote"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <rect width="20" height="12" x="2" y="6" rx="2" />   <circle cx="12" cy="12" r="2" />   <path d="M6 12h.01M18 12h.01" /> </svg>  Value</b></td><td>Usually capacity or value-doubt, not money</td><td>Value &amp; Price</td></tr>
+      <tr><td>"I have a site" · "Facebook is enough" · "My nephew"</td><td><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="house"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />   <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /> </svg>  Status Quo</b></td><td>Honor it → name the invisible gap</td><td>Status Quo</td></tr>
+      <tr><td>"Booked out anyway" · "All word of mouth"</td><td><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="house"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />   <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /> </svg>  Status Quo</b></td><td>The net UNDER the engine, not a replacement</td><td>Status Quo</td></tr>
+      <tr><td>"Not a good time" · "Let me think" · "Call me in November"</td><td><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="calendar days"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M8 2v3" />   <path d="M16 2v3" />   <rect x="3" y="3" width="18" height="18" rx="2" />   <path d="M3 9h18" />   <path d="M8 13h.01" />   <path d="M12 13h.01" />   <path d="M16 13h.01" />   <path d="M8 17h.01" />   <path d="M12 17h.01" />   <path d="M16 17h.01" /> </svg>  Agenda</b></td><td>Schedule the window — never force it</td><td>Timing &amp; Agenda</td></tr>
+      <tr><td>"Ask my spouse" · "Not my decision"</td><td><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="key round"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z" />   <circle cx="16.5" cy="7.5" r=".5" fill="currentColor" /> </svg>  Authority</b></td><td>Arm the ally / invite the circle in</td><td>Authority</td></tr>
+      <tr><td>"Never heard of you" · "Won't you vanish?" · "Scam?"</td><td><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="handshake"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m11 17 2 2a1 1 0 1 0 3-3" />   <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4" />   <path d="m21 3 1 11h-2" />   <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3" />   <path d="M3 4h8" /> </svg>  Trust</b></td><td>Verifiable facts only — point, never insist</td><td>Trust</td></tr>
+      <tr><td>"You already burned me" (the veteran)</td><td><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="handshake"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m11 17 2 2a1 1 0 1 0 3-3" />   <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4" />   <path d="m21 3 1 11h-2" />   <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3" />   <path d="M3 4h8" /> </svg>  Trust</b></td><td>Absorb → clarify the wound → slow close</td><td>Trust</td></tr>
+      <tr><td>"Stop calling me" · rude hangup · mistakes · beyond-lane asks</td><td><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="ban"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <path d="M4.929 4.929 19.07 19.071" /> </svg>  Special</b></td><td>See the Special Cases rules</td><td>Special Cases</td></tr>
+    </table>
+  </div>
+  <div class="note"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="paperclip"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m16 6-8.414 8.586a2 2 0 0 0 2.829 2.829l8.414-8.586a4 4 0 1 0-5.657-5.657l-8.379 8.551a6 6 0 1 0 8.485 8.485l8.379-8.551" /> </svg>  <b>Cross-reference:</b> "Send me an email" is handled in the <b>Calling Playbook</b> (Cold tab) — it's a call-flow branch, not an objection. Persona-specific variants (salon, cleaning, landscaping) live in the <b>Personas Guide</b>. This guide holds the universal versions.</div>
+
+  <div class="note"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="brain"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M12 18V5" />   <path d="M15 13a4.17 4.17 0 0 1-3-4 4.17 4.17 0 0 1-3 4" />   <path d="M17.598 6.5A3 3 0 1 0 12 5a3 3 0 1 0-5.598 1.5" />   <path d="M17.997 5.125a4 4 0 0 1 2.526 5.77" />   <path d="M18 18a4 4 0 0 0 2-7.464" />   <path d="M19.967 17.483A4 4 0 1 1 12 18a4 4 0 1 1-7.967-.517" />   <path d="M6 18a4 4 0 0 1-2-7.464" />   <path d="M6.003 5.125a4 4 0 0 0-2.526 5.77" /> </svg>  <b>The mindset anchor (Ch 9):</b> objections are a MAP of what stands between them and yes — a gift of information, not an attack. The prospect who objects is engaged. The one who vanishes quietly never was.</div>
+</div>
+
+<!-- ============ PANEL 1 : VALUE & PRICE ============ -->
+<div class="panel" id="p1">
+  <h2><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="banknote"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <rect width="20" height="12" x="2" y="6" rx="2" />   <circle cx="12" cy="12" r="2" />   <path d="M6 12h.01M18 12h.01" /> </svg>  Value &amp; Price Objections</h2>
+  <p>At $100 once + $20–30/month, most "price" objections are really <b>value</b> objections — the math hasn't landed yet, or the wrong comparison is running in their head. Your job: find the comparison, fix it with their numbers.</p>
+
+  <div class="obj">
+    <div class="obj-head">"It's too expensive."</div>
+    <p class="real"><b>Usually really means:</b> "I haven't yet seen value that justifies it" — or they're comparing against the wrong thing (free builders, or what they assumed websites cost).</p>
+    <div class="lace-step"><b>L</b> Let them finish completely. Their tone tells you which comparison they're running.</div>
+    <div class="lace-step"><b>A</b> <em>"Fair to ask — most owners ask exactly that."</em></div>
+    <div class="lace-step"><b>C</b> <em>"Sure — compared to what?"</em> The reference point decides your entire answer. Wait for it.</div>
+    <div class="lace-step"><b>E</b> Branch on what they say:
+      <div class="branch"><b>Vs. free builders:</b> <em>"Then the real comparison is your time — and who fixes it at 9pm when it breaks. Free hands you the tools; we hand you the finished thing, built and supported."</em></div>
+      <div class="branch"><b>Vs. expectations:</b> <em>"Most owners assume websites cost thousands. It's $100, one time — and hosting starts at $20 a month, everything included."</em></div>
+      <div class="branch"><b>Vs. another quote:</b> <em>"What did they include? I'd rather you compare honestly — here's exactly what ours covers…"</em></div>
+    </div>
+    <div class="neversay"><b>Never say:</b> "It's cheap!" — you just started an argument. · Any discount. · "You get what you pay for" — it insults everyone on the free route, including people they know.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head">"Why would I pay when Wix is free?"</div>
+    <p class="real"><b>Usually really means:</b> "Would I have to build and manage it myself?" — it's a <b>capacity</b> question wearing a price costume (Ch 7, worked example).</p>
+    <div class="lace-step"><b>L</b> Let them finish: <em>"…seems like everyone just uses those."</em></div>
+    <div class="lace-step"><b>A</b> <em>"That's fair — free is worth a serious look. Honestly, for some people it's the right call."</em></div>
+    <div class="lace-step"><b>C</b> <em>"When you picture your site — something you'd build and manage yourself, or something handled?"</em> → <em>"I don't have time to figure that out. I'd want it handled."</em> That's the real objection.</div>
+    <div class="lace-step"><b>E</b> <em>"Then that's exactly the difference. Free builders hand you the tools — you become the designer, the mobile-fixer, the support desk. We're the hands: built for you, mobile-ready, preview before launch, a real human at the end of the phone for $20 a month. If you'd enjoy building it yourself — genuinely, do the free route. If you want it handled — that's our $100."</em> → <em>"Does that make the difference clear?"</em></div>
+    <div class="neversay"><b>Never say:</b> "Free sites look unprofessional" — someone they respect has one. · Trashing Wix by name — you're trashing their plan, not the tool.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head">"What's the catch?"</div>
+    <p class="real"><b>Usually really means:</b> burned-before radar — they're waiting for the hidden fee to appear.</p>
+    <div class="lace-step"><b>L+A</b> <em>"No catch — and I like that you checked."</em></div>
+    <div class="lace-step"><b>C</b> Usually unnecessary — the objection is direct. Answer it directly.</div>
+    <div class="lace-step"><b>E</b> <em>"The $100 covers the full design and build. The preview is a starting point — we customize the final site for your business before it goes live. Hosting starts at $20/month — that part IS monthly, and I'd rather tell you now than surprise you later."</em></div>
+    <div class="neversay"><b>Never say:</b> "There's nothing monthly!" — a lie that dies at invoice one and takes your reputation with it.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head">"Do it for $50 and I'll sign today."</div>
+    <p class="real"><b>Usually really means:</b> a <b>buying signal wearing a discount costume</b> — they want in, and they're testing where your line is.</p>
+    <div class="lace-step"><b>L+A</b> <em>"I appreciate a direct offer."</em></div>
+    <div class="lace-step"><b>C</b> Skipped deliberately — the objection is crystal clear. Spend the time on E.</div>
+    <div class="lace-step"><b>E</b> <em>"The price is the price — $100 is what keeps real humans building and supporting it. What I can do is walk you through exactly what's included so you can judge the value yourself… And since you're ready to move — want me to get your preview started this week?"</em> The "today" energy gets redirected to the <b>proper close</b>, not the discount.</div>
+    <div class="neversay"><b>Never say:</b> "Let me ask my manager" theater. · Matching their number "just this once." · Guilt-tripping the offer.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head">"I don't have the budget right now."</div>
+    <p class="real"><b>Usually really means:</b> EITHER a genuine constraint OR value-doubt in budget clothing. These need opposite answers — clarify which first.</p>
+    <div class="lace-step"><b>L+A</b> <em>"Understood — and thanks for being straight about it."</em></div>
+    <div class="lace-step"><b>C</b> <em>"Can I ask — is it the $100 upfront, the monthly, or honestly, not being sure yet that it's worth it?"</em> All three answers lead somewhere different.</div>
+    <div class="lace-step"><b>E</b>
+      <div class="branch"><b>Genuine constraint:</b> <em>"Completely respected. When does your planning window open — next quarter, next season? I'll call then, and not before."</em> Log it. Honor it exactly.</div>
+      <div class="branch"><b>Value-doubt:</b> back to THEIR Gap math (Ch 4–6): <em>"Then let's check the math before we call it unaffordable — how many customers a month are walking past right now?"</em></div>
+    </div>
+    <div class="neversay"><b>Never say:</b> pressure a genuine constraint — that's how rushed, resentful clients are made. · Inventing payment plans or "split it in two" — not official policy, ever.</div>
+  </div>
+</div>
+
+<!-- ============ PANEL 2 : STATUS QUO ============ -->
+<div class="panel" id="p2">
+  <h2><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="house"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8" />   <path d="M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /> </svg>  Status Quo Objections</h2>
+  <p>"I'm fine as I am" is the quietest deal-killer. The rule: <b>honor what works, name the invisible gap.</b> You never fight their engine — you position the site as the net underneath it. And if the status quo is genuinely comfortable? The honest answer is <b>they may not need you yet</b> — say so and keep the door open (TCI both-sides ethics).</p>
+
+  <div class="obj">
+    <div class="obj-head">"I already have a website."</div>
+    <p class="real"><b>Usually really means:</b> "prove the change is worth the hassle."</p>
+    <div class="lace-step"><b>L+A</b> <em>"Perfect — then you know what a site does for you."</em></div>
+    <div class="lace-step"><b>C</b> <em>"Quick one: when you last pulled it up on your phone — how did it look? And when did someone last update it?"</em></div>
+    <div class="lace-step"><b>E</b>
+      <div class="branch"><b>Stale / broken on mobile:</b> <em>"That's the exact gap — the site exists but works against you. Many owners we meet are due a refresh; a preview costs nothing but a conversation."</em></div>
+      <div class="branch"><b>Genuinely good site:</b> honest correction + door open: <em>"Then honestly, you may be in good shape — I'd rather tell you that than manufacture a problem. If anything changes — a redesign, hosting, support — we're at (702) 372-6399."</em></div>
+    </div>
+    <div class="neversay"><b>Never say:</b> "That thing is terrible" — it's THEIRS. Criticize gently through questions, or not at all.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head">"Facebook / Instagram is enough for me."</div>
+    <p class="real"><b>Usually really means:</b> it genuinely works for repeat business — the blind spot is <b>new-customer search</b>.</p>
+    <div class="lace-step"><b>L+A</b> <em>"And it works — for people who already know you."</em></div>
+    <div class="lace-step"><b>C</b> The search test: <em>"When someone NEW to the area types '[salon / cleaner / landscaper] near me' — where do you show up? … Right. Social profiles don't rank there. Websites do."</em></div>
+    <div class="lace-step"><b>E</b> <em>"Think of it as rented land versus owned address: the feed changes its rules overnight — the site is yours, and it catches everyone the platforms miss. It's not instead of your page — it's the missing half."</em></div>
+    <div class="neversay"><b>Never say:</b> "Facebook pages are unprofessional" — you're insulting their current strategy AND their skills.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head">"My nephew / my kid handles that."</div>
+    <p class="real"><b>Usually really means:</b> free labor beats paying — until the first 9pm emergency, or the second year of neglect.</p>
+    <div class="lace-step"><b>L+A</b> <em>"He might do a great job — genuinely."</em></div>
+    <div class="lace-step"><b>C+E</b> <em>"The question is who's behind it at 9pm when it breaks — and who keeps it current on new phones. And if he's genuinely got it covered? Then that's fine — I'd rather you hear me say that than push. If you ever want it handled, we're one call away: (702) 372-6399."</em></div>
+    <div class="neversay"><b>Never say:</b> anything against the nephew — that's family, and you just made an enemy. · Implying they're cheap for using him.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head">"I'm booked out anyway."</div>
+    <p class="real"><b>Usually really means:</b> no felt pain right now — TCI honest answers confirm it. That's a qualification RESULT, not a failure.</p>
+    <div class="lace-step"><b>L+A</b> <em>"Love that — genuinely."</em></div>
+    <div class="lace-step"><b>C</b> <em>"Is that every month, or does it dip?"</em> — seasonality usually opens the door.</div>
+    <div class="lace-step"><b>E</b> <em>"If you're truly full year-round, a website isn't urgent — I'd rather tell you that than push. Most owners do say the phone-answering alone — hours, pricing, what's included — earns its keep. And when the dip comes, you'll know where I am."</em></div>
+    <div class="neversay"><b>Never say:</b> "You're NOT that busy" — arguing a busy owner out of their own reality loses every single time.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head">"All my work is word of mouth / repeat clients."</div>
+    <p class="real"><b>Usually really means:</b> the referral engine works — and they've never examined what happens AFTER a referral is given.</p>
+    <div class="lace-step"><b>L+A</b> <em>"Word of mouth is the best marketing there is — no argument."</em></div>
+    <div class="lace-step"><b>C+E</b> <em>"Here's the quiet part: every referral looks you up before they call. What do they find? … Exactly. The site doesn't replace word of mouth — it closes the people the word of mouth sends. And it catches the new arrivals who don't know anyone here yet."</em></div>
+    <div class="neversay"><b>Never say:</b> "Word of mouth isn't enough" — it clearly IS for them; that's why they said it. You'd be arguing with their lived success.</div>
+  </div>
+</div>
+
+<!-- ============ PANEL 3 : TIMING & AGENDA ============ -->
+<div class="panel" id="p3">
+  <h2><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="calendar days"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M8 2v3" />   <path d="M16 2v3" />   <rect x="3" y="3" width="18" height="18" rx="2" />   <path d="M3 9h18" />   <path d="M8 13h.01" />   <path d="M12 13h.01" />   <path d="M16 13h.01" />   <path d="M8 17h.01" />   <path d="M12 17h.01" />   <path d="M16 17h.01" /> </svg>  Timing &amp; Agenda Objections</h2>
+  <p>The rule of this whole tab: <b>timing pushback gets scheduled, not steamrolled.</b> Agenda objections are scheduling information, not rejection (Ch 5). Forcing timing creates rushed, unhappy clients — and rushed clients churn, which costs more than the sale earned.</p>
+
+  <div class="obj">
+    <div class="obj-head">"Now's not a good time."</div>
+    <p class="real"><b>Usually really means:</b> either a real busy window — or a soft no. One question sorts them.</p>
+    <div class="lace-step"><b>L+A</b> <em>"Totally understandable."</em></div>
+    <div class="lace-step"><b>C</b> <em>"When IS a better window?"</em> — the answer separates real windows from polite brushes.</div>
+    <div class="lace-step"><b>E</b>
+      <div class="branch"><b>Real window:</b> <em>"Then [month] it is — I'll call then, and not before."</em> Log the exact date. Honor it exactly.</div>
+      <div class="branch"><b>Vague brush:</b> one soft probe: <em>"In general — are mornings or afternoons easier to reach you?"</em> Then honor whatever they give. No third attempt this cycle.</div>
+    </div>
+    <div class="neversay"><b>Never say:</b> "It only takes a minute!" — their time is not yours to budget. · Calling before the promised window "just to check in."</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head">"Let me think about it."</div>
+    <p class="real"><b>Usually really means:</b> one of three unresolved questions. "Thinking" is where deals go to die — unless you find the real question.</p>
+    <div class="lace-step"><b>L+A</b> <em>"Of course."</em></div>
+    <div class="lace-step"><b>C</b> <em>"So I send you off with the right things to think about — which part deserves the thinking: the $100, the monthly, or whether it'll actually help?"</em></div>
+    <div class="lace-step"><b>E</b> Answer the one they name with the matching tool:
+      <div class="branch"><b>The $100:</b> what's included, the preview process — value for the build.</div>
+      <div class="branch"><b>The monthly:</b> the flexibility policy — plans move as needs change; hosting is what keeps it alive.</div>
+      <div class="branch"><b>Whether it'll help:</b> their own Gap math, one more time — their numbers, not yours.</div>
+    </div>
+    <div class="neversay"><b>Never say:</b> "What's there to think about?" · Filling their silence with a re-pitch.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head">"Call me in November." (any season/month)</div>
+    <p class="real"><b>Usually really means:</b> a genuine scheduling instruction — and the most valuable data point in your CRM.</p>
+    <div class="lace-step"><b>L+A+E</b> <em>"November it is. Anything changes before then, you have my number."</em></div>
+    <div class="lace-step"><b>THE SYSTEM</b> Log the date. Return ON the date — not before, not "a week early to be safe." The kept promise becomes the warmest opener in sales: <em>"I promised I'd call in November, and here I am."</em> (Ch 10, Scenario 2 — the Tom play: honor → re-discover → re-weigh → re-close.)</div>
+    <div class="neversay"><b>Never do:</b> the October "just checking in" call. You promised November. The promise IS the pipeline.</div>
+  </div>
+</div>
+
+<!-- ============ PANEL 4 : AUTHORITY ============ -->
+<div class="panel" id="p4">
+  <h2><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="key round"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M2.586 17.414A2 2 0 0 0 2 18.828V21a1 1 0 0 0 1 1h3a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h1a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1h.172a2 2 0 0 0 1.414-.586l.814-.814a6.5 6.5 0 1 0-4-4z" />   <circle cx="16.5" cy="7.5" r=".5" fill="currentColor" /> </svg>  Authority Objections</h2>
+  <p>In local business, decisions are family decisions more often than not. The rule: <b>bring the circle in — never sell around it.</b> Chapter 5 asked "Who else is involved?" early; these cards handle when the answer surfaces late.</p>
+
+  <div class="obj">
+    <div class="obj-head">"I need to ask my husband / wife."</div>
+    <p class="real"><b>Usually really means:</b> a real co-decision structure — not an excuse in the vast majority of local businesses.</p>
+    <div class="lace-step"><b>L+A</b> <em>"Smart — it's a family decision."</em> (Never condescend. Never sigh.)</div>
+    <div class="lace-step"><b>C</b> Usually unnecessary — the structure is clear. Move straight to arming the ally.</div>
+    <div class="lace-step"><b>E</b> Two paths, offer both:
+      <div class="branch"><b>Arm the ally:</b> <em>"What's helped other owners: I send you the preview link — you show them in two minutes."</em></div>
+      <div class="branch"><b>Invite the circle:</b> <em>"Or if it's easier, let's get them on a quick call — I'd rather answer their questions myself than have you guess them."</em></div>
+      <div class="branch"><b>When the spouse joins:</b> switch the lead value to <b>financial + risk removal</b> — their numbers, the preview, the flexibility policy (Ch 6 tailoring).</div>
+    </div>
+    <div class="neversay"><b>Never say:</b> "Why do you need permission?" · Pressuring them to decide alone tonight. · Calling before the promised follow-up time.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head">"It's not my decision — I just answer the phones."</div>
+    <p class="real"><b>Usually really means:</b> a gatekeeper stating their role. They are an ally to win — never an obstacle to push past.</p>
+    <div class="lace-step"><b>L+A</b> <em>"Got it — thanks for being straight with me."</em></div>
+    <div class="lace-step"><b>C</b> <em>"Is there generally a good time [Owner] takes calls about the business?"</em></div>
+    <div class="lace-step"><b>E</b> <em>"Could I leave the essentials with you — my name, the website, and the number, (702) 372-6399? If [Owner] asks about the website request, that's everything they'd need. And thank you for guarding their time — that's exactly the right instinct."</em></div>
+    <div class="neversay"><b>Never say:</b> "It's a personal call" — tricking a gatekeeper burns the bridge permanently. · Demanding the owner's cell. · Treating the handoff as beneath you.</div>
+  </div>
+</div>
+
+<!-- ============ PANEL 5 : TRUST ============ -->
+<div class="panel" id="p5">
+  <h2><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="handshake"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m11 17 2 2a1 1 0 1 0 3-3" />   <path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4" />   <path d="m21 3 1 11h-2" />   <path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3" />   <path d="M3 4h8" /> </svg>  Trust Objections</h2>
+  <p>The pattern for this entire tab: <b>insistence builds doubt; verifiability builds trust.</b> Never argue your credibility — point to things the prospect can check themselves: the published prices, the preview process, the real phone number. Full training: Ch 7, Slide 16.</p>
+
+  <div class="obj">
+    <div class="obj-head">"Never heard of you guys."</div>
+    <p class="real"><b>Usually really means:</b> unknown = risky until proven otherwise. Fair position.</p>
+    <div class="lace-step"><b>L+A</b> <em>"Fair — no reason you would have yet."</em></div>
+    <div class="lace-step"><b>C</b> Usually unnecessary.</div>
+    <div class="lace-step"><b>E</b> <em>"We're a Las Vegas web company, and businesses like yours are exactly who we serve. Everything's at steadyhandsop.com — prices published right on the site. And our number is (702) 372-6399 — call or text anytime."</em></div>
+    <div class="neversay"><b>Never say:</b> "We're the best in Vegas!" — unverified superlatives ARE the thing they're guarding against.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head">"How do I know you won't take the money and vanish?"</div>
+    <p class="real"><b>Usually really means:</b> the #1 wound of this market — abandonment by a previous provider.</p>
+    <div class="lace-step"><b>L+A</b> <em>"That's the right question to ask anyone in this industry."</em></div>
+    <div class="lace-step"><b>C</b> Usually unnecessary.</div>
+    <div class="lace-step"><b>E</b> <em>"Because you see the actual site before launch — the preview is built first, before anything goes live. The monthly only continues if you're happy. And the phone number is real: (702) 372-6399 — call it right now if you like. Someone answers."</em></div>
+    <div class="neversay"><b>Never say:</b> "How dare you suggest—" — the suspicion was earned by the industry, not by you. Absorb it without taking it personally.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head">"Sounds too good to be true."</div>
+    <p class="real"><b>Usually really means:</b> healthy skepticism doing its job.</p>
+    <div class="lace-step"><b>L+A+E</b> <em>"Then don't take my word for it — check the pricing page, call the number, decide in your own time. No pressure from me either way."</em></div>
+    <div class="lace-step"><b>THE MECHANISM</b> The confident withdrawal IS the credibility. Salespeople who push past this objection confirm it was too good to be true. The one who says "go verify" gets verified — and verification favors us every time, because everything about us checks out.</div>
+    <div class="neversay"><b>Never say:</b> "I promise!" · Any new, bigger claim to overcome the doubt.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head">"You people already took two grand off me once." — the burned veteran</div>
+    <p class="real"><b>Usually really means:</b> industry trauma. The deepest objection in our market — and handled right, the source of our loudest future advocate (Ch 10, Scenario 3 — Frank).</p>
+    <div class="lace-step"><b>L+A</b> Full absorb, no defending: <em>"…That would make me skeptical too. Two thousand dollars and a site that didn't work — I'd be done with this whole industry."</em> <b>Then pause.</b> The pause does more work than any sentence could.</div>
+    <div class="lace-step"><b>C</b> <em>"Can I ask — what stung most? The money, or how you were treated after?"</em> → almost always: <em>"After. Vanished. Nobody picked up."</em> The real wound is abandonment, not price.</div>
+    <div class="lace-step"><b>E</b> Verifiable facts ONLY: <em>"Here's what I can point to, and you can check every word: our prices are published — $100 to build, $20 a month, on the site right now. You see the preview before anything goes live. And our number is (702) 372-6399 — call it right now. Someone answers."</em></div>
+    <div class="lace-step"><b>THE SLOW CLOSE</b> <em>"I'm not going to push you tonight. Look at the pricing page, call the number, decide in your own time. If the answer's no — I respect it, and I won't call back to wear you down."</em> → <em>"…Send me the site."</em></div>
+    <div class="neversay"><b>Never say:</b> anything defending the industry. · Matching his energy. · Rushing the close. With the burned veteran, <b>patience is the only technique</b> and verifiability is the only currency.</div>
+  </div>
+</div>
+
+<!-- ============ PANEL 6 : SPECIAL CASES ============ -->
+<div class="panel" id="p6">
+  <h2><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="ban"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <path d="M4.929 4.929 19.07 19.071" /> </svg>  Special Cases &amp; The Hard Lines</h2>
+
+  <div class="obj">
+    <div class="obj-head">"Is this a scam?" / "Are you legit?"</div>
+    <p class="real"><b>Usually really means:</b> caller-ID fatigue — everyone with a phone is braced for fraud daily.</p>
+    <div class="lace-step"><b>L+A+E</b> <em>"It's a real sales call from a real Las Vegas company — I'd rather say that straight. Check us before deciding: steadyhandsop.com, prices published, (702) 372-6399. If anything smells off to you, trust that instinct — and we part friends."</em></div>
+    <div class="neversay"><b>Never say:</b> over-protesting ("Scam?! How could you even—") · getting defensive. Calm transparency is the whole answer.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head">"Stop calling me." — the clear hard no</div>
+    <p class="real"><b>Usually really means:</b> exactly what it says. This is a legal and ethical instruction — the end of the line, absolutely.</p>
+    <div class="lace-step"><b>THE ENTIRE RESPONSE</b> <em>"Understood — you won't hear from me again. Have a good one."</em> Then: log <b>do-not-contact</b> in the CRM immediately.</div>
+    <div class="warn"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="octagon"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M2.586 16.726A2 2 0 0 1 2 15.312V8.688a2 2 0 0 1 .586-1.414l4.688-4.688A2 2 0 0 1 8.688 2h6.624a2 2 0 0 1 1.414.586l4.688 4.688A2 2 0 0 1 22 8.688v6.624a2 2 0 0 1-.586 1.414l-4.688 4.688a2 2 0 0 1-1.414.586H8.688a2 2 0 0 1-1.414-.586z" /> </svg>  <b>The absolute line:</b> no "one more call in six months." No switching reps to get around it. No new number. The Banned List's "wearing them down" ends HERE, without exception. One clean exit protects the company's legal standing and your own integrity — and the door stays theirs to open, not yours to knock on.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head">"Can you also do SEO / ads / social media?"</div>
+    <p class="real"><b>Usually really means:</b> a real need — outside your lane.</p>
+    <div class="lace-step"><b>E</b> <em>"That's outside what I handle personally — let me connect you with our team."</em> Official channels: (702) 372-6399 · kiara@steadyhandsop.com. Escalate and log it.</div>
+    <div class="neversay"><b>Never say:</b> "Sure, we can figure that out." One improvised promise can undo a hundred honest calls (Ch 3).</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head">When YOU make a mistake on the call</div>
+    <p class="real"><b>What it means:</b> wrong name, wrong detail, misspoke about a price. It happens. The handling is the reputation.</p>
+    <div class="lace-step"><b>THE MOVE</b> Own it instantly: <em>"That's my mistake — [correct name], thank you for catching it."</em> Correct the record clearly. Continue the conversation normally.</div>
+    <div class="note">A mistake owned in one sentence builds more trust than ten minutes of smooth perfection. A mistake hidden or glossed erodes everything. Never blame "the CRM" or "the system" — it was your call.</div>
+  </div>
+
+  <div class="obj">
+    <div class="obj-head">The talker who won't let you ask anything</div>
+    <p class="real"><b>Usually really means:</b> they're ENGAGED — this is a good problem requiring gentle structure.</p>
+    <div class="lace-step"><b>E — redirect</b> <em>"I love that you're telling me all this — let me ask one structured question so I can actually use it: how do new customers find you today?"</em></div>
+    <div class="lace-step"><b>E — or schedule</b> <em>"There's a lot here and I want to do it justice — can we book fifteen minutes tomorrow?"</em></div>
+    <div class="neversay"><b>Never do:</b> talk over them. Their monologue contains your discovery — extract the CGP material from it and reflect it back.</div>
+  </div>
+
+  <h2>The Tab in One Breath</h2>
+  <div class="grid2">
+    <div class="box"><h4>Always</h4>
+      <ul>
+        <li>LACE in order — even under hostility</li>
+        <li>Verifiable facts over insistence</li>
+        <li>Own your mistakes in one sentence</li>
+        <li>Honor every "stop calling" absolutely</li>
+      </ul>
+    </div>
+    <div class="box"><h4>Never</h4>
+      <ul>
+        <li>Defend, argue, or match hostile energy</li>
+        <li>Call around a do-not-contact instruction</li>
+        <li>Improvise capabilities beyond the official offer</li>
+        <li>Hide a mistake to protect the moment</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<footer>
+  <b>Steady Hands LLC — Objection Handling Guide</b><br>
+  Part of Steady Hands LLC Training Program · Companion to Chapters 1–10 · Developed by Ahmed Kamel · © 2026
+</footer>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.panel');
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      tabs.forEach(function(x){ x.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      t.classList.add('active');
+      document.getElementById(t.dataset.p).classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+</script>
+
+<script>(function(){const bar=document.querySelector('.topbar');if(!bar)return;function fit(){document.documentElement.style.setProperty('--sh-topbar-height',Math.ceil(bar.getBoundingClientRect().height)+'px');}if(window.ResizeObserver)new ResizeObserver(fit).observe(bar);window.addEventListener('resize',fit);fit();})();</script>
+</body>
+</html>

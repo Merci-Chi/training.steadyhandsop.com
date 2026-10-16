@@ -1,49 +1,453 @@
-<!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Steady Hands | Sales Training</title><link rel="stylesheet" href="styles.css?v=portal-wip-20261014"><link rel="stylesheet" href="training-login.css?v=20261013-outreach-match"><script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js" defer></script></head>
-<body><section id="trainingAuth"><div class="auth-layout">
-<section class="brand-side">
-<a class="brand-link" href="https://steadyhandsop.com"><img class="brand-logo" src="https://onboard.steadyhandsop.com/images/logo.png" alt=""><img class="brand-wordmark" src="https://onboard.steadyhandsop.com/images/wordmark-white.png" alt="Steady Hands"></a>
-<div class="brand-copy"><p class="eyebrow">STEADY HANDS TEAM TRAINING</p><h1>We run the site.<span class="tagline-art" role="img" aria-label="You run the show."></span></h1><p>Learn, practice, and grow your skills with the Steady Hands training program.</p></div>
-<img class="wave" src="https://onboard.steadyhandsop.com/images/background.jpg" alt="">
-</section>
-<main class="auth-side"><div class="auth-card">
-<div class="mobile-brand"><img src="https://onboard.steadyhandsop.com/images/logo.png" alt=""> Steady Hands</div>
-<p class="eyebrow">YOUR WORKSPACE</p><h2>Welcome back</h2><p class="sub">Sign in to access your Steady Hands Training.</p>
-<form id="trainingLoginForm" class="login-form">
-<label for="trainingEmail">Email address</label><input id="trainingEmail" type="email" name="email" placeholder="you@company.com" autocomplete="username" required>
-<label for="trainingPassword">Password</label><div class="password-wrap"><input id="trainingPassword" type="password" name="password" placeholder="Enter your password" autocomplete="current-password" required><button id="trainingShowPassword" type="button" aria-label="Show password">Show</button></div>
-<div class="outreach-login-options"><label class="outreach-check-label"><input id="trainingRemember" type="checkbox"><span class="outreach-check-box" aria-hidden="true">✓</span><span>Save email to this device</span></label><p id="trainingLoginStatus" class="login-message" role="status" aria-live="polite"></p></div>
-<button id="trainingSignIn" class="primary-button full outreach-login-submit" type="submit">Sign in <span aria-hidden="true">→</span></button><button id="trainingForgot" class="text-btn outreach-forgot" type="button">Forgot password?</button>
-</form><p class="foot outreach-login-foot">Authorized team access only</p></div></main></div></section><div id="trainingProtected" hidden>
-<header class="top" aria-label="Training page header"><div class="top-inner"><button type="button" id="trainingMenuBtn" class="training-menu-btn" aria-label="Open training sections" aria-controls="trainingMenu" aria-expanded="false"><i data-lucide="menu"></i></button><h1 class="top-title">Training</h1><div class="top-meta"><i data-lucide="graduation-cap"></i><span>Steady Hands</span></div></div><nav id="trainingMenu" class="training-quick-menu" aria-label="Training sections" hidden><a href="#training-1">1. Welcome to Steady Hands</a><a href="#training-2">2. Client Experience &amp; Portal</a><a href="#training-3">3. Using Outreach</a><a href="#training-4">4. Commissions &amp; Expectations</a></nav></header>
-<main class="shell"><section class="intro"><div><span class="eyebrow">TEAM TRAINING</span><h1>Learn. Practice. Get confident.</h1><p>Four training sections covering Steady Hands, client experience, hands-on Client Portal and Outreach practice, and commissions.</p></div><div class="progress"><div class="progress-top"><strong id="progressTitle">0 of 4 complete</strong><span id="progressPercent">0%</span></div><div class="track"><span id="progressBar"></span></div><small>Complete each section at your own pace.</small></div></section>
-<div id="lessons" class="lessons"></div>
-<section class="footer-progress"><div><strong>Ready to get started?</strong><p>Choose a training section above. Your training progress is saved to your team account.</p></div><button id="resetAll" class="reset-btn" type="button">Reset progress</button></section>
-</main>
-<div id="modal" class="modal-backdrop" hidden><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-head"><div><span id="modalType" class="eyebrow"></span><h2 id="modalTitle"></h2></div><button id="modalClose" class="icon-close" type="button" aria-label="Close dialog">×</button></div><div id="modalBody" class="modal-content"></div></div></div>
-<div class="training-account"><span id="trainingAccountName"></span><button id="trainingSignOut" type="button">Sign out</button></div></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script><script src="training-auth.js"></script><script src="training.js?v=portal-wip-20261014"></script>
-<script>
-/* Open Outreach practice directly, bypassing the old scenario chooser. */
-document.addEventListener('click', function (event) {
-  const control = event.target.closest('button, a, [role="button"]');
-  if (!control || !/interactive\s+demo/i.test(control.textContent || '')) return;
-
-  // There are two Interactive Demo cards: Client Portal first, Outreach second.
-  const controls = Array.from(document.querySelectorAll('button, a, [role="button"]'))
-    .filter(el => /interactive\s+demo/i.test(el.textContent || '') &&
-      !Array.from(el.children).some(child => /interactive\s+demo/i.test(child.textContent || '')));
-  let isOutreach = controls.indexOf(control) === 1;
-  // Also support section-specific markup and links if the card structure changes.
-  for (let node = control.parentElement; node && node.id !== 'lessons'; node = node.parentElement) {
-    if (/^training-3$/.test(node.id || '')) { isOutreach = true; break; }
-    if (/^training-2$/.test(node.id || '')) { isOutreach = false; break; }
-    const headings = Array.from(node.querySelectorAll('h2, h3, h4'));
-    if (headings.some(h => /using (the )?outreach/i.test(h.textContent))) { isOutreach = true; break; }
-    if (headings.some(h => /client experience|client portal/i.test(h.textContent))) { isOutreach = false; break; }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Steady Hands Vanguard — Sales Training Hub</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --navy:#1A3A5C; --navy2:#2D4A6B; --gold:#D4A017; --gold2:#F0C24B;
+    --ink:#22313F; --mist:#90A4B8; --paper:#F5F8FB; --white:#fff;
   }
-  if (!isOutreach) return;
-  event.preventDefault();
-  event.stopImmediatePropagation();
-  window.location.href = './OUTREACH%20DEMO/index.html';
-}, true);
-</script></body></html>
+  body{font-family:'Segoe UI','Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--paper);color:var(--ink);line-height:1.6}
+  a{text-decoration:none;color:inherit}
+
+  .topbar{position:sticky;top:0;z-index:100;background:rgba(26,58,92,.97);backdrop-filter:blur(8px);
+    display:flex;align-items:center;justify-content:space-between;padding:.9rem 2rem;box-shadow:0 2px 14px rgba(0,0,0,.25)}
+  .brand{display:flex;align-items:center;gap:.7rem;color:#fff}
+  .logo{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.15rem;color:var(--navy)}
+  .brand b{font-size:1.1rem;display:block;line-height:1.2}
+  .brand small{color:var(--mist);font-size:.78rem;letter-spacing:.06em;text-transform:uppercase}
+  .topnav{display:flex;gap:1.4rem;align-items:center}
+  .topnav a{color:#DFE9F2;font-size:.95rem;font-weight:600;transition:.2s}
+  .topnav a:hover{color:var(--gold2)}
+
+  .hero{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 60%,#3A5A7E 100%);color:#fff;
+    padding:4.5rem 2rem 4rem;text-align:center;position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;inset:0;
+    background:radial-gradient(600px 300px at 80% 20%,rgba(212,160,23,.15),transparent)}
+  .hero h1{font-size:clamp(2rem,5vw,3.4rem);font-weight:800;position:relative}
+  .hero h1 span{background:linear-gradient(135deg,#fff,var(--gold2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  .hero p.sub{font-size:clamp(1rem,2.2vw,1.3rem);color:#C9D8E6;max-width:760px;margin:1.1rem auto 0;position:relative}
+  .hero .kicker{display:inline-block;background:rgba(212,160,23,.18);border:1px solid var(--gold);color:var(--gold2);
+    padding:.35rem 1rem;border-radius:999px;font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.2rem;position:relative}
+  .stats{display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin-top:2.4rem;position:relative}
+  .stat{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:14px;
+    padding:1rem 1.6rem;min-width:140px}
+  .stat b{display:block;font-size:1.9rem;color:var(--gold2);font-weight:800}
+  .stat span{font-size:.82rem;color:#C9D8E6;letter-spacing:.05em;text-transform:uppercase}
+
+  section{max-width:1180px;margin:0 auto;padding:3.2rem 1.5rem 1rem}
+  .sec-head{text-align:center;margin-bottom:2rem}
+  .sec-head h2{font-size:1.9rem;color:var(--navy);font-weight:800}
+  .sec-head p{color:#5A6E82;max-width:680px;margin:.5rem auto 0}
+  .sec-head .bar{width:64px;height:4px;background:var(--gold);border-radius:4px;margin:.9rem auto 0}
+
+  .fw-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:1rem}
+  .fw{background:var(--white);border:1px solid #E3EAF1;border-radius:14px;padding:1.2rem 1.3rem;
+    box-shadow:0 2px 8px rgba(26,58,92,.05);transition:.2s;border-top:4px solid var(--gold)}
+  .fw:hover{transform:translateY(-4px);box-shadow:0 10px 24px rgba(26,58,92,.12)}
+  .fw h3{font-size:1.05rem;color:var(--navy);letter-spacing:.03em}
+  .fw h3 em{font-style:normal;color:var(--gold);font-weight:800}
+  .fw p{font-size:.88rem;color:#5A6E82;margin-top:.35rem}
+  .fw .tag{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    background:#EEF3F8;color:var(--navy2);border-radius:6px;padding:.15rem .5rem;margin-top:.6rem}
+
+  #search{width:100%;max-width:420px;padding:.7rem 1.1rem;border:1.5px solid #D7E1EA;border-radius:10px;
+    font-size:.95rem;outline:none;display:block;margin:0 auto 1.4rem;transition:.2s}
+  #search:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,160,23,.15)}
+
+  .progress-line{max-width:1180px;margin:0 auto;padding:0 1.5rem}
+  .progress-line .pbar{height:8px;background:#E3EAF1;border-radius:8px;overflow:hidden}
+  .progress-line .pfill{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:.4s;border-radius:8px}
+  .progress-line small{display:block;text-align:right;color:#5A6E82;margin-top:.35rem;font-size:.78rem}
+
+  .ch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:1.3rem;margin-top:1rem}
+  .ch{background:var(--white);border:1px solid #E3EAF1;border-radius:16px;overflow:hidden;
+    display:flex;flex-direction:column;transition:.22s;position:relative}
+  .ch:hover{transform:translateY(-5px);box-shadow:0 14px 30px rgba(26,58,92,.14)}
+  .ch-top{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:1rem 1.2rem;
+    display:flex;align-items:center;gap:.9rem}
+  .ch-num{width:46px;height:46px;flex:0 0 46px;border-radius:12px;background:rgba(212,160,23,.2);
+    border:1.5px solid var(--gold);color:var(--gold2);font-weight:800;font-size:1.25rem;
+    display:flex;align-items:center;justify-content:center}
+  .ch-top h3{font-size:1.02rem;font-weight:700;line-height:1.35}
+  .ch-body{padding:1.1rem 1.2rem 1.2rem;display:flex;flex-direction:column;gap:.8rem;flex:1}
+  .ch-body p{font-size:.9rem;color:#5A6E82}
+  .tags{display:flex;flex-wrap:wrap;gap:.4rem}
+  .tags span{font-size:.7rem;font-weight:600;background:#EEF3F8;color:var(--navy2);
+    padding:.2rem .55rem;border-radius:6px}
+  .ch-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between;
+    border-top:1px dashed #E3EAF1;padding-top:.85rem}
+  .open-btn{background:var(--navy);color:#fff;font-weight:700;font-size:.85rem;padding:.55rem 1.1rem;
+    border-radius:9px;transition:.2s;display:inline-block}
+  .open-btn:hover{background:var(--gold);color:var(--navy)}
+  .done{display:flex;align-items:center;gap:.45rem;font-size:.8rem;color:#5A6E82;cursor:pointer;user-select:none}
+  .done input{accent-color:var(--gold);width:16px;height:16px;cursor:pointer}
+  .ch.completed{outline:2px solid var(--gold)}
+  .ch.completed .ch-num{background:var(--gold);color:var(--navy)}
+
+  .pb-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.3rem}
+  .pb{background:var(--white);border:1px solid #E3EAF1;border-left:5px solid var(--gold);border-radius:14px;
+    padding:1.2rem 1.3rem;transition:.2s;display:flex;flex-direction:column;gap:.7rem}
+  .pb:hover{transform:translateY(-4px);box-shadow:0 10px 24px rgba(26,58,92,.12)}
+  .pb h3{color:var(--navy);font-size:1.05rem}
+  .pb p{font-size:.88rem;color:#5A6E82;flex:1}
+  .pb-foot{display:flex;align-items:center;justify-content:space-between;
+    border-top:1px dashed #E3EAF1;padding-top:.85rem;margin-top:.3rem}
+  .pb.completed{outline:2px solid var(--gold)}
+
+  .bundlebox{max-width:1180px;margin:2.5rem auto 0;padding:1.2rem 1.5rem;
+    background:rgba(212,160,23,.1);border:1.5px dashed var(--gold);border-radius:14px;
+    display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
+  .bundlebox b{color:var(--navy)}
+  .bundlebox p{font-size:.9rem;color:#5A6E82;flex:1;min-width:260px}
+  .bundlebox code{background:#EEF3F8;border-radius:5px;padding:.1rem .45rem;font-size:.85rem}
+
+  .facts{background:linear-gradient(135deg,var(--navy),var(--navy2));border-radius:18px;color:#fff;
+    padding:2.2rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.6rem}
+  .fact h4{color:var(--gold2);font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.7rem}
+  .fact ul{list-style:none}
+  .fact li{font-size:.92rem;color:#DCE7F1;margin-bottom:.4rem;padding-left:1.1rem;position:relative}
+  .fact li::before{content:"→";position:absolute;left:0;color:var(--gold)}
+  .fact .price{font-size:1.35rem;font-weight:800;color:var(--gold2)}
+
+  footer{text-align:center;padding:2.4rem 1rem 2.8rem;color:#7A8DA0;font-size:.85rem}
+  footer b{color:var(--navy)}
+
+  @media(max-width:640px){.topnav{display:none}.hero{padding:3rem 1.2rem}}
+</style>
+<link rel="icon" href="assets/steady-hands-logo.jpg">
+<style>
+/* Local logo and Lucide icon assets. */
+.sh-icon{display:inline-block;width:1em;height:1em;vertical-align:-.125em;flex-shrink:0;overflow:visible}
+.logo.sh-logo-slot{background:none;overflow:hidden;flex-shrink:0}
+.sh-brand-logo{display:block;width:100%;height:100%;object-fit:contain;border-radius:inherit}
+.brandtag .sh-brand-logo{display:inline-block;width:24px;height:24px;border-radius:5px;vertical-align:middle;margin-right:8px}
+
+#search{background-image:url("data:image/svg+xml;base64,PHN2ZwogIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIKICB3aWR0aD0iMjQiCiAgaGVpZ2h0PSIyNCIKICB2aWV3Qm94PSIwIDAgMjQgMjQiCiAgZmlsbD0ibm9uZSIKICBzdHJva2U9IiM1QTZFODIiCiAgc3Ryb2tlLXdpZHRoPSIyIgogIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIKICBzdHJva2UtbGluZWpvaW49InJvdW5kIgo+CiAgPHBhdGggZD0ibTIxIDIxLTQuMzQtNC4zNCIgLz4KICA8Y2lyY2xlIGN4PSIxMSIgY3k9IjExIiByPSI4IiAvPgo8L3N2Zz4K");background-repeat:no-repeat;background-position:.8rem center;background-size:1em;padding-left:2.3rem}
+</style>
+<style>@media(max-width:640px){.ch-grid,.pb-grid,.fw-grid{grid-template-columns:minmax(0,1fr)}.topbar{padding:.8rem 1rem}.brand b{font-size:.95rem}.bundlebox{margin-left:1rem;margin-right:1rem}.bundlebox p{min-width:0}.ch,.pb,.fw{min-width:0}}</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">
+    <div class="logo sh-logo-slot"><img class="sh-brand-logo" src="assets/steady-hands-logo.jpg" alt="Steady Hands Operation logo"></div>
+    <div><b>Steady Hands LLC</b><small>Sales Training Hub</small></div>
+  </div>
+  <nav class="topnav">
+    <a href="#frameworks">Frameworks</a>
+    <a href="#chapters">Chapters</a>
+    <a href="#playbooks">Playbooks</a>
+    <a href="#company">Company</a>
+  </nav>
+</div>
+
+<div class="hero">
+  <div class="kicker">Internal Training Program · Steady Hands LLC</div>
+  <h1>Welcome to <span>Steady Hands Vanguard</span></h1>
+  <p class="sub">Mastering the Art of Value-Driven Sales — the complete journey from <b>order-taker</b> to <b>trusted advisor</b>. Ten chapters, five field playbooks, one ethical system. Work the chapters in order — then keep the playbooks beside you on every dial day.</p>
+  <div class="stats">
+    <div class="stat"><b>15</b><span>Modules</span></div>
+    <div class="stat"><b>10</b><span>Chapters</span></div>
+    <div class="stat"><b>5</b><span>Playbooks</span></div>
+    <div class="stat"><b>8</b><span>Frameworks</span></div>
+  </div>
+</div>
+
+<section id="frameworks">
+  <div class="sec-head">
+    <h2>Core Frameworks — The Official Glossary</h2>
+    <p>The definitions below are the <b>single source of truth</b> used across every module. Learn them once, apply them everywhere.</p>
+    <div class="bar"></div>
+  </div>
+  <div class="fw-grid">
+    <div class="fw"><h3><em>CGP</em> — Challenges · Goals · Plans</h3>
+      <p>Explore the buyer's world: the challenges they face, the goals those challenges block, and their current plan.</p>
+      <span class="tag">Discovery</span></div>
+    <div class="fw"><h3><em>TCI</em> — Timeline · Consequences · Implications</h3>
+      <p>The objective pros &amp; cons: consequences of staying put vs. positive implications of solving it. Never manipulative.</p>
+      <span class="tag">Explore</span></div>
+    <div class="fw"><h3><em>BAA</em> — Budget · Authority · Agenda</h3>
+      <p>Qualify money, decision power, and the client's priorities &amp; timing. Our ethical successor to legacy BANT.</p>
+      <span class="tag">Qualify</span></div>
+    <div class="fw"><h3><em>SPIN</em> — Situation · Problem · Implication · Need-payoff</h3>
+      <p>The classic questioning ladder that moves a conversation from facts to felt need.</p>
+      <span class="tag">Questioning</span></div>
+    <div class="fw"><h3><em>DARE</em> — Define · Analyze · Report · Establish</h3>
+      <p>Our diagnostic engine: define the goal, analyze the state, report the quantified gap, establish the solution.</p>
+      <span class="tag">Diagnosis</span></div>
+    <div class="fw"><h3><em>LACE</em> — Listen · Acknowledge · Clarify · Execute</h3>
+      <p>The objection-handling loop: hear fully, validate, dig to the real objection, respond with value.</p>
+      <span class="tag">Objections</span></div>
+    <div class="fw"><h3><em>Challenger</em> — Teach · Tailor · Take Control</h3>
+      <p>Deliver insight the client didn't have, tailored to their world, while confidently guiding the sale.</p>
+      <span class="tag">Insight</span></div>
+    <div class="fw"><h3><em>Flywheel</em> — Attract · Engage · Deliver · Delight · Amplify</h3>
+      <p>Self-reinforcing growth: the closed deal is the starting line, not the finish.</p>
+      <span class="tag">Growth</span></div>
+  </div>
+</section>
+
+<section id="chapters">
+  <div class="sec-head">
+    <h2>Training Chapters</h2>
+    <p>Work through them in order — each chapter builds on the one before it. Check the box when you've mastered a chapter.</p>
+    <div class="bar"></div>
+  </div>
+  <input type="text" id="search" placeholder="Search modules or topics… (e.g. objection, pricing, SPIN)">
+  <div class="progress-line">
+    <div class="pbar"><div class="pfill" id="pfill"></div></div>
+    <small id="ptext">0 / 15 modules completed</small>
+  </div>
+  <div class="ch-grid">
+
+    <div class="ch" data-key="ethics mandate trusted advisor order-taker value first philosophy glossary chapter1">
+      <div class="ch-top"><div class="ch-num">01</div><h3>The Steady Hands Mandate: Ethics as Our Competitive Edge</h3></div>
+      <div class="ch-body">
+        <p>Establishing the ethical foundation of value-driven selling — the journey from order-taker to trusted advisor.</p>
+        <div class="tags"><span>Ethics</span><span>Trusted Advisor</span><span>The Mandate</span><span>Glossary</span></div>
+        <div class="ch-foot">
+          <a class="open-btn" href="Chapter_01_Comprehensive_Presentation.html">Open Chapter →</a>
+          <label class="done"><input type="checkbox" data-mod="ch1"> Done</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="ch" data-key="value first paradigm outcomes features so what what if storytelling value stacking chapter2">
+      <div class="ch-top"><div class="ch-num">02</div><h3>The Value-First Paradigm: Selling Outcomes, Not Features</h3></div>
+      <div class="ch-body">
+        <p>Mastering the shift from feature-listing to outcome-driven conversations using "So What?" and "What If?" thinking.</p>
+        <div class="tags"><span>Value-First</span><span>Outcomes</span><span>Storytelling</span><span>Value Stacking</span></div>
+        <div class="ch-foot">
+          <a class="open-btn" href="Chapter_02_Comprehensive_Presentation.html">Open Chapter →</a>
+          <label class="done"><input type="checkbox" data-mod="ch2"> Done</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="ch" data-key="service portfolio pricing battle cards website 100 hosting 20 30 backend standard clients preview chapter3">
+      <div class="ch-top"><div class="ch-num">03</div><h3>Service Portfolio Mastery: Steady Hands Solutions</h3></div>
+      <div class="ch-body">
+        <p>Complete command of our real offerings — $100 development, Standard ($20/mo) &amp; Backend ($30/mo) hosting — matched to real client profiles.</p>
+        <div class="tags"><span>Battle Cards</span><span>$100 Development</span><span>$20 / $30 Hosting</span><span>Real Clients</span></div>
+        <div class="ch-foot">
+          <a class="open-btn" href="Chapter_03_Comprehensive_Presentation.html">Open Chapter →</a>
+          <label class="done"><input type="checkbox" data-mod="ch3"> Done</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="ch" data-key="discovery dare spin latent needs cost of inaction questions diagnosis chapter4">
+      <div class="ch-top"><div class="ch-num">04</div><h3>The Art of Discovery: Uncovering Latent Needs</h3></div>
+      <div class="ch-body">
+        <p>Diagnosing client challenges with DARE and going deeper with SPIN — surfacing needs the client hasn't yet articulated.</p>
+        <div class="tags"><span>DARE</span><span>SPIN</span><span>Latent Needs</span><span>Cost of Inaction</span></div>
+        <div class="ch-foot">
+          <a class="open-btn" href="Chapter_04_Comprehensive_Presentation.html">Open Chapter →</a>
+          <label class="done"><input type="checkbox" data-mod="ch4"> Done</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="ch" data-key="qualification cgp tci baa bant prioritization scoring red flags agenda chapter5">
+      <div class="ch-top"><div class="ch-num">05</div><h3>Strategic Qualification: CGP, TCI &amp; BAA</h3></div>
+      <div class="ch-body">
+        <p>Qualifying opportunities ethically and systematically with our three core frameworks — plus BANT as a legacy comparison.</p>
+        <div class="tags"><span>CGP</span><span>TCI</span><span>BAA</span><span>BANT (Legacy)</span><span>Prioritization</span></div>
+        <div class="ch-foot">
+          <a class="open-btn" href="Chapter_05_Comprehensive_Presentation.html">Open Chapter →</a>
+          <label class="done"><input type="checkbox" data-mod="ch5"> Done</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="ch" data-key="value proposition roi quantified stakeholder proof points formula honest math chapter6">
+      <div class="ch-top"><div class="ch-num">06</div><h3>Crafting Compelling Value Propositions</h3></div>
+      <div class="ch-body">
+        <p>Building specific, quantified, believable value propositions — the honest math, tailored to each decision-maker.</p>
+        <div class="tags"><span>Value Formula</span><span>ROI</span><span>Stakeholder Mapping</span><span>Proof Points</span></div>
+        <div class="ch-foot">
+          <a class="open-btn" href="Chapter_06_Comprehensive_Presentation.html">Open Chapter →</a>
+          <label class="done"><input type="checkbox" data-mod="ch6"> Done</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="ch" data-key="negotiation objection handling lace value shield batna zopa closing price chapter7">
+      <div class="ch-top"><div class="ch-num">07</div><h3>Negotiation &amp; Objection Handling: LACE and the Value Shield</h3></div>
+      <div class="ch-body">
+        <p>Handling price, timing, authority, and trust objections ethically with LACE — and protecting value in every negotiation.</p>
+        <div class="tags"><span>LACE</span><span>Value Shield</span><span>BATNA &amp; ZOPA</span><span>Ethical Closing</span></div>
+        <div class="ch-foot">
+          <a class="open-btn" href="Chapter_07_Comprehensive_Presentation.html">Open Chapter →</a>
+          <label class="done"><input type="checkbox" data-mod="ch7"> Done</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="ch" data-key="flywheel attract engage deliver delight amplify referrals retention expansion chapter8">
+      <div class="ch-top"><div class="ch-num">08</div><h3>The Steady Hands Flywheel: Transactions → Partnerships</h3></div>
+      <div class="ch-body">
+        <p>Building self-reinforcing growth through Attract, Engage, Deliver, Delight, and Amplify — momentum that compounds.</p>
+        <div class="tags"><span>Flywheel</span><span>Client Success</span><span>Referrals</span><span>Expansion</span></div>
+        <div class="ch-foot">
+          <a class="open-btn" href="Chapter_08_Comprehensive_Presentation.html">Open Chapter →</a>
+          <label class="done"><input type="checkbox" data-mod="ch8"> Done</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="ch" data-key="mindset growth learning resilience adaptability personal brand rejection reset routine chapter9">
+      <div class="ch-top"><div class="ch-num">09</div><h3>Cultivating Steady Hands LLC Mindset</h3></div>
+      <div class="ch-body">
+        <p>Growth mindset, the rejection math, the reset routine, and remote-work discipline — the person behind the pipeline.</p>
+        <div class="tags"><span>Growth Mindset</span><span>Resilience</span><span>Reset Routine</span><span>Personal Brand</span></div>
+        <div class="ch-foot">
+          <a class="open-btn" href="Chapter_09_Comprehensive_Presentation.html">Open Chapter →</a>
+          <label class="done"><input type="checkbox" data-mod="ch9"> Done</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="ch" data-key="complex scenarios multi stakeholder simulations role play integration mastery creed chapter10">
+      <div class="ch-top"><div class="ch-num">10</div><h3>Steady Hands LLC in Action: Complex Scenarios &amp; Simulations</h3></div>
+      <div class="ch-body">
+        <p>Integrating every framework across multi-stakeholder scenarios and role-play — ending with the Manifesto and the Creed.</p>
+        <div class="tags"><span>Multi-Stakeholder</span><span>Integrated Frameworks</span><span>Simulations</span><span>The Creed</span></div>
+        <div class="ch-foot">
+          <a class="open-btn" href="Chapter_10_Comprehensive_Presentation.html">Open Chapter →</a>
+          <label class="done"><input type="checkbox" data-mod="ch10"> Done</label>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="playbooks">
+  <div class="sec-head">
+    <h2>Field Playbooks &amp; Practical Guides</h2>
+    <p>Beyond theory — the hands-on tools you'll use on every call. Built specifically for Steady Hands services and clients.</p>
+    <div class="bar"></div>
+  </div>
+  <div class="pb-grid">
+
+    <div class="pb" data-key="calling cold warm scripts voicemail gatekeeper compliance dial opener">
+      <h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="phone"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" /> </svg>  Cold &amp; Warm Calling Playbook</h3>
+      <p>Openers, full call flows, voicemail cadence, gatekeeper plays, and the compliance card — everything for the dial day, word for word.</p>
+      <div class="pb-foot">
+        <a class="open-btn" href="Playbook_Calling_Guide.html">Open Guide →</a>
+        <label class="done"><input type="checkbox" data-mod="pb-calling"> Done</label>
+      </div>
+    </div>
+
+    <div class="pb" data-key="personas salon cleaning landscaping profiles industries seasons language plan fit">
+      <h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="user round"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="8" r="5" />   <path d="M20 21a8 8 0 0 0-16 0" /> </svg>  Buyer Personas Guide</h3>
+      <p>Industry profiles anchored on our real clients — pains, language, seasons, plan fit, and persona-specific objection responses.</p>
+      <div class="pb-foot">
+        <a class="open-btn" href="Playbook_Buyer_Personas.html">Open Guide →</a>
+        <label class="done"><input type="checkbox" data-mod="pb-personas"> Done</label>
+      </div>
+    </div>
+
+    <div class="pb" data-key="objection lace responses price trust authority agenda status quo never say">
+      <h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="shield"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> </svg>  Objection Handling Guide</h3>
+      <p>Every objection decoded: what it really means, the full LACE response, and what never to say. The written reference.</p>
+      <div class="pb-foot">
+        <a class="open-btn" href="Playbook_Objection_Handling.html">Open Guide →</a>
+        <label class="done"><input type="checkbox" data-mod="pb-objections"> Done</label>
+      </div>
+    </div>
+
+    <div class="pb" data-key="role play scenarios simulation scorecard debrief nina tom frank hidden cards">
+      <h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="drama"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M10 11h.01" />   <path d="M14 6h.01" />   <path d="M18 6h.01" />   <path d="M6.5 13.1h.01" />   <path d="M22 5c0 9-4 12-6 12s-6-3-6-12c0-2 2-3 6-3s6 1 6 3" />   <path d="M17.4 9.9c-.8.8-2 .8-2.8 0" />   <path d="M10.1 7.1C9 7.2 7.7 7.7 6 8.6c-3.5 2-4.7 3.9-3.7 5.6 4.5 7.8 9.5 8.4 11.2 7.4.9-.5 1.9-2.1 1.9-4.7" />   <path d="M9.1 16.5c.3-1.1 1.4-1.7 2.4-1.4" /> </svg>  Role-Play Scenarios Pack</h3>
+      <p>Hidden role cards, three complete scenarios, the live 100-point observer scorecard, and the debrief protocol.</p>
+      <div class="pb-foot">
+        <a class="open-btn" href="Playbook_Role_Play_Scenarios.html">Open Pack →</a>
+        <label class="done"><input type="checkbox" data-mod="pb-roleplay"> Done</label>
+      </div>
+    </div>
+
+    <div class="pb" data-key="cheat sheet printable frameworks quick reference one page creed prices">
+      <h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="clipboard list"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <rect width="8" height="4" x="8" y="2" rx="1" ry="1" />   <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />   <path d="M12 11h4" />   <path d="M12 16h4" />   <path d="M8 11h.01" />   <path d="M8 16h.01" /> </svg>  Framework Cheat Sheet</h3>
+      <p>One printable page — every framework, rule, price, and the Creed. Print it and keep it beside the screen.</p>
+      <div class="pb-foot">
+        <a class="open-btn" href="Playbook_Cheat_Sheet.html">Open Sheet →</a>
+        <label class="done"><input type="checkbox" data-mod="pb-cheatsheet"> Done</label>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bundlebox">
+    <b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="package"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z" />   <path d="M12 22V12" />   <polyline points="3.29 7 12 12 20.71 7" />   <path d="m7.5 4.27 9 5.15" /> </svg>  Want everything in ONE file?</b>
+    <p>Open <code>Bundle_Builder.html</code>, select all 15 module files, press <b>Build</b>, and download <code>Steady_Hands_Training_Complete.html</code> — the whole program in a single file that works anywhere, offline.</p>
+  </div>
+</section>
+
+<section id="company">
+  <div class="sec-head">
+    <h2>Company Quick Facts</h2>
+    <p>Everything a new team member needs to know about who we are and what we sell.</p>
+    <div class="bar"></div>
+  </div>
+  <div class="facts">
+    <div class="fact"><h4>What We Sell</h4>
+      <ul>
+        <li><span class="price">$100</span> — Website Development (one-time)</li>
+        <li><span class="price">$20/mo</span> — Standard Hosting</li>
+        <li><span class="price">$30/mo</span> — Business Hosting (admin area)</li>
+      </ul></div>
+    <div class="fact"><h4>Who We Serve</h4>
+      <ul><li>Small &amp; local businesses</li><li>Cleaning services · Salons · Landscapers</li><li>Businesses needing a simple, managed web presence</li></ul></div>
+    <div class="fact"><h4>Proof It Works</h4>
+      <ul><li>Sheyla's Pro Cleaning</li><li>Studio 47 Hair Salon</li><li>DF Landscape</li></ul></div>
+    <div class="fact"><h4>Contact</h4>
+      <ul><li><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="phone"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384" /> </svg>  (702) 372-6399 — call or text</li><li><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="mail"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7" />   <rect x="2" y="4" width="20" height="16" rx="2" /> </svg>  kiara@steadyhandsop.com</li><li><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="map pin"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />   <circle cx="12" cy="10" r="3" /> </svg>  Las Vegas, Nevada · Remote team</li></ul></div>
+  </div>
+</section>
+
+<footer>
+  <b>Steady Hands LLC</b> — Mastering the Art of Value-Driven Sales<br>
+  Training program developed by <b>Ahmed Kamel</b> for Steady Hands LLC · © 2026
+</footer>
+
+<script>
+  const boxes = document.querySelectorAll('.done input');
+  const saved = JSON.parse(localStorage.getItem('sh_progress_v2') || '{}');
+
+  function updateBar() {
+    let done = 0;
+    boxes.forEach(function(b){ if (b.checked) done++; });
+    const pct = boxes.length ? (done / boxes.length * 100) : 0;
+    document.getElementById('pfill').style.width = pct + '%';
+    document.getElementById('ptext').textContent = done + ' / ' + boxes.length + ' modules completed';
+  }
+
+  boxes.forEach(function(b) {
+    const card = b.closest('.ch') || b.closest('.pb');
+    if (saved[b.dataset.mod]) { b.checked = true; }
+    if (b.checked && card) { card.classList.add('completed'); }
+    b.addEventListener('change', function() {
+      saved[b.dataset.mod] = b.checked;
+      localStorage.setItem('sh_progress_v2', JSON.stringify(saved));
+      if (card) { card.classList.toggle('completed', b.checked); }
+      updateBar();
+    });
+  });
+  updateBar();
+
+  document.getElementById('search').addEventListener('input', function(e) {
+    const q = e.target.value.toLowerCase().trim();
+    document.querySelectorAll('.ch,.pb').forEach(function(c) {
+      c.style.display = (!q || c.dataset.key.includes(q)) ? '' : 'none';
+    });
+  });
+</script>
+
+</body>
+</html>

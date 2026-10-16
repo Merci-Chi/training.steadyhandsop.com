@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Playbook: Role-Play Scenarios Pack — Steady Hands LLC</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --navy:#1A3A5C; --navy2:#2D4A6B; --gold:#D4A017; --gold2:#F0C24B;
+    --mist:#90A4B8; --paper:#F5F8FB; --ink:#22313F;
+  }
+  body{font-family:'Inter','Segoe UI',-apple-system,BlinkMacSystemFont,sans-serif;
+    background:var(--paper);color:var(--ink);line-height:1.65}
+
+  .topbar{position:sticky;top:0;z-index:100;background:rgba(26,58,92,.97);backdrop-filter:blur(8px);
+    display:flex;align-items:center;justify-content:space-between;padding:.8rem 1.6rem;
+    box-shadow:0 2px 14px rgba(0,0,0,.25)}
+  .brand{display:flex;align-items:center;gap:.7rem;color:#fff}
+  .logo{width:40px;height:40px;border-radius:10px;background:linear-gradient(135deg,var(--gold),var(--gold2));
+    display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--navy)}
+  .brand b{display:block;line-height:1.2}
+  .brand small{color:var(--mist);font-size:.75rem;letter-spacing:.06em;text-transform:uppercase}
+  .topbar .tag{color:var(--gold2);font-size:.78rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+
+  .hero{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:2.6rem 2rem;text-align:center}
+  .hero h1{font-size:2.2rem;font-weight:800}
+  .hero h1 span{color:var(--gold2)}
+  .hero p{max-width:760px;margin:.8rem auto 0;color:#C9D8E6;font-size:1.05rem}
+
+  .wrap{max-width:1150px;margin:0 auto;padding:1.6rem 1.5rem 4rem}
+
+  .tabs{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.6rem;position:sticky;top:64px;z-index:90;
+    background:var(--paper);padding:.7rem 0}
+  .tab{background:#fff;border:1.5px solid #D7E1EA;border-radius:999px;padding:.55rem 1.05rem;
+    font-size:.88rem;font-weight:700;color:var(--navy2);cursor:pointer;transition:.2s}
+  .tab:hover{border-color:var(--gold)}
+  .tab.active{background:var(--navy);border-color:var(--navy);color:#fff}
+
+  .panel{display:none;animation:fade .35s}
+  .panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  h2{color:var(--navy);font-size:1.5rem;margin:1.6rem 0 .8rem;padding-bottom:.4rem;border-bottom:3px solid var(--gold)}
+  h2:first-child{margin-top:.2rem}
+  h3{color:var(--navy2);font-size:1.12rem;margin:1.3rem 0 .5rem}
+  p{margin-bottom:.85rem}
+  ul{margin:0 0 1rem 1.3rem}
+  li{margin-bottom:.4rem}
+  b{color:var(--navy)}
+  em{color:var(--navy2)}
+
+  .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.2rem;margin-bottom:1.2rem}
+  .box{background:#fff;border:1px solid #E3EAF1;border-radius:14px;padding:1.25rem 1.35rem;
+    box-shadow:0 2px 8px rgba(26,58,92,.05)}
+  .box h4{color:var(--gold);font-size:1rem;margin-bottom:.55rem}
+  .box ul{margin-left:1.15rem}
+  .box p{margin-bottom:.4rem;font-size:.95rem}
+
+  .rolecard{background:#fff;border:1px solid #E3EAF1;border-radius:14px;margin:1rem 0;overflow:hidden;
+    box-shadow:0 2px 8px rgba(26,58,92,.05)}
+  .rolecard summary{background:rgba(26,58,92,.06);padding:.85rem 1.2rem;cursor:pointer;font-weight:700;
+    color:var(--navy);list-style:none;display:flex;align-items:center;gap:.5rem}
+  .rolecard summary::-webkit-details-marker{display:none}
+  .rolecard summary::after{content:"▾";margin-left:auto;color:var(--gold);font-size:1.1rem}
+  .rolecard details[open] summary::after,.rolecard summary:has(+*) details[open]::after{content:"▴"}
+  .rolecard .inner{padding:1.1rem 1.3rem;border-top:1px solid #EDF2F7}
+  .secret{background:rgba(138,109,11,.08);border:1.5px dashed var(--gold);border-radius:10px;
+    padding:.8rem 1.05rem;margin:.7rem 0;font-size:.93rem}
+  .secret b{color:#8a6d0b}
+
+  .stage{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;border-radius:16px;
+    padding:1.3rem 1.5rem;margin:1.1rem 0}
+  .stage h4{color:var(--gold2);font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.55rem}
+  .stage ul{list-style:none;margin:0}
+  .stage li{color:#DCE7F1;font-size:.95rem;margin-bottom:.35rem;padding-left:1.3rem;position:relative}
+  .stage li::before{content:"→";position:absolute;left:0;color:var(--gold)}
+  .stage em{color:#fff}
+
+  .note{background:rgba(212,160,23,.1);border:1.5px dashed var(--gold);border-radius:12px;
+    padding:.95rem 1.25rem;margin:1.1rem 0;font-size:.92rem}
+  .warn{background:rgba(255,120,120,.08);border:1.5px dashed #E07070;border-radius:12px;
+    padding:.95rem 1.25rem;margin:1.1rem 0;font-size:.92rem}
+
+  .tablewrap{overflow-x:auto;margin:1.1rem 0}
+  table{width:100%;border-collapse:separate;border-spacing:0;background:#fff;border:1px solid #E3EAF1;
+    border-radius:14px;overflow:hidden;min-width:620px}
+  th,td{padding:.6rem .9rem;text-align:left;font-size:.9rem;border-bottom:1px solid #EDF2F7;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  th{background:var(--navy);color:#fff;font-size:.87rem}
+  td b{color:var(--gold)}
+
+  /* Scorecard */
+  .scorecard{background:#fff;border:2px solid var(--navy);border-radius:16px;padding:1.4rem 1.5rem;margin:1.3rem 0}
+  .sc-row{display:flex;justify-content:space-between;align-items:center;gap:1rem;
+    padding:.7rem 0;border-bottom:1px dashed #E3EAF1;flex-wrap:wrap}
+  .sc-row:last-of-type{border-bottom:none}
+  .sc-row .dim{flex:1;min-width:220px}
+  .sc-row .dim b{display:block;color:var(--navy)}
+  .sc-row .dim small{color:#5A6E82}
+  .sc-row select{background:#fff;border:1.5px solid #D7E1EA;border-radius:8px;padding:.4rem .6rem;
+    font-size:.95rem;font-weight:700;color:var(--navy);cursor:pointer}
+  .sc-row .mx{font-size:.85rem;color:#5A6E82;font-weight:700}
+  .sc-total{display:flex;justify-content:space-between;align-items:center;background:rgba(212,160,23,.12);
+    border:2px solid var(--gold);border-radius:12px;padding:.9rem 1.2rem;margin-top:1rem;flex-wrap:wrap;gap:.5rem}
+  .sc-total b{font-size:1.4rem;color:var(--navy)}
+  .sc-band{font-weight:800;padding:.4rem 1rem;border-radius:999px;font-size:.95rem}
+  .band-gold{background:var(--gold);color:var(--navy)}
+  .band-green{background:rgba(93,219,138,.25);color:#1d7a45}
+  .band-orange{background:rgba(240,160,60,.25);color:#a05a10}
+  .band-red{background:rgba(255,120,120,.25);color:#c0392b}
+
+  .debrief{background:#fff;border:1px solid #E3EAF1;border-radius:14px;padding:1.2rem 1.4rem;margin:.8rem 0}
+  .debrief label{display:block;font-weight:700;color:var(--navy);margin:.6rem 0 .25rem;font-size:.95rem}
+  .debrief textarea,.debrief input{width:100%;border:1.5px solid #D7E1EA;border-radius:10px;
+    padding:.6rem .8rem;font-size:.95rem;font-family:inherit;resize:vertical}
+  .debrief textarea:focus,.debrief input:focus{outline:none;border-color:var(--gold)}
+
+  footer{text-align:center;padding:2rem;color:#7A8DA0;font-size:.85rem;border-top:1px solid #E3EAF1;margin-top:2rem}
+  footer b{color:var(--navy)}
+
+  @media(max-width:640px){.hero{padding:1.8rem 1.2rem}.topbar .tag{display:none}.tabs{top:60px}}
+</style>
+<link rel="icon" href="assets/steady-hands-logo.jpg">
+<style>
+/* Local logo and Lucide icon assets. */
+.sh-icon{display:inline-block;width:1em;height:1em;vertical-align:-.125em;flex-shrink:0;overflow:visible}
+.logo.sh-logo-slot{background:none;overflow:hidden;flex-shrink:0}
+.sh-brand-logo{display:block;width:100%;height:100%;object-fit:contain;border-radius:inherit}
+.brandtag .sh-brand-logo{display:inline-block;width:24px;height:24px;border-radius:5px;vertical-align:middle;margin-right:8px}
+</style>
+<style>
+.sh-playbook-back{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:44px;padding:9px 12px;border-radius:10px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:.85rem;font-weight:600;flex-shrink:0}
+.sh-playbook-back-wrap{padding:.5rem 1rem;text-align:left;background:var(--navy)}
+.topbar{gap:.8rem}.tabs{top:var(--sh-topbar-height,60px)}
+@media(max-width:640px){.topbar{padding:.7rem .8rem;flex-wrap:wrap}.topbar .brand{min-width:0;flex:1}.topbar .brand b{font-size:.85rem}.topbar .brand small{font-size:.65rem}.topbar .logo{flex-shrink:0}.cols{grid-template-columns:minmax(0,1fr)}.pb-grid{grid-template-columns:minmax(0,1fr)}.sheet{padding:1rem}.sh-head .prices{text-align:left}table{max-width:100%}}
+@media print{.sh-playbook-back,.sh-playbook-back-wrap{display:none}}
+</style>
+</head>
+<body>
+
+<div class="topbar"><a class="sh-playbook-back" href="index.html"><svg class="sh-icon" width="1em" height="1em" aria-hidden="true"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m12 19-7-7 7-7" />   <path d="M19 12H5" /> </svg> <span>Back</span></a>
+  <div class="brand"><div class="logo sh-logo-slot"><img class="sh-brand-logo" src="assets/steady-hands-logo.jpg" alt="Steady Hands Operation logo"></div><div><b>Steady Hands LLC</b><small>Field Playbook</small></div></div>
+  <div class="tag"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="drama"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M10 11h.01" />   <path d="M14 6h.01" />   <path d="M18 6h.01" />   <path d="M6.5 13.1h.01" />   <path d="M22 5c0 9-4 12-6 12s-6-3-6-12c0-2 2-3 6-3s6 1 6 3" />   <path d="M17.4 9.9c-.8.8-2 .8-2.8 0" />   <path d="M10.1 7.1C9 7.2 7.7 7.7 6 8.6c-3.5 2-4.7 3.9-3.7 5.6 4.5 7.8 9.5 8.4 11.2 7.4.9-.5 1.9-2.1 1.9-4.7" />   <path d="M9.1 16.5c.3-1.1 1.4-1.7 2.4-1.4" /> </svg>  Role-Play Pack</div>
+</div>
+
+<div class="hero">
+  <h1>Role-Play <span>Scenarios Pack</span></h1>
+  <p>The training room, made real. Three complete scenarios from Chapter 10 — each with <b>role cards for the players</b> (the client-actor holds information the rep doesn't see — that's where the learning lives), evaluation targets, and the interactive Observer Scorecard. Nobody's first LACE happens on a live prospect.</p>
+</div>
+
+<div class="wrap">
+
+<!-- ============ TABS ============ -->
+<div class="tabs" id="tabs">
+  <button class="tab active" data-p="p0"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="clapperboard"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="m12.296 3.464 3.02 3.956" />   <path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3z" />   <path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />   <path d="m6.18 5.276 3.1 3.899" /> </svg>  Setup &amp; Rules</button>
+  <button class="tab" data-p="p1"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="medal"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15" />   <path d="M11 12 5.12 2.2" />   <path d="m13 12 5.88-9.8" />   <path d="M8 7h8" />   <circle cx="12" cy="17" r="5" />   <path d="M12 18v-2h-.5" /> </svg>  Scenario 1: Salon Deal</button>
+  <button class="tab" data-p="p2"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="calendar days"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M8 2v3" />   <path d="M16 2v3" />   <rect x="3" y="3" width="18" height="18" rx="2" />   <path d="M3 9h18" />   <path d="M8 13h.01" />   <path d="M12 13h.01" />   <path d="M16 13h.01" />   <path d="M8 17h.01" />   <path d="M12 17h.01" />   <path d="M16 17h.01" /> </svg>  Scenario 2: November Call</button>
+  <button class="tab" data-p="p3"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="shield"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> </svg>  Scenario 3: Burned Veteran</button>
+  <button class="tab" data-p="p4"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="chart column"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M3 3v16a2 2 0 0 0 2 2h16" />   <path d="M18 17V9" />   <path d="M13 17V5" />   <path d="M8 17v-3" /> </svg>  Scorecard</button>
+  <button class="tab" data-p="p5"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="refresh cw"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />   <path d="M21 3v5h-5" />   <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />   <path d="M8 16H3v5" /> </svg>  Debrief</button>
+</div>
+
+<!-- ============ PANEL 0 : SETUP ============ -->
+<div class="panel active" id="p0">
+  <h2>How the Room Works</h2>
+  <div class="grid2">
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="users round"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M18 21a8 8 0 0 0-16 0" />   <circle cx="10" cy="8" r="5" />   <path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3" /> </svg>  The Three Roles</h4>
+      <ul>
+        <li><b>The Rep</b> — trains here. Runs the full call from the spine: opener → discovery → math → close.</li>
+        <li><b>The Client-Actor</b> — plays it REAL. Holds a role card with <b>hidden information</b> the rep must discover through questions — not read in a pitch.</li>
+        <li><b>The Observer</b> — scores silently with the 100-point Scorecard, watching for frameworks, order, and conduct. Never coaches mid-scene.</li>
+      </ul>
+    </div>
+    <div class="box"><h4><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="ruler"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M21.3 15.3a2.4 2.4 0 0 1 0 3.4l-2.6 2.6a2.4 2.4 0 0 1-3.4 0L2.7 8.7a2.41 2.41 0 0 1 0-3.4l2.6-2.6a2.41 2.41 0 0 1 3.4 0Z" />   <path d="m14.5 12.5 2-2" />   <path d="m11.5 9.5 2-2" />   <path d="m8.5 6.5 2-2" />   <path d="m17.5 15.5 2-2" /> </svg>  The Session Shape</h4>
+      <ul>
+        <li>10 minutes per scene · timer visible · interruptions allowed where the card says so</li>
+        <li>Rotate roles every scene — <b>playing the client teaches what pitching feels like from the other side</b></li>
+        <li>Escalating difficulty: earn Scenario 1 before Scenario 3 — master the friendly, then the hostile</li>
+        <li>Debrief immediately after every scene — the rep speaks FIRST (Debrief tab)</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>The Rules of the Room</h2>
+  <div class="warn">
+    <ul style="margin-bottom:0">
+      <li><b>Stay in character until the debrief</b> — no breaking to explain yourself mid-scene. What happens in the scene happened.</li>
+      <li><b>Clients play it REAL</b> — skeptical, busy, sometimes rude. Kindness in role-play is cheating: it robs the rep of the reps they need.</li>
+      <li><b>Ethics count double in practice</b> — run the temptation scenarios so the Banned List is familiar when it's live. A rep whoDiscounts in practice will discount on calls.</li>
+      <li><b>Specific beats polite</b> — "at minute four you skipped the Agenda question" helps; "it was good" teaches nothing.</li>
+      <li><b>No shame in scores</b> — the scorecard measures the SKILL, not the person. Below 60 = more reps, never a verdict.</li>
+    </ul>
+  </div>
+
+  <h2>The Session Cycle</h2>
+  <div class="flow">
+    <span>1. Assign roles + hand out cards</span><span>2. 2-min silent prep</span><span>3. The scene (10 min)</span><span>4. Rep self-review first</span><span>5. Observer feedback</span><span>6. One insight → team chat</span><span>7. One commitment for next session</span>
+  </div>
+</div>
+
+<!-- ============ PANEL 1 : SCENARIO 1 ============ -->
+<div class="panel" id="p1">
+  <h2><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="medal"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M7.21 15 2.66 7.14a2 2 0 0 1 .13-2.2L4.4 2.8A2 2 0 0 1 6 2h12a2 2 0 0 1 1.6.8l1.6 2.14a2 2 0 0 1 .14 2.2L16.79 15" />   <path d="M11 12 5.12 2.2" />   <path d="m13 12 5.88-9.8" />   <path d="M8 7h8" />   <circle cx="12" cy="17" r="5" />   <path d="M12 18v-2h-.5" /> </svg>  Scenario 1 — The Salon Deal (Multi-Stakeholder)</h2>
+  <p><b>Difficulty:</b> Foundational · <b>Skills tested:</b> gatekeeper navigation, integrated frameworks, tailored stakeholder value, the single close.</p>
+
+  <div class="stage">
+    <h4>The Scene — Visible to All</h4>
+    <ul>
+      <li>Warm lead: <b>Nina</b> filled the interest form on steadyhandsop.com</li>
+      <li>You call the salon. <b>Dana</b> (front-desk manager) answers first</li>
+      <li>Nina is between clients — <b>10 minutes only</b> (timer running)</li>
+      <li>Marcus — Nina's husband — handles the money and will need to approve</li>
+    </ul>
+  </div>
+
+  <h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="target"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <circle cx="12" cy="12" r="6" />   <circle cx="12" cy="12" r="2" /> </svg>  Rep Objectives (what the Observer watches for)</h3>
+  <div class="tablewrap">
+    <table>
+      <tr><th>Move</th><th>Success Looks Like</th></tr>
+      <tr><td>Win Dana</td><td>Transparent about purpose · references Nina's form · asks about rhythm — Dana becomes a scheduler, not a wall</td></tr>
+      <tr><td>Run discovery in 10 min</td><td>CGP opened fast · one quantifiable goal (DARE-D) · numbers come from NINA, not the rep</td></tr>
+      <tr><td>Map the Authority</td><td>"Who else decides?" surfaces <b>before</b> the price — Marcus enters the plan as a strategy, not a surprise</td></tr>
+      <tr><td>Tailor + close once</td><td>Next-Step Close (preview) — asked ONCE, then silence</td></tr>
+    </table>
+  </div>
+
+  <div class="rolecard">
+    <details>
+      <summary><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="drama"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M10 11h.01" />   <path d="M14 6h.01" />   <path d="M18 6h.01" />   <path d="M6.5 13.1h.01" />   <path d="M22 5c0 9-4 12-6 12s-6-3-6-12c0-2 2-3 6-3s6 1 6 3" />   <path d="M17.4 9.9c-.8.8-2 .8-2.8 0" />   <path d="M10.1 7.1C9 7.2 7.7 7.7 6 8.6c-3.5 2-4.7 3.9-3.7 5.6 4.5 7.8 9.5 8.4 11.2 7.4.9-.5 1.9-2.1 1.9-4.7" />   <path d="M9.1 16.5c.3-1.1 1.4-1.7 2.4-1.4" /> </svg>  Role Card — DANA (the gatekeeper)</summary>
+      <div class="inner">
+        <div class="secret"><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="lock keyhole"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="16" r="1" />   <rect x="3" y="10" width="18" height="12" rx="2" />   <path d="M7 10V7a5 5 0 0 1 10 0v3" /> </svg>  Your secret script (only YOU read this):</b> You're protective of Nina's time — she's buried between clients. First response, <em>suspicious</em>: "Can I ask what this is regarding?"</div>
+        <p><b>If the rep is transparent + respectful →</b> you soften: "She's with a client. She's super busy." If they ask about rhythm well → you offer: "She's got about ten minutes at 3."</p>
+        <p><b>If the rep pushes or is vague →</b> you cool: "She's really slammed today. I can take a message." (The deal dies here — and that's a valid outcome the debrief will learn from.)</p>
+        <p><b>Your tell:</b> you respond to <em>rhythm-respect</em>, not to persistence. "Morning or afternoon" type questions win you over instantly.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="rolecard">
+    <details>
+      <summary><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="drama"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M10 11h.01" />   <path d="M14 6h.01" />   <path d="M18 6h.01" />   <path d="M6.5 13.1h.01" />   <path d="M22 5c0 9-4 12-6 12s-6-3-6-12c0-2 2-3 6-3s6 1 6 3" />   <path d="M17.4 9.9c-.8.8-2 .8-2.8 0" />   <path d="M10.1 7.1C9 7.2 7.7 7.7 6 8.6c-3.5 2-4.7 3.9-3.7 5.6 4.5 7.8 9.5 8.4 11.2 7.4.9-.5 1.9-2.1 1.9-4.7" />   <path d="M9.1 16.5c.3-1.1 1.4-1.7 2.4-1.4" /> </svg>  Role Card — NINA (the owner)</summary>
+      <div class="inner">
+        <div class="secret"><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="lock keyhole"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="16" r="1" />   <rect x="3" y="10" width="18" height="12" rx="2" />   <path d="M7 10V7a5 5 0 0 1 10 0v3" /> </svg>  Your secret numbers (only YOU read this):</b> You lose roughly <b>4–5 new clients/month</b> to salons that show up on Google. Average first visit ≈ <b>$65</b>. You get <b>8–10 interruption calls</b> on a busy day during appointments. You filled the form because a regular mentioned it.</div>
+        <p><b>Your character:</b> open but rushed — 10 minutes hard limit. You answer questions honestly IF they're good questions. You volunteer NOTHING unless asked — the rep must earn every data point.</p>
+        <p><b>Your objection:</b> when price comes up: <em>"Marcus watches the money — I'd need to show him."</em> (Authority test — watch what the rep does with it.)</p>
+        <p><b>Your tell:</b> if the rep pitches before minute 4, you get antsy: "Are we getting to prices? I've got a client in ten."</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="rolecard">
+    <details>
+      <summary><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="drama"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M10 11h.01" />   <path d="M14 6h.01" />   <path d="M18 6h.01" />   <path d="M6.5 13.1h.01" />   <path d="M22 5c0 9-4 12-6 12s-6-3-6-12c0-2 2-3 6-3s6 1 6 3" />   <path d="M17.4 9.9c-.8.8-2 .8-2.8 0" />   <path d="M10.1 7.1C9 7.2 7.7 7.7 6 8.6c-3.5 2-4.7 3.9-3.7 5.6 4.5 7.8 9.5 8.4 11.2 7.4.9-.5 1.9-2.1 1.9-4.7" />   <path d="M9.1 16.5c.3-1.1 1.4-1.7 2.4-1.4" /> </svg>  Role Card — OBSERVER (Scenario 1 focus)</summary>
+      <div class="inner">
+        <p>Watch specifically for: <b>(1)</b> Was Dana handled with rhythm-respect or pushed? <b>(2)</b> Did Nina's numbers come from HER — or did the rep supply them? <b>(3)</b> Was Marcus/Authority surfaced before price? <b>(4)</b> Was the close asked once — and did the rep then STOP TALKING?</p>
+        <p>Score on the Scorecard tab. The stakeholder handling (Dana + Marcus) is worth close attention in the debrief.</p>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ============ PANEL 2 : SCENARIO 2 ============ -->
+<div class="panel" id="p2">
+  <h2><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="calendar days"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M8 2v3" />   <path d="M16 2v3" />   <rect x="3" y="3" width="18" height="18" rx="2" />   <path d="M3 9h18" />   <path d="M8 13h.01" />   <path d="M12 13h.01" />   <path d="M16 13h.01" />   <path d="M8 17h.01" />   <path d="M12 17h.01" />   <path d="M16 17h.01" /> </svg>  Scenario 2 — The November Call (Re-Engagement)</h2>
+  <p><b>Difficulty:</b> Intermediate · <b>Skills tested:</b> the kept promise, re-discovery on new reality, fresh TCI, re-closing on HIS calendar logic.</p>
+
+  <div class="stage">
+    <h4>The Scene — Visible to All</h4>
+    <ul>
+      <li>It's the first week of <b>November</b></li>
+      <li>June discovery call went well — Gap math done together — then Tom said: <em>"Call me in November. Summer is our crazy season."</em></li>
+      <li>You honored it completely — <b>zero contact all summer</b> (logged in the CRM)</li>
+      <li>You're dialing now — the promise kept IS your opener</li>
+    </ul>
+  </div>
+
+  <h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="target"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <circle cx="12" cy="12" r="6" />   <circle cx="12" cy="12" r="2" /> </svg>  Rep Objectives</h3>
+  <div class="tablewrap">
+    <table>
+      <tr><th>Move</th><th>Success Looks Like</th></tr>
+      <tr><td>Honor the promise first</td><td>Opens with the promise + asks about HIS season — human first, business second</td></tr>
+      <tr><td>Re-discover, don't re-pitch</td><td>"What's changed since June?" — treats the old Gap as stale data needing re-verification</td></tr>
+      <tr><td>Re-weigh with fresh TCI</td><td>Finds the NEW urgency — ideally HIS winter-thin-bookings logic, not the rep's pressure</td></tr>
+      <tr><td>Re-close or re-promise</td><td>Close once on the new math — OR set the next window with the same discipline (spring planning)</td></tr>
+    </table>
+  </div>
+
+  <div class="rolecard">
+    <details>
+      <summary><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="drama"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M10 11h.01" />   <path d="M14 6h.01" />   <path d="M18 6h.01" />   <path d="M6.5 13.1h.01" />   <path d="M22 5c0 9-4 12-6 12s-6-3-6-12c0-2 2-3 6-3s6 1 6 3" />   <path d="M17.4 9.9c-.8.8-2 .8-2.8 0" />   <path d="M10.1 7.1C9 7.2 7.7 7.7 6 8.6c-3.5 2-4.7 3.9-3.7 5.6 4.5 7.8 9.5 8.4 11.2 7.4.9-.5 1.9-2.1 1.9-4.7" />   <path d="M9.1 16.5c.3-1.1 1.4-1.7 2.4-1.4" /> </svg>  Role Card — TOM (the landscaper)</summary>
+      <div class="inner">
+        <div class="secret"><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="lock keyhole"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="16" r="1" />   <rect x="3" y="10" width="18" height="12" rx="2" />   <path d="M7 10V7a5 5 0 0 1 10 0v3" /> </svg>  Your secret situation (only YOU read this):</b> Summer was good — the best in three years. BUT: you lost one of your two crews in September (the foreman moved away), and you've turned down <b>three winter contracts</b> you couldn't staff. You're worried about winter cash flow for the first time. Your June interest is still real — you just never got around to it.</div>
+        <p><b>Your character:</b> warm but guarded — you don't remember the rep's name until they say the promise line. The line lands: <em>"…Right, November. I appreciate you actually called."</em></p>
+        <p><b>If re-discovered properly (what changed?):</b> you reveal the crew loss and the turned-down contracts. The new Gap writes itself: winter contracts you CAN take now, no site to win them.</p>
+        <p><b>Your objection:</b> <em>"Winter's half gone by the time a site's even up, isn't it?"</em> — timing fear. (Watch for the preview-process answer: built fast, live in days.)</p>
+        <p><b>If the rep re-pitches June's numbers</b> without asking what changed → you go flat: "Like I said in June…" — the deal stalls politely.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="rolecard">
+    <details>
+      <summary><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="drama"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M10 11h.01" />   <path d="M14 6h.01" />   <path d="M18 6h.01" />   <path d="M6.5 13.1h.01" />   <path d="M22 5c0 9-4 12-6 12s-6-3-6-12c0-2 2-3 6-3s6 1 6 3" />   <path d="M17.4 9.9c-.8.8-2 .8-2.8 0" />   <path d="M10.1 7.1C9 7.2 7.7 7.7 6 8.6c-3.5 2-4.7 3.9-3.7 5.6 4.5 7.8 9.5 8.4 11.2 7.4.9-.5 1.9-2.1 1.9-4.7" />   <path d="M9.1 16.5c.3-1.1 1.4-1.7 2.4-1.4" /> </svg>  Role Card — OBSERVER (Scenario 2 focus)</summary>
+      <div class="inner">
+        <p>Watch specifically for: <b>(1)</b> Did the opener land the promise FIRST — before any pitch? <b>(2)</b> Did the rep ASK what changed — or assume June's reality? <b>(3)</b> Did the new urgency come from TOM's words (winter gap) or the rep's spin? <b>(4)</b> If "not yet" — was the next window scheduled with the same discipline?</p>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ============ PANEL 3 : SCENARIO 3 ============ -->
+<div class="panel" id="p3">
+  <h2><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="shield"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z" /> </svg>  Scenario 3 — The Burned Veteran (Trust Rebuild)</h2>
+  <p><b>Difficulty:</b> Advanced — earn it · <b>Skills tested:</b> LACE order under hostility, verifiable-facts discipline, the slow close, emotional regulation (Ch 9 reset routine — mid-scene!).</p>
+
+  <div class="stage">
+    <h4>The Scene — Visible to All</h4>
+      <ul>
+      <li>Cold call to <b>Frank</b> — auto detailing, 12 years in business</li>
+      <li>Paid another company <b>$2,000</b> three years ago; site never worked, support vanished</li>
+      <li>You're the third "web person" to call this month</li>
+      <li>His tone: hostile from hello</li>
+    </ul>
+  </div>
+
+  <h3><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="target"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" />   <circle cx="12" cy="12" r="6" />   <circle cx="12" cy="12" r="2" /> </svg>  Rep Objectives</h3>
+  <div class="tablewrap">
+    <table>
+      <tr><th>Move</th><th>Success Looks Like</th></tr>
+      <tr><td>Absorb the opening shot</td><td>Validates the experience without defending the industry — <em>"I'd be done with this whole industry too"</em> — then PAUSES</td></tr>
+    <tr><td>Clarify the wound</td><td>"What stung most — the money or how you were treated after?" → abandonment, not price</td></tr>
+      <tr><td>Verifiable facts ONLY</td><td>Published prices · preview process · real phone number they can call NOW — zero unverified claims</td></tr>
+      <tr><td>The slow close</td><td>"No pressure tonight — check the site, call the number" → the confident withdrawal IS the credibility</td></tr>
+    </table>
+  </div>
+
+  <div class="rolecard">
+    <details>
+      <summary><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="drama"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M10 11h.01" />   <path d="M14 6h.01" />   <path d="M18 6h.01" />   <path d="M6.5 13.1h.01" />   <path d="M22 5c0 9-4 12-6 12s-6-3-6-12c0-2 2-3 6-3s6 1 6 3" />   <path d="M17.4 9.9c-.8.8-2 .8-2.8 0" />   <path d="M10.1 7.1C9 7.2 7.7 7.7 6 8.6c-3.5 2-4.7 3.9-3.7 5.6 4.5 7.8 9.5 8.4 11.2 7.4.9-.5 1.9-2.1 1.9-4.7" />   <path d="M9.1 16.5c.3-1.1 1.4-1.7 2.4-1.4" /> </svg>  Role Card — FRANK (the burned veteran)</summary>
+      <div class="inner">
+        <div class="secret"><b><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="lock keyhole"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="16" r="1" />   <rect x="3" y="10" width="18" height="12" rx="2" />   <path d="M7 10V7a5 5 0 0 1 10 0v3" /> </svg>  Your secret wound (only YOU read this):</b> The $2,000 still stings — but what REALLY burned you: after payment, the company <b>vanished</b>. Two months of emails into a void. Your nephew finally fixed the site half-way. You've told this story to every business owner at your supply store — you're the cautionary tale.</div>
+        <p><b>Your character:</b> opens hostile: <em>"You people already took two grand off me once. Why would I talk to you?"</em></p>
+        <p><b>The disarm sequence (in order):</b> <b>(1)</b> Validation lands → you soften 10%: <em>"Hmph. At least you're honest."</em> <b>(2)</b> The wound question lands → you reveal the REAL story (abandonment, not money): <em>"After. Vanished. Nobody picked up."</em> <b>(3)</b> Verifiable facts → you test one: <em>"(702) 372-6399? I'm calling it right now."</em> — stay in character: you "call" it. <b>(4)</b> The slow close → <em>"…Send me the site. But I'm watching you."</em></p>
+        <p><b>If rushed or pressured →</b> you shut the door: <em>"Two grand says otherwise. Goodbye."</em> (Valid outcome — the debrief learns from it.)</p>
+        <p><b>Your tell:</b> you HATE the phrase "we're different." If they say it, you get colder, not warmer.</p>
+      </div>
+    </div>
+  </details>
+  </div>
+
+  <div class="rolecard">
+    <details>
+      <summary><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="drama"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M10 11h.01" />   <path d="M14 6h.01" />   <path d="M18 6h.01" />   <path d="M6.5 13.1h.01" />   <path d="M22 5c0 9-4 12-6 12s-6-3-6-12c0-2 2-3 6-3s6 1 6 3" />   <path d="M17.4 9.9c-.8.8-2 .8-2.8 0" />   <path d="M10.1 7.1C9 7.2 7.7 7.7 6 8.6c-3.5 2-4.7 3.9-3.7 5.6 4.5 7.8 9.5 8.4 11.2 7.4.9-.5 1.9-2.1 1.9-4.7" />   <path d="M9.1 16.5c.3-1.1 1.4-1.7 2.4-1.4" /> </svg>  Role Card — OBSERVER (Scenario 3 focus)</summary>
+      <div class="inner">
+        <p>Watch specifically for: <b>(1)</b> Did the rep defend the industry — even once? (instant red flag) <b>(2)</b> Was there a real pause after validation — or did they fill it with pitch? <b>(3)</b> Every fact stated: verifiable? <b>(4)</b> The close: slow, confident, no pressure — or did urgency leak back in? <b>(5)</b> Post-call conduct: did the rep's voice carry the scene into rudeness on the "next dial"? (Ask them to demonstrate the reset routine aloud — Ch 9)</p>
+      </div>
+    </details>
+  </div>
+</div>
+
+<!-- ============ PANEL 4 : SCORECARD ============ -->
+<div class="panel" id="p4">
+  <h2><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="chart column"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M3 3v16a2 2 0 0 0 2 2h16" />   <path d="M18 17V9" />   <path d="M13 17V5" />   <path d="M8 17v-3" /> </svg>  The Observer Scorecard</h2>
+  <p>100 points across seven dimensions — the same discipline as qualification, turned inward. <b>Select a score per dimension; the total and band calculate live.</b></p>
+
+  <div class="scorecard">
+    <div class="sc-row">
+      <div class="dim"><b>1. Opening &amp; Permission</b><small>Respectful, brief, framed — earned the conversation</small></div>
+      <span class="mx">/10</span>
+      <select data-max="10" onchange="calc()"><option>0</option><option>2</option><option>4</option><option>6</option><option>8</option><option>10</option></select>
+    </div>
+    <div class="sc-row">
+      <div class="dim"><b>2. Discovery Depth</b><small>CGP explored; SPIN flowed; listened 60%+</small></div>
+      <span class="mx">/20</span>
+      <select data-max="20" onchange="calc()"><option>0</option><option>5</option><option>10</option><option>15</option><option>20</option></select>
+    </div>
+    <div class="sc-row">
+      <div class="dim"><b>3. Ethical Quantification</b><small>Client's numbers · conservative · labeled · IF-framed</small></div>
+      <span class="mx">/15</span>
+      <select data-max="15" onchange="calc()"><option>0</option><option>5</option><option>10</option><option>15</option></select>
+    </div>
+    <div class="sc-row">
+      <div class="dim"><b>4. Qualification (BAA)</b><small>Budget, Authority, Agenda surfaced — no surprises at close</small></div>
+      <span class="mx">/15</span>
+      <select data-max="15" onchange="calc()"><option>0</option><option>5</option><option>10</option><option>15</option></select>
+    </div>
+    <div class="sc-row">
+      <div class="dim"><b>5. Value Presentation</b><small>Outcome first · full costs visible · four value types touched</small></div>
+      <span class="mx">/15</span>
+      <select data-max="15" onchange="calc()"><option>0</option><option>5</option><option>10</option><option>15</option></select>
+    </div>
+    <div class="sc-row">
+      <div class="dim"><b>6. Objection Handling</b><small>LACE in order · real objection found · one loop at a time</small></div>
+      <span class="mx">/15</span>
+      <select data-max="15" onchange="calc()"><option>0</option><option>5</option><option>10</option><option>15</option></select>
+    </div>
+    <div class="sc-row">
+      <div class="dim"><b>7. Close &amp; Conduct</b><small>Asked once, stopped talking · graceful on "no" · zero Banned List items</small></div>
+      <span class="mx">/10</span>
+      <select data-max="10" onchange="calc()"><option>0</option><option>2</option><option>4</option><option>6</option><option>8</option><option>10</option></select>
+    </div>
+
+    <div class="sc-total">
+      <b>Total: <span id="scTotal">0</span> / 100</b>
+      <span class="sc-band band-red" id="scBand">Select scores above</span>
+    </div>
+  </div>
+
+  <h2>What the Bands Mean</h2>
+  <div class="tablewrap">
+    <table>
+      <tr><th>Band</th><th>Score</th><th>What Happens Next</th></tr>
+      <tr><td><span class="sc-band band-gold"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="trophy"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M10 14.66V17a1 1 0 0 1-1 1 2 2 0 0 0-2 2v2" />   <path d="M14 14.66V17a1 1 0 0 0 1 1 2 2 0 0 1 2 2v2" />   <path d="M17.916 10H19.5A2.5 2.5 0 0 0 22 7.5V5a1 1 0 0 0-1-1h-3" />   <path d="M4 22h16" />   <path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z" />   <path d="M6.084 10H4.5A2.5 2.5 0 0 1 2 7.5V5a1 1 0 0 1 1-1h3" /> </svg>  Steady Hands LLC-Ready</span></td><td>80–100</td><td>Graduate this scenario — move to the next difficulty</td></tr>
+      <tr><td><span class="sc-band band-green"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="circle" style="color:#22c55e;fill:currentColor"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" /> </svg>  Strong</span></td><td>70–79</td><td>One targeted drill on the weakest dimension, then re-run</td></tr>
+      <tr><td><span class="sc-band band-orange"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="circle" style="color:#f97316;fill:currentColor"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" /> </svg>  Developing</span></td><td>60–69</td><td>Two focused reps on the weak dimensions before advancing</td></tr>
+      <tr><td><span class="sc-band band-red"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="circle" style="color:#ef4444;fill:currentColor"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" /> </svg>  More Reps</span></td><td>Below 60</td><td>Full re-run with coaching — the score measures the rep of THIS scene, not the person</td></tr>
+    </table>
+  </div>
+  <div class="note"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="chart column"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M3 3v16a2 2 0 0 0 2 2h16" />   <path d="M18 17V9" />   <path d="M13 17V5" />   <path d="M8 17v-3" /> </svg>  Scoring culture: below 60 triggers MORE REPS — never shame. The scorecard measures the skill in this scene, not the human running it.</div>
+</div>
+
+<div class="panel" id="p5">
+  <h2><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="refresh cw"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />   <path d="M21 3v5h-5" />   <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />   <path d="M8 16H3v5" /> </svg>  The Debrief Protocol</h2>
+  <p>Where the actual learning happens. The rep speaks <b>first</b> — self-assessment before external feedback builds the Ch 9 muscle. Fill this after every scene.</p>
+
+  <div class="debrief">
+    <label>Scene run:</label>
+    <input type="text" placeholder="Scenario + date + rep name">
+    <label>1. Rep self-review — what did I do well?</label>
+    <textarea rows="2" placeholder="Specific moments, not generalities…"></textarea>
+    <label>2. Rep self-review — what would I change?</label>
+    <textarea rows="2" placeholder="The honest one — name the skipped step…"></textarea>
+    <label>3. Observer feedback — specific, not general</label>
+    <textarea rows="2" placeholder="'At minute four you jumped to price before the Agenda question' — not 'it was good'"></textarea>
+    <label>4. Group insight — one transferable lesson for the team chat</label>
+    <textarea rows="2" placeholder="'Gatekeepers respond to rhythm-questions — morning or afternoon?'"></textarea>
+    <label>5. ONE commitment for the next session</label>
+    <input type="text" placeholder="'Next simulation: I will ask the Authority question before minute six'">
+  </div>
+
+  <div class="note"><svg class="sh-icon" width="1em" height="1em" role="img" aria-label="refresh cw"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />   <path d="M21 3v5h-5" />   <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />   <path d="M8 16H3v5" /> </svg>  The loop mirrors everything: Learn → Apply → Adjust (Ch 9). Simulations ARE the Apply gear — the debrief IS the Adjust. <b>Skip the debrief and you've done theater, not training.</b></div>
+
+  <h2>Escalation Path for Scenario Design</h2>
+  <div class="flow">
+    <span>Master: Salon Deal</span><span>→</span><span>Master: November Call</span><span>→</span><span>Master: Burned Veteran</span><span>→</span><span>Manager-invented scenarios</span><span>→</span><span>Live supervised dials</span>
+  </div>
+  <p>Managers invent new scenarios continuously — same format, fresh situations: the competitor-undercut call, the seasonal rush interruption, the "my partner saw a bad review" call. The format is the asset; the situations rotate.</p>
+</div>
+
+</div><!-- /wrap -->
+
+<footer>
+  <b>Steady Hands LLC — Role-Play Scenarios Pack</b><br>
+  Part of Steady Hands LLC Training Program · Companion to Chapters 1–10 · Developed by Ahmed Kamel · © 2026
+</footer>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const panels = document.querySelectorAll('.panel');
+  tabs.forEach(function(t){
+    t.addEventListener('click', function(){
+      tabs.forEach(function(x){ x.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      t.classList.add('active');
+      document.getElementById(t.dataset.p).classList.add('active');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+  });
+
+  function calc(){
+    let total = 0;
+    document.querySelectorAll('.scorecard select').forEach(function(s){
+      total += parseInt(s.value) || 0;
+    });
+    document.getElementById('scTotal').textContent = total;
+    const band = document.getElementById('scBand');
+    if(total === 0){ band.textContent = 'Select scores above'; band.className = 'sc-band band-red'; }
+    else if(total >= 80){ band.innerHTML = '<svg class="sh-icon" width="1em" height="1em" role="img" aria-label="trophy"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <path d="M10 14.66V17a1 1 0 0 1-1 1 2 2 0 0 0-2 2v2" />   <path d="M14 14.66V17a1 1 0 0 0 1 1 2 2 0 0 1 2 2v2" />   <path d="M17.916 10H19.5A2.5 2.5 0 0 0 22 7.5V5a1 1 0 0 0-1-1h-3" />   <path d="M4 22h16" />   <path d="M6 9a6 6 0 0 0 12 0V3a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1z" />   <path d="M6.084 10H4.5A2.5 2.5 0 0 1 2 7.5V5a1 1 0 0 1 1-1h3" /> </svg>  Steady Hands LLC-Ready'; band.className = 'sc-band band-gold'; }
+    else if(total >= 70){ band.innerHTML = '<svg class="sh-icon" width="1em" height="1em" role="img" aria-label="circle" style="color:#22c55e;fill:currentColor"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" /> </svg>  Strong — one targeted drill'; band.className = 'sc-band band-green'; }
+    else if(total >= 60){ band.innerHTML = '<svg class="sh-icon" width="1em" height="1em" role="img" aria-label="circle" style="color:#f97316;fill:currentColor"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" /> </svg>  Developing — two focused reps'; band.className = 'sc-band band-orange'; }
+    else { band.innerHTML = '<svg class="sh-icon" width="1em" height="1em" role="img" aria-label="circle" style="color:#ef4444;fill:currentColor"   xmlns="http://www.w3.org/2000/svg"   viewBox="0 0 24 24"   fill="none"   stroke="currentColor"   stroke-width="2"   stroke-linecap="round"   stroke-linejoin="round" >   <circle cx="12" cy="12" r="10" /> </svg>  More reps with coaching'; band.className = 'sc-band band-red'; }
+  }
+</script>
+
+<script>(function(){const bar=document.querySelector('.topbar');if(!bar)return;function fit(){document.documentElement.style.setProperty('--sh-topbar-height',Math.ceil(bar.getBoundingClientRect().height)+'px');}if(window.ResizeObserver)new ResizeObserver(fit).observe(bar);window.addEventListener('resize',fit);fit();})();</script>
+</body>
+</html>
