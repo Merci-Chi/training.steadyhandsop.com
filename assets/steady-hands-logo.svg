@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title id="title">Steady Hands logo</title>
+  <desc id="desc">A gold handshake and compass mark on a navy background.</desc>
+  <rect width="64" height="64" rx="14" fill="#1A3A5C"/>
+  <rect x="1.5" y="1.5" width="61" height="61" rx="12.5" fill="none" stroke="#F0C24B" stroke-width="3"/>
+  <path d="M18 26.5 25.2 20a7 7 0 0 1 8.5-.7l2.6 1.6 8.7 1.4 3.1 9.5-5.7 5.8a3.2 3.2 0 0 1-4.6 0l-1.2-1.2-1.8 1.8a3.2 3.2 0 0 1-4.6 0l-2-2-1.5 1.5a3.2 3.2 0 0 1-4.6 0L16 31.8Z" fill="none" stroke="#F0C24B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="m21.4 30.4 5.3 5.3m1.6-7.1 6.1 6.1m1.7-7.3 4.1 4.1" fill="none" stroke="#F0C24B" stroke-width="3" stroke-linecap="round"/>
+  <path d="m28.3 28.6 4.2-4.2a3.2 3.2 0 0 1 4.5 0l1.2 1.2" fill="none" stroke="#F0C24B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M32 10v4m0 36v4M10 32h4m36 0h4" stroke="#D4A017" stroke-width="2" stroke-linecap="round"/>
+</svg>
